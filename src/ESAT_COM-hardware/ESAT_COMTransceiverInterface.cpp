@@ -60,11 +60,9 @@ void ESAT_COMTransceiverInterfaceClass::disable()
 {
 #if defined(SDN_HAS_HW_PULLUP)
       pinMode(shutdownPin, INPUT); //Let it be high at least 10 ms
-      Serial.println("Let it rise");
 #else
       digitalWrite(shutdownPin, HIGH); // So we don't get a glitch after setting pinMode OUTPUT
       pinMode(shutdownPin, OUTPUT); //Drive high 10 ms
-      Serial.println("Drive high");
 #endif
 }
 
@@ -80,10 +78,8 @@ void ESAT_COMTransceiverInterfaceClass::powerUpTransceiver()
 #if defined(SDN_HAS_HW_PULLUP)
   pinMode(shutdownPin, OUTPUT); //Pull it down
   digitalWrite(shutdownPin, LOW); //Drive low least 10 ms
-  Serial.println("Drive low");
 #else
   digitalWrite(shutdownPin, LOW); // Let it be low at leat 10 ms
-  Serial.println("Drive low");
 #endif
   delay(10);
 }
@@ -116,7 +112,6 @@ uint8_t ESAT_COMTransceiverInterfaceClass::requestToSend()
 // SPI public
 void ESAT_COMTransceiverInterfaceClass::reset()
 {
-  Serial.println("NEW");
   powerUpTransceiver();
   delay(10);
   //. Put radio in shutdown, wait and then release.

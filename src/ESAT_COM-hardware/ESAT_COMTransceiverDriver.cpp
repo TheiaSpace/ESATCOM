@@ -391,7 +391,13 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COMTransc
   // a communication fault.  
   ESAT_COMTransceiverCommands.powerUp(*transceiver);
   ESAT_COMTransceiverCommands.getInterruptStatus(*transceiver, 0, 0, 0);
-  ESAT_COMTransceiverCommands.configureGPIODefault(*transceiver);
+  //ESAT_COMTransceiverCommands.configureGPIODefault(*transceiver);
+  ESAT_COMTransceiverCommands.configureGPIO(*transceiver, 
+                                        ESAT_COMTransceiverCommandsClass::DONOTHING, false,
+                                        ESAT_COMTransceiverCommandsClass::CTS, false,
+                                        ESAT_COMTransceiverCommandsClass::DONOTHING, false,
+                                        ESAT_COMTransceiverCommandsClass::DONOTHING, false,
+                                        ESAT_COMTransceiverCommandsClass::RADIO_HIGH);                                        
   error = transceiverConfiguration -> applyConfiguration(*transceiver);
   if (ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS != error)
   {

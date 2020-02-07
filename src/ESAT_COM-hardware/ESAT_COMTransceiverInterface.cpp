@@ -24,38 +24,44 @@ ESAT_COMTransceiverInterfaceClass::ESAT_COMTransceiverInterfaceClass()
 {  
 }
 
-ESAT_COMTransceiverInterfaceClass::ESAT_COMTransceiverInterfaceClass(SPIClass& spiBus, uint8_t chipSelect, uint8_t interrupt, uint8_t shutdown)
+ESAT_COMTransceiverInterfaceClass::ESAT_COMTransceiverInterfaceClass(SPIClass& spiBus, uint8_t chipSelect, uint8_t interrupt, uint8_t shutdown, uint8_t gpio0, uint8_t gpio1, uint8_t gpio2, uint8_t gpio3)
 {
   transceiverSPI = &spiBus;
   chipSelectPin = chipSelect;
   interruptPin = interrupt;
   shutdownPin = shutdown;
+  gpio0Pin = gpio0;
+  gpio1Pin = gpio1;
+  gpio2Pin = gpio2;
+  gpio3Pin = gpio3;
 }
 
-// SPI public
 void ESAT_COMTransceiverInterfaceClass::begin()
 {
   pinMode(interruptPin, INPUT);
   pinMode(chipSelectPin, OUTPUT);
   digitalWrite(chipSelectPin, HIGH);
+  pinMode(gpio1Pin, INPUT);
   transceiverSPI -> begin();
   transceiverSPI -> setClockDivider(SPI_CLOCK_DIVIDER_FOR_STM32L4);
   ctsWentHigh = 0;
 }
 
-// SPI public
 uint8_t ESAT_COMTransceiverInterfaceClass::checkInterruptPin()
 {
   return digitalRead(interruptPin);
 }
 
-// SPI public
+uint8_t ESAT_COMTransceiverInterfaceClass::checkClearToSendPin()
+{
+  return digitalRead(gpio1Pin);
+}
+
 void ESAT_COMTransceiverInterfaceClass::clearChipSelect()
 {
   digitalWrite(chipSelectPin, HIGH);
 }
 
-// SPI public
 void ESAT_COMTransceiverInterfaceClass::disable()
 {
 #if defined(SDN_HAS_HW_PULLUP)
@@ -66,13 +72,11 @@ void ESAT_COMTransceiverInterfaceClass::disable()
 #endif
 }
 
-// SPI public
 uint8_t ESAT_COMTransceiverInterfaceClass::getInterruptPin()
 {
   return interruptPin;
 }
 
-// SPI public
 void ESAT_COMTransceiverInterfaceClass::powerUpTransceiver()
 {  
 #if defined(SDN_HAS_HW_PULLUP)
@@ -84,7 +88,18 @@ void ESAT_COMTransceiverInterfaceClass::powerUpTransceiver()
   delay(10);
 }
 
-// SPI public
+void ESAT_COMTransceiverInterfaceClass::readData(uint8_t command, uint8_t pollForCTS, uint8_t dataByteCount, uint8_t* data)
+{
+  if (requestToSend())
+  {
+    setChipSelect();
+    transceiverSPI -> transfer(command);
+    SPIBulkRead(dataByteCount, data);
+    clearChipSelect();
+  }
+}
+
+/* 
 void ESAT_COMTransceiverInterfaceClass::readData(uint8_t command, uint8_t pollForCTS, uint8_t dataByteCount, uint8_t* data)
 {
   if(pollForCTS)
@@ -101,15 +116,36 @@ void ESAT_COMTransceiverInterfaceClass::readData(uint8_t command, uint8_t pollFo
   DEBUG_PRINTLN(*data);
   clearChipSelect();
   setBusy();
+} */
+
+uint8_t ESAT_COMTransceiverInterfaceClass::requestToSend()
+{
+  if (checkClearToSendPin())
+  {
+    failCounter = 0;
+    return 1;
+  }
+  else
+  {
+    ++failCounter;
+    if (failCounter >= FAIL_THRESHOLD)
+    {
+      return 0;
+    }
+    else
+    {
+      delayMicroseconds(20);
+      return requestToSend();
+    }
+  }
 }
 
-// SPI public
+/* 
 uint8_t ESAT_COMTransceiverInterfaceClass::requestToSend()
 {
   return retrieveResponse(0, 0);
-}
+} */
 
-// SPI public
 void ESAT_COMTransceiverInterfaceClass::reset()
 {
   powerUpTransceiver();
@@ -122,7 +158,62 @@ void ESAT_COMTransceiverInterfaceClass::reset()
   setBusy();
 }
 
-// SPI public
+void ESAT_COMTransceiverInterfaceClass::setBusy()
+{
+  
+}
+
+/*
+
+void ESAT_COMTransceiverInterfaceClass::setBusy()
+{
+  ctsWentHigh = 0;
+} */
+
+void ESAT_COMTransceiverInterfaceClass::setChipSelect()
+{
+  digitalWrite(chipSelectPin, LOW);
+}
+
+void ESAT_COMTransceiverInterfaceClass::SPIBulkRead(uint8_t numBytes, uint8_t* data)
+{
+  while (numBytes--)
+  {
+    *data++ = transceiverSPI -> transfer(0);
+  }
+}
+
+void ESAT_COMTransceiverInterfaceClass::SPIBulkWrite(uint8_t numBytes, uint8_t* data)
+{
+  while(numBytes--)
+  {
+    transceiverSPI -> transfer(*data++);
+  }
+}
+
+uint8_t ESAT_COMTransceiverInterfaceClass::SPIWriteReadByte(uint8_t toWrite)
+{
+  return transceiverSPI -> transfer(toWrite);
+}
+
+uint8_t ESAT_COMTransceiverInterfaceClass::retrieveResponse(uint8_t byteCount, uint8_t* data)
+{
+  if (requestToSend())
+  {
+    setChipSelect();
+    transceiverSPI -> transfer(0x44);
+    transceiverSPI -> transfer(0);
+    if (byteCount)
+    {
+      SPIBulkRead(byteCount, data);
+    }
+    clearChipSelect();
+    return 0xFF;
+  }
+  return 0;
+}
+
+/* 
 uint8_t ESAT_COMTransceiverInterfaceClass::retrieveResponse(uint8_t byteCount, uint8_t* data)
 {
   uint8_t clearToSend = 0;
@@ -154,44 +245,26 @@ uint8_t ESAT_COMTransceiverInterfaceClass::retrieveResponse(uint8_t byteCount, u
   }
   return clearToSend;
 }
+*/
 
-// SPI public
-void ESAT_COMTransceiverInterfaceClass::setBusy()
+void ESAT_COMTransceiverInterfaceClass::writeCommand(uint8_t byteCount, uint8_t* data)
 {
-  ctsWentHigh = 0;
-}
 
-// SPI public
-void ESAT_COMTransceiverInterfaceClass::setChipSelect()
-{
-  digitalWrite(chipSelectPin, LOW);
-}
-
-// SPI public
-void ESAT_COMTransceiverInterfaceClass::SPIBulkRead(uint8_t numBytes, uint8_t* data)
-{
-  while (numBytes--)
+  if (requestToSend())
   {
-    *data++ = transceiverSPI -> transfer(0);
+    setChipSelect();
+    SPIBulkWrite(byteCount, data);
+    // Required due to a bug in transceiver single 
+    // byte commands. Supposedly fixed in B0. 
+    if (byteCount == 1)
+    {
+      SPIWriteReadByte(0);
+    }
+    clearChipSelect();
   }
-}
+} 
 
-// SPI public
-void ESAT_COMTransceiverInterfaceClass::SPIBulkWrite(uint8_t numBytes, uint8_t* data)
-{
-  while(numBytes--)
-  {
-    transceiverSPI -> transfer(*data++);
-  }
-}
-
-// SPI public
-uint8_t ESAT_COMTransceiverInterfaceClass::SPIWriteReadByte(uint8_t toWrite)
-{
-  return transceiverSPI -> transfer(toWrite);
-}
-
-// SPI public
+/* 
 void ESAT_COMTransceiverInterfaceClass::writeCommand(uint8_t byteCount, uint8_t* data)
 {
   while (ctsWentHigh <= 0)
@@ -208,9 +281,8 @@ void ESAT_COMTransceiverInterfaceClass::writeCommand(uint8_t byteCount, uint8_t*
   }
   clearChipSelect();
   setBusy();
-}
+} */
 
-// SPI public
 uint8_t ESAT_COMTransceiverInterfaceClass::writeCommandAndRetrieveResponse(uint8_t commandByteCount, uint8_t* commandData,
                                                                         uint8_t responseByteCount, uint8_t* responseData)
 {
@@ -218,8 +290,18 @@ uint8_t ESAT_COMTransceiverInterfaceClass::writeCommandAndRetrieveResponse(uint8
   return retrieveResponse(responseByteCount, responseData);
 }
 
-// SPI public
 void ESAT_COMTransceiverInterfaceClass::writeData(uint8_t command, uint8_t pollForCTS, uint8_t dataByteCount, uint8_t* data)
+{
+ if (requestToSend())
+ {
+  setChipSelect();
+  transceiverSPI -> transfer(command);
+  SPIBulkWrite(dataByteCount, data);
+  clearChipSelect();
+ }
+}
+
+/* void ESAT_COMTransceiverInterfaceClass::writeData(uint8_t command, uint8_t pollForCTS, uint8_t dataByteCount, uint8_t* data)
 {
   if(pollForCTS)
   {
@@ -233,10 +315,9 @@ void ESAT_COMTransceiverInterfaceClass::writeData(uint8_t command, uint8_t pollF
   SPIBulkWrite(dataByteCount, data);
   clearChipSelect();
   setBusy();
-}
+} */
 
 
+ESAT_COMTransceiverInterfaceClass ReceptionTransceiverLowLevelDriver(SPI, CS_RX, INT_RX, SDN_RX, GPIO0_RX, GPIO1_RX, GPIO2_RX, GPIO3_RX);
 
-ESAT_COMTransceiverInterfaceClass ReceptionTransceiverLowLevelDriver(SPI, CS_RX, INT_RX, SDN_RX);
-
-ESAT_COMTransceiverInterfaceClass TransmissionTransceiverLowLevelDriver(SPI1, CS_TX, INT_TX, SDN_TX);
+ESAT_COMTransceiverInterfaceClass TransmissionTransceiverLowLevelDriver(SPI1, CS_TX, INT_TX, SDN_TX, GPIO0_TX, GPIO1_TX, GPIO2_TX, GPIO3_TX);

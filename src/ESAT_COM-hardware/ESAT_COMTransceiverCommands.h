@@ -40,7 +40,7 @@ class ESAT_COMTransceiverCommandsClass
       INV_CTS = 9,
       POR = 12,
       TX_DATA_CLK = 16,
-      RX_DATY_CLK = 17,
+      RX_DATA_CLK = 17,
       TX_DATA = 19,
       RX_DATA = 20,
       RX_RAW_DATA = 21,

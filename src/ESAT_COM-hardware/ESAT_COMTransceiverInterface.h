@@ -41,11 +41,14 @@ class ESAT_COMTransceiverInterfaceClass
   
   // Constructor of the class. Configures the interface pins
   // required to communicate to the transceiver.
-  ESAT_COMTransceiverInterfaceClass(SPIClass& spiBus, uint8_t chipSelect, uint8_t interrupt, uint8_t shutdown);
+  ESAT_COMTransceiverInterfaceClass(SPIClass& spiBus, uint8_t chipSelect, uint8_t interrupt, uint8_t shutdown, uint8_t gpio0, uint8_t gpio1, uint8_t gpio2, uint8_t gpio3);
   
   // Initializes the transceiver required software and hardware.
   // This function should be called before anything.
   void begin();
+  
+   // Tests if the clear to send line is high (1) or low (0).
+  uint8_t checkClearToSendPin(); 
    
   // Tests if the interrupt line is high (1) or low (0).
   uint8_t checkInterruptPin(); 
@@ -124,6 +127,7 @@ class ESAT_COMTransceiverInterfaceClass
   
   // Number of requests to send before aborting communications.
   const uint16_t RADIO_CTS_TIMEOUT = 10000;
+  const uint32_t FAIL_THRESHOLD = 20000;
   
   // SPI clock divider value.
   const uint8_t SPI_CLOCK_DIVIDER_FOR_STM32L4 = 10;
@@ -133,6 +137,8 @@ class ESAT_COMTransceiverInterfaceClass
 
   // Used for latching the last CTS.
   uint8_t ctsWentHigh = 0;
+  
+  uint32_t failCounter;
 
   // Pointer to the transceiver SPI instance.
   SPIClass* transceiverSPI;
@@ -142,6 +148,18 @@ class ESAT_COMTransceiverInterfaceClass
   
   // Transceiver shutdown pin.
   uint8_t shutdownPin;      
+  
+  // Transceiver GPIO 0 pin.
+  uint8_t gpio0Pin;
+  
+  // Transceiver GPIO 1 pin.
+  uint8_t gpio1Pin;
+  
+  // Transceiver GPIO 2 pin.
+  uint8_t gpio2Pin;
+  
+  // Transceiver GPIO 3 pin.
+  uint8_t gpio3Pin;
 };
 
 // Global instace of the reception transceiver low level driver.

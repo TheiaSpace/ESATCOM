@@ -261,7 +261,7 @@ uint8_t ESAT_COMTransceiverCommandsClass::getGPIOConfigurationMask(ESAT_COMTrans
         return 12;
       case TX_DATA_CLK:
         return 16;
-      case RX_DATY_CLK:
+      case RX_DATA_CLK:
         return 17;
       case TX_DATA:
         return 19;

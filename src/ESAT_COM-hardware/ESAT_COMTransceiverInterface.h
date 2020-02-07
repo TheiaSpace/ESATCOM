@@ -23,15 +23,16 @@
 #include <Arduino.h>
 #include <SPI.h>
 
+#define SDN_HAS_HW_PULLUP
+
 class ESAT_COMTransceiverInterfaceClass
 {    
   public:  
   enum TransceiverLowLevelDriverError
   {
       TRANSCEIVER_SUCCESS,
-      TRANSCEIVER_NO_PATCH,
       TRANSCEIVER_CTS_TIMEOUT,
-      TRANSCEIVER_PATCH_FAIL,
+      TRANSCEIVER_CHIP_ERROR,
       TRANSCEIVER_COMMAND_ERROR
   };
   

@@ -47,14 +47,17 @@ class ESAT_COMTransceiverInterfaceClass
   // This function should be called before anything.
   void begin();
   
-   // Tests if the clear to send line is high (1) or low (0).
-  uint8_t checkClearToSendPin(); 
-   
-  // Tests if the interrupt line is high (1) or low (0).
-  uint8_t checkInterruptPin(); 
-  
   // Clears the transceiver chip select line.  
   void clearChipSelect();
+  
+  // Clears the unsuccessful request to send counter.
+  void clearRTSCounter();
+  
+   // Tests if the clear to send line is high (1) or low (0).
+  uint8_t checkClearToSendPin(); 
+    
+  // Tests if the interrupt line is high (1) or low (0).
+  uint8_t checkInterruptPin(); 
   
   // Turns the radio chip off by holding the SDN pin high.
   void disable();
@@ -66,11 +69,9 @@ class ESAT_COMTransceiverInterfaceClass
   void powerUpTransceiver();
 
   // Retrieves data from the transceiver. Requires the
-  // command for accessing the data, the flag for waiting 
-  // for a valid CTS before starting the retrival, the
-  // number of bytes to retreive and the pointer for 
-  // storing the data.
-  void readData(uint8_t command, uint8_t pollForCTS, uint8_t dataByteCount, uint8_t* data);
+  // command for accessing the data, the number of bytes
+  // to retreive and the pointer for storing the data.
+  void readData(uint8_t command, uint8_t dataByteCount, uint8_t* data);
   
   // Checks if transceiver is ready to accept commands.
   // Also updates ctsWentHigh flag.
@@ -87,10 +88,10 @@ class ESAT_COMTransceiverInterfaceClass
   // Sets the transceiver chip select line.
   void setChipSelect();  
   
-  // Clears the ctsWentHigh latched value.
-  void setBusy();
-
- // Writes a bunch of bytes via SPI.
+  // Sets the maximum failed RTS threshold.
+  void setRTSMaximumThreshold(uint32_t threshold);
+  
+  // Writes a bunch of bytes via SPI.
   // Requires the number of bytes to write and their
   // location.
   void SPIBulkWrite(uint8_t numBytes, uint8_t* data);
@@ -112,36 +113,25 @@ class ESAT_COMTransceiverInterfaceClass
   // Polls for CTS, issues a command if the transceiver
   // is ready and polls for its response. Requires both the command
   // and the response expected lengths and a pointer to them.
-  // WARNING, IF NO CTS EXECUTION IS HOLD IN AN INFINITE LOOP.
   uint8_t writeCommandAndRetrieveResponse(uint8_t commandByteCount, uint8_t* commandData,
                                           uint8_t responseByteCount, uint8_t* responseData);  
                                           
   // Writes data to the transceiver. Requires the
-  // command for loading the data, the flag for waiting 
-  // for a valid CTS before starting the writing, the
+  // command for loading the data, the
   // number of bytes to write and the pointer for 
   // reading the data.
-  void writeData(uint8_t command, uint8_t pollForCTS, uint8_t dataByteCount, uint8_t* data);
+  void writeData(uint8_t command, uint8_t dataByteCount, uint8_t* data);
          
   private:
   
-  // Number of requests to send before aborting communications.
-  const uint16_t RADIO_CTS_TIMEOUT = 10000;
-  const uint32_t FAIL_THRESHOLD = 20000;
+  // Delay (in us) between requests to send chekings.
+  const uint16_t DELAY_BETWEEN_RTS_US = 20;
   
   // SPI clock divider value.
   const uint8_t SPI_CLOCK_DIVIDER_FOR_STM32L4 = 10;
   
   // Transceiver chip select pin.
   uint8_t chipSelectPin;
-
-  // Used for latching the last CTS.
-  uint8_t ctsWentHigh = 0;
-  
-  uint32_t failCounter;
-
-  // Pointer to the transceiver SPI instance.
-  SPIClass* transceiverSPI;
  
   // Transceiver interrupt pin.
   uint8_t interruptPin;
@@ -160,6 +150,15 @@ class ESAT_COMTransceiverInterfaceClass
   
   // Transceiver GPIO 3 pin.
   uint8_t gpio3Pin;
+  
+  // Number of requests to send before aborting communications.
+  uint32_t maximumRTS = 20000;
+  
+  // Number of RTS performed.
+  uint32_t RTSCounter;
+
+  // Pointer to the hardware SPI instance.
+  SPIClass* transceiverSPI;
 };
 
 // Global instace of the reception transceiver low level driver.

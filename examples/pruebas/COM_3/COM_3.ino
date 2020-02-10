@@ -85,7 +85,7 @@ void setup()
                 I2COutputBuffer,
                 (unsigned long) WHOLE_PACKET_BUFFER_LENGTH);
   interrupts();
-  //TransmissionTransceiver.setChannel(32);
+  TransmissionTransceiver.setChannel(32);
              
   delay(1000);
 }

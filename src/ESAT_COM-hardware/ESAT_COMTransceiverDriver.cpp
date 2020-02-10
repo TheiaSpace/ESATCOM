@@ -53,7 +53,7 @@ int8_t ESAT_COMTransceiverDriverClass::available(void)
 {
   switch (transceiverOperationMode)
   {
-    case TXInterruptsMode:
+    case TXMode:
     {
       if (transmissionInProgress == true)
       {
@@ -72,7 +72,7 @@ int8_t ESAT_COMTransceiverDriverClass::available(void)
         return 1;        
       }
     }    
-    case RXInterruptsMode:
+    case RXMode:
     {  
       if (receptionAvailable == true) // If reception was available but still not read, return 1
       {
@@ -115,7 +115,7 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   TransceiverErrorCode error;
   switch (transceiverOperationMode)
   {
-    case TXInterruptsMode:
+    case TXMode:
     {
       ESAT_COMTransmissionLED.begin();
       //DEBUG_PRINTLN("Initializing TX interrupts");
@@ -135,7 +135,7 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
       setTransmissionPower(transmissionPowerRate);
       break;
     }
-    case RXInterruptsMode:
+    case RXMode:
     {
       ESAT_COMReceptionLED.begin();      
       receptionConfigurationData = switchReceptionConfiguration(transceiverModulationType);
@@ -198,12 +198,12 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   ESAT_COMTransceiverConfigurationClass* transceiverConfiguration;  
   switch (transceiverOperationMode)
   {
-    case TXInterruptsMode:
+    case TXMode:
     {
       transceiverConfiguration = transmissionConfigurationData;
       break;
     }
-    case RXInterruptsMode:
+    case RXMode:
     {
       transceiverConfiguration = receptionConfigurationData;
       break;
@@ -265,11 +265,11 @@ float ESAT_COMTransceiverDriverClass::getFrequency()
 {
   switch (transceiverOperationMode)
   {
-    case TXInterruptsMode:
+    case TXMode:
     {
       return transmissionFrequency;
     }
-    case RXInterruptsMode:
+    case RXMode:
     {
       return receptionFrequency;
     }
@@ -318,7 +318,7 @@ uint8_t ESAT_COMTransceiverDriverClass::getModulation()
 
 float ESAT_COMTransceiverDriverClass::getReceivedSignalStrengthIndicator()
 {
-  if (transceiverOperationMode != RXInterruptsMode)
+  if (transceiverOperationMode != RXMode)
   {
     return 0.0;
   }   
@@ -329,7 +329,7 @@ float ESAT_COMTransceiverDriverClass::getReceivedSignalStrengthIndicator()
 float ESAT_COMTransceiverDriverClass::getTransceiverTemperature()
 {
   // If transceiver is disabled return 0 (better returning error but not yet)
-  if ((transceiverOperationMode != RXInterruptsMode) && (transceiverOperationMode != TXInterruptsMode))
+  if ((transceiverOperationMode != RXMode) && (transceiverOperationMode != TXMode))
   {
     return 0;
   } 
@@ -340,7 +340,7 @@ float ESAT_COMTransceiverDriverClass::getTransceiverTemperature()
 float ESAT_COMTransceiverDriverClass::getTransceiverVoltage()
 {
   // If transceiver is disabled return 0 (better returning error but not yet)
-  if ((transceiverOperationMode!=RXInterruptsMode) && (transceiverOperationMode!=TXInterruptsMode))
+  if ((transceiverOperationMode!=RXMode) && (transceiverOperationMode!=TXMode))
   {
     return 0;
   } 
@@ -352,11 +352,11 @@ float ESAT_COMTransceiverDriverClass::getTransmissionPowerRate()
 {
   switch (transceiverOperationMode)
   {
-    case ESAT_COMTransceiverDriverClass::TXInterruptsMode:
+    case ESAT_COMTransceiverDriverClass::TXMode:
     {
       return transmissionPowerRate;
     }
-    case ESAT_COMTransceiverDriverClass::RXInterruptsMode:
+    case ESAT_COMTransceiverDriverClass::RXMode:
     default:
     {
       // If transceiver is disabled return 0 (better returning error but not yet)
@@ -429,7 +429,7 @@ uint8_t* ESAT_COMTransceiverDriverClass::nonBlockingRead(void)
 
 ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::nonBlockingWrite(uint8_t* msgBuf)
 {
-  if (transceiverOperationMode != ESAT_COMTransceiverDriverClass::TXInterruptsMode)
+  if (transceiverOperationMode != ESAT_COMTransceiverDriverClass::TXMode)
   {
     return ESAT_COMTransceiverDriverClass::wrongModeError;
   }    
@@ -471,13 +471,13 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   // Store set frequency.
   switch (transceiverOperationMode)
   {
-    case TXInterruptsMode:
+    case TXMode:
     {
       transmissionFrequency = frequency;
       transceiverConfiguration = transmissionConfigurationData;
       break;
     }
-    case RXInterruptsMode:
+    case RXMode:
     {
       receptionFrequency = frequency;
       transceiverConfiguration = receptionConfigurationData;
@@ -540,7 +540,7 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
 {
   switch (transceiverOperationMode)
   {   
-    case TXInterruptsMode:
+    case TXMode:
     {
       // Disable interrupts
       detachInterrupt(digitalPinToInterrupt(transceiver -> getInterruptPin()));
@@ -548,7 +548,7 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
       transmissionInterruptFlag = 0;
       return noError;
     }
-    case RXInterruptsMode:
+    case RXMode:
     {
       // Disable interrupts
       detachInterrupt(digitalPinToInterrupt(transceiver -> getInterruptPin()));
@@ -566,7 +566,7 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
 ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::setTransmissionPower(float transmissionPowerRateToBeSet)
 {
   //Power can't be changed in non-TX mode (or disabled)
-  if (transceiverOperationMode != ESAT_COMTransceiverDriverClass::TXInterruptsMode)
+  if (transceiverOperationMode != ESAT_COMTransceiverDriverClass::TXMode)
   {
     return ESAT_COMTransceiverDriverClass::wrongPowerError;
   }
@@ -586,7 +586,7 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
  
 ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::startReception (void)
 {
-  if (transceiverOperationMode!=RXInterruptsMode)
+  if (transceiverOperationMode!=RXMode)
   {
     return wrongModeError;
   }
@@ -753,7 +753,7 @@ void ESAT_COMTransceiverDriverClass::setTransmissionTransceiverInterruptFlag (vo
 
 ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::write(uint8_t* msgBuf)
 {
-  if (transceiverOperationMode != TXInterruptsMode)
+  if (transceiverOperationMode != TXMode)
   {
     return wrongModeError;
   }

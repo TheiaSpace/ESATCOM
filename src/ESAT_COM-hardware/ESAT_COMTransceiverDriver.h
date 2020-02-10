@@ -80,8 +80,8 @@ class ESAT_COMTransceiverDriverClass
     enum TransceiverMode
     {
       notInitializedMode = 0,
-      TXInterruptsMode = 1,
-      RXInterruptsMode = 2,
+      TXMode = 1,
+      RXMode = 2,
     };
   
     // Highest reserved channel for reception.

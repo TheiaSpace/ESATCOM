@@ -21,308 +21,308 @@
 #include <Arduino.h>
 #include "ESAT_COM2FSKReceptionConfiguration.h"
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::applyConfiguration(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::applyConfiguration(ESAT_COMTransceiverHALClass& transceiver)
 {
   
-  ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError returnBuff;
+  ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError returnBuff;
   returnBuff = configureGlobalProperties(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureInterrupts(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }    
   returnBuff = configureFastResponseRegisterA(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureFastResponseRegisterB(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureFastResponseRegisterC(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureFastResponseRegisterD(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
 
   returnBuff = configurePreamble(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configurePreambleLength(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configurePreamblePattern(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
 
   returnBuff = configureSyncWord(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
 
   returnBuff = configurePacket(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configurePacketCRC(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configurePacketWhitening(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configurePacketLength(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configurePacketFIFOThresholds(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configurePacketField1(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configurePacketField2(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configurePacketField3(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configurePacketField4(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configurePacketField5(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configurePacketReceptionField1(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configurePacketReceptionField2(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configurePacketReceptionField3(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configurePacketReceptionField4(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configurePacketReceptionField5(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
 
   returnBuff = configureModemModulationType(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemMappingControl(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemDSMControl(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemDataRate(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemTransmissionNCO(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemFrequencyDeviation(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemTransmissionRampDown(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemMDMControl(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemIFControl(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemDecimationControl(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemIFPKDThresholds(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemBCR(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemAFC(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemAGC(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemFSK4(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemOOK(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemRawEyeControl(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemAntennaDiversity(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemRawSearch2(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemClockGeneratorBand(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemSpikeDetector(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemOneShotAFC(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureModemDSA(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
 
   returnBuff = configureReceptionFilter1Coefficients(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureReceptionFilter2Coefficients(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
 
   returnBuff = configurePowerAmplifier(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
 
   returnBuff = configureSynthesizer(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
 
   returnBuff = configureMatch1(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureMatch2(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureMatch3(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   returnBuff = configureMatch4(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
   
   returnBuff = configureFrequencyControl(transceiver);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
-  return ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS;
+  return ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS;
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureGlobalProperties(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureGlobalProperties(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 2;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_GLOBAL;
@@ -330,8 +330,8 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   uint8_t cmdBuff[numProperties];  
   cmdBuff[0] = 0x52;
   cmdBuff[1] = 0x00;  
-  ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError returnBuff = ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError returnBuff = ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
@@ -341,7 +341,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties2, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureInterrupts(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureInterrupts(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 4;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_INTERRUPTS_CONTROL;
@@ -354,7 +354,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureFastResponseRegisterA(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureFastResponseRegisterA(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 1;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_FAST_RESPONSE_REGISTERS_CONTROL;
@@ -364,7 +364,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureFastResponseRegisterB(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureFastResponseRegisterB(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 1;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_FAST_RESPONSE_REGISTERS_CONTROL;
@@ -374,7 +374,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureFastResponseRegisterC(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureFastResponseRegisterC(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 1;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_FAST_RESPONSE_REGISTERS_CONTROL;
@@ -384,7 +384,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureFastResponseRegisterD(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureFastResponseRegisterD(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 1;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_FAST_RESPONSE_REGISTERS_CONTROL;
@@ -394,7 +394,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePreambleLength(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePreambleLength(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 1;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PREAMBLE;
@@ -404,7 +404,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePreamble(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePreamble(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 4;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PREAMBLE;
@@ -417,7 +417,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePreamblePattern(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePreamblePattern(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 4;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PREAMBLE;
@@ -430,7 +430,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);  
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureSyncWord(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureSyncWord(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 6;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_SYNC;
@@ -445,7 +445,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);  
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketCRC(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketCRC(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 1;
   const uint8_t numProperties2 = 4;
@@ -453,8 +453,8 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   uint8_t offset = 0x00;
   uint8_t cmdBuff[numProperties2];  
   cmdBuff[0] = 0x00; 
-  ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError returnBuff = ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError returnBuff = ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }  
@@ -466,7 +466,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties2, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketWhitening(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketWhitening(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 5;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
@@ -480,7 +480,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);  
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacket(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacket(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 2;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
@@ -492,7 +492,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
 }
 
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketLength(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketLength(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 3;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
@@ -504,7 +504,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);    
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketFIFOThresholds(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketFIFOThresholds(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 2;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
@@ -515,7 +515,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);    
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketField1(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketField1(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 4;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
@@ -528,7 +528,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);    
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketField2(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketField2(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 4;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
@@ -541,7 +541,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);    
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketField3(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketField3(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 4;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
@@ -554,7 +554,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff); 
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketField4(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketField4(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 4;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
@@ -567,7 +567,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff); 
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketField5(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketField5(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 4;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
@@ -580,7 +580,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff); 
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketReceptionField1(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketReceptionField1(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 4;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
@@ -593,7 +593,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff); 
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketReceptionField2(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketReceptionField2(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 4;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
@@ -606,7 +606,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff); 
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketReceptionField3(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketReceptionField3(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 4;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
@@ -619,7 +619,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff); 
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketReceptionField4(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketReceptionField4(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 4;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
@@ -632,7 +632,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff); 
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketReceptionField5(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePacketReceptionField5(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 4;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
@@ -645,7 +645,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff); 
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemModulationType(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemModulationType(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 1;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -655,7 +655,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);  
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemMappingControl(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemMappingControl(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 1;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -665,7 +665,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);  
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemDSMControl(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemDSMControl(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 1;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -675,7 +675,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);  
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemDataRate(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemDataRate(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 3;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -686,7 +686,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   cmdBuff[2] = 0x00;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff); 
 }
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemTransmissionNCO(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemTransmissionNCO(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 4;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -698,7 +698,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   cmdBuff[3] = 0x80;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff); 
 }
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemFrequencyDeviation(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemFrequencyDeviation(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 3;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -710,7 +710,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemTransmissionRampDown(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemTransmissionRampDown(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 1;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -720,7 +720,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemMDMControl(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemMDMControl(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 1;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -730,7 +730,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemIFControl(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemIFControl(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 4;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -742,7 +742,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   cmdBuff[3] = 0x00;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemDecimationControl(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemDecimationControl(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 3;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -753,7 +753,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   cmdBuff[2] = 0x00;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemIFPKDThresholds(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemIFPKDThresholds(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 1;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -762,7 +762,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   cmdBuff[0] = 0xE8;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemBCR(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemBCR(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 10;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -781,7 +781,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemAFC(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemAFC(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 7;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -797,7 +797,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemAGC(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemAGC(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 1;
   const uint8_t numProperties2 = 3;
@@ -805,8 +805,8 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   uint8_t offset = 0x35;
   uint8_t cmdBuff[numProperties2];  
   cmdBuff[0] = 0xE0; 
-  ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError returnBuff = ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError returnBuff = ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
@@ -817,7 +817,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties2, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemFSK4(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemFSK4(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 5;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -831,7 +831,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemOOK(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemOOK(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 4;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -844,7 +844,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemRawEyeControl(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemRawEyeControl(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 3;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -855,7 +855,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   cmdBuff[2] = 0x99;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemAntennaDiversity(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemAntennaDiversity(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 2;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -866,7 +866,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemRSSI(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemRSSI(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 4;
   const uint8_t numProperties2 = 1;
@@ -877,8 +877,8 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   cmdBuff[1] = 0x00;
   cmdBuff[2] = 0x18;
   cmdBuff[3] = 0x40;
-  ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError returnBuff = ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError returnBuff = ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
@@ -887,7 +887,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties2, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemRawSearch2(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemRawSearch2(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 1;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -897,7 +897,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff); 
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemClockGeneratorBand(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemClockGeneratorBand(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 1;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -907,7 +907,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff); 
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemSpikeDetector(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemSpikeDetector(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 1;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -917,7 +917,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff); 
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemOneShotAFC(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemOneShotAFC(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 1;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -927,7 +927,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff); 
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemDSA(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureModemDSA(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 5;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -941,7 +941,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff); 
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureReceptionFilter1Coefficients(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureReceptionFilter1Coefficients(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 12;
   const uint8_t numProperties2 = 6;
@@ -960,8 +960,8 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   cmdBuff[9] = 0x17;
   cmdBuff[10] = 0x16;
   cmdBuff[11] = 0x0C;
-  ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError returnBuff = ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError returnBuff = ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
@@ -975,7 +975,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties2, offset, cmdBuff); 
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureReceptionFilter2Coefficients(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureReceptionFilter2Coefficients(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 12;
   const uint8_t numProperties2 = 6;
@@ -994,8 +994,8 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   cmdBuff[9] = 0x17;
   cmdBuff[10] = 0x16;
   cmdBuff[11] = 0x0C;
-  ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError returnBuff = ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
-  if (returnBuff != ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS)
+  ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError returnBuff = ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
+  if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
     return returnBuff;
   }
@@ -1009,7 +1009,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties2, offset, cmdBuff); 
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePowerAmplifier(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configurePowerAmplifier(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 4;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_POWER_AMPLIFIER;
@@ -1022,7 +1022,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureSynthesizer(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureSynthesizer(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 7;;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_SYNTHESIZER;
@@ -1038,7 +1038,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureMatch1(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureMatch1(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 3;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MATCH;
@@ -1050,7 +1050,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureMatch2(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureMatch2(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 3;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MATCH;
@@ -1062,7 +1062,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureMatch3(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureMatch3(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 3;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MATCH;
@@ -1074,7 +1074,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureMatch4(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureMatch4(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 3;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MATCH;
@@ -1086,7 +1086,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKRe
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureFrequencyControl(ESAT_COMTransceiverInterfaceClass& transceiver)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::configureFrequencyControl(ESAT_COMTransceiverHALClass& transceiver)
 {
   const uint8_t numProperties = 8;
   const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_FREQUENCY_CONTROL;

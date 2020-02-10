@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -17,15 +17,15 @@
  * along with Theia Space's ESAT COM library.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-#ifndef ESAT_COMTransceiverInterface_h
-#define ESAT_COMTransceiverInterface_h
+#ifndef ESAT_COMTransceiverHAL_h
+#define ESAT_COMTransceiverHAL_h
 
 #include <Arduino.h>
 #include <SPI.h>
 
 #define SDN_HAS_HW_PULLUP
 
-class ESAT_COMTransceiverInterfaceClass
+class ESAT_COMTransceiverHALClass
 {    
   public:  
   enum TransceiverLowLevelDriverError
@@ -37,11 +37,11 @@ class ESAT_COMTransceiverInterfaceClass
   };
   
   // Default constructor.
-  ESAT_COMTransceiverInterfaceClass();
+  ESAT_COMTransceiverHALClass();
   
   // Constructor of the class. Configures the interface pins
   // required to communicate to the transceiver.
-  ESAT_COMTransceiverInterfaceClass(SPIClass& spiBus, uint8_t chipSelect, uint8_t interrupt, uint8_t shutdown, uint8_t gpio0, uint8_t gpio1, uint8_t gpio2, uint8_t gpio3);
+  ESAT_COMTransceiverHALClass(SPIClass& spiBus, uint8_t chipSelect, uint8_t interrupt, uint8_t shutdown, uint8_t gpio0, uint8_t gpio1, uint8_t gpio2, uint8_t gpio3);
   
   // Initializes the transceiver required software and hardware.
   // This function should be called before anything.
@@ -162,9 +162,9 @@ class ESAT_COMTransceiverInterfaceClass
 };
 
 // Global instace of the reception transceiver low level driver.
-extern ESAT_COMTransceiverInterfaceClass ReceptionTransceiverLowLevelDriver;
+extern ESAT_COMTransceiverHALClass ReceptionTransceiverLowLevelDriver;
 
 // Global instace of the transmission transceiver low level driver.
-extern ESAT_COMTransceiverInterfaceClass TransmissionTransceiverLowLevelDriver;
+extern ESAT_COMTransceiverHALClass TransmissionTransceiverLowLevelDriver;
 
-#endif /*ESAT_COMTransceiverInterface_h*/
+#endif /*ESAT_COMTransceiverHAL_h*/

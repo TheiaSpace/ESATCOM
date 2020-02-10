@@ -22,7 +22,7 @@
 
 #include <Arduino.h>
 #include <SPI.h>
-#include "ESAT_COMTransceiverInterface.h"
+#include "ESAT_COMTransceiverHAL.h"
 #include "configurations/ESAT_COMTransceiverConfiguration.h"
 
 // Radio communications devices driver class.
@@ -125,7 +125,7 @@ class ESAT_COMTransceiverDriverClass
     
     // Constructor. Initializes the transceiver API software
     // and attaches it to a physical interface.    
-    ESAT_COMTransceiverDriverClass(ESAT_COMTransceiverInterfaceClass& hardwareTransceiver);
+    ESAT_COMTransceiverDriverClass(ESAT_COMTransceiverHALClass& hardwareTransceiver);
     
     // Process the transmission (keeps filling the fifo 
     // until packet is over); and the reception (if a 
@@ -241,7 +241,7 @@ class ESAT_COMTransceiverDriverClass
     uint8_t failedInitializationCounter = 0;
     
     // Low level driver entity.
-    ESAT_COMTransceiverInterfaceClass* transceiver;
+    ESAT_COMTransceiverHALClass* transceiver;
     
     boolean receptionAvailable;
     
@@ -293,7 +293,7 @@ class ESAT_COMTransceiverDriverClass
     int8_t checkTransmissionAvailability();
                
     // Configures the transceiver.
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError initializeTransceiver(ESAT_COMTransceiverConfigurationClass* transceiverConfiguration);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError initializeTransceiver(ESAT_COMTransceiverConfigurationClass* transceiverConfiguration);
              
     // Interrupt service routine for the reception transceiver.
     // Set the RX ISR flag when is called.
@@ -326,7 +326,7 @@ class ESAT_COMTransceiverDriverClass
     ESAT_COMTransceiverConfigurationClass* switchTransmissionConfiguration(ModulationType modulationType); 
 
     // Casts from HAL error to device driver error.
-    TransceiverErrorCode translateLowLevelDriverError(ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError);
+    TransceiverErrorCode translateLowLevelDriverError(ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError);
 
 };
 

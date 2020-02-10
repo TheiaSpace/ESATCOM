@@ -18,13 +18,13 @@
  * <http://www.gnu.org/licenses/>.
  */
  
-#include "ESAT_COMTransceiverInterface.h"
+#include "ESAT_COMTransceiverHAL.h"
 
-ESAT_COMTransceiverInterfaceClass::ESAT_COMTransceiverInterfaceClass()
+ESAT_COMTransceiverHALClass::ESAT_COMTransceiverHALClass()
 {  
 }
 
-ESAT_COMTransceiverInterfaceClass::ESAT_COMTransceiverInterfaceClass(SPIClass& spiBus, uint8_t chipSelect, uint8_t interrupt, uint8_t shutdown, uint8_t gpio0, uint8_t gpio1, uint8_t gpio2, uint8_t gpio3)
+ESAT_COMTransceiverHALClass::ESAT_COMTransceiverHALClass(SPIClass& spiBus, uint8_t chipSelect, uint8_t interrupt, uint8_t shutdown, uint8_t gpio0, uint8_t gpio1, uint8_t gpio2, uint8_t gpio3)
 {
   transceiverSPI = &spiBus;
   chipSelectPin = chipSelect;
@@ -36,7 +36,7 @@ ESAT_COMTransceiverInterfaceClass::ESAT_COMTransceiverInterfaceClass(SPIClass& s
   gpio3Pin = gpio3;
 }
 
-void ESAT_COMTransceiverInterfaceClass::begin()
+void ESAT_COMTransceiverHALClass::begin()
 {
   pinMode(interruptPin, INPUT);
   pinMode(chipSelectPin, OUTPUT);
@@ -46,27 +46,27 @@ void ESAT_COMTransceiverInterfaceClass::begin()
   transceiverSPI -> setClockDivider(SPI_CLOCK_DIVIDER_FOR_STM32L4);
 }
 
-void ESAT_COMTransceiverInterfaceClass::clearChipSelect()
+void ESAT_COMTransceiverHALClass::clearChipSelect()
 {
   digitalWrite(chipSelectPin, HIGH);
 }
 
-void ESAT_COMTransceiverInterfaceClass::clearRTSCounter()
+void ESAT_COMTransceiverHALClass::clearRTSCounter()
 {
   RTSCounter = 0;
 }
 
-uint8_t ESAT_COMTransceiverInterfaceClass::checkClearToSendPin()
+uint8_t ESAT_COMTransceiverHALClass::checkClearToSendPin()
 {
   return digitalRead(gpio1Pin);
 }
 
-uint8_t ESAT_COMTransceiverInterfaceClass::checkInterruptPin()
+uint8_t ESAT_COMTransceiverHALClass::checkInterruptPin()
 {
   return digitalRead(interruptPin);
 }
 
-void ESAT_COMTransceiverInterfaceClass::disable()
+void ESAT_COMTransceiverHALClass::disable()
 {
 #if defined(SDN_HAS_HW_PULLUP)
       pinMode(shutdownPin, INPUT); //Let it be high at least 10 ms
@@ -76,12 +76,12 @@ void ESAT_COMTransceiverInterfaceClass::disable()
 #endif
 }
 
-uint8_t ESAT_COMTransceiverInterfaceClass::getInterruptPin()
+uint8_t ESAT_COMTransceiverHALClass::getInterruptPin()
 {
   return interruptPin;
 }
 
-void ESAT_COMTransceiverInterfaceClass::powerUpTransceiver()
+void ESAT_COMTransceiverHALClass::powerUpTransceiver()
 {  
 #if defined(SDN_HAS_HW_PULLUP)
   pinMode(shutdownPin, OUTPUT); //Pull it down
@@ -92,7 +92,7 @@ void ESAT_COMTransceiverInterfaceClass::powerUpTransceiver()
   delay(10);
 }
 
-void ESAT_COMTransceiverInterfaceClass::readData(uint8_t command, uint8_t dataByteCount, uint8_t* data)
+void ESAT_COMTransceiverHALClass::readData(uint8_t command, uint8_t dataByteCount, uint8_t* data)
 {
   if (requestToSend())
   {
@@ -103,7 +103,7 @@ void ESAT_COMTransceiverInterfaceClass::readData(uint8_t command, uint8_t dataBy
   }
 }
 
-uint8_t ESAT_COMTransceiverInterfaceClass::requestToSend()
+uint8_t ESAT_COMTransceiverHALClass::requestToSend()
 {
   if (checkClearToSendPin())
   {
@@ -124,7 +124,7 @@ uint8_t ESAT_COMTransceiverInterfaceClass::requestToSend()
   }
 }
 
-void ESAT_COMTransceiverInterfaceClass::reset()
+void ESAT_COMTransceiverHALClass::reset()
 {
   powerUpTransceiver();
   delay(10);
@@ -135,7 +135,7 @@ void ESAT_COMTransceiverInterfaceClass::reset()
   delay(10);
 }
 
-uint8_t ESAT_COMTransceiverInterfaceClass::retrieveResponse(uint8_t byteCount, uint8_t* data)
+uint8_t ESAT_COMTransceiverHALClass::retrieveResponse(uint8_t byteCount, uint8_t* data)
 {
   if (requestToSend())
   {
@@ -152,17 +152,17 @@ uint8_t ESAT_COMTransceiverInterfaceClass::retrieveResponse(uint8_t byteCount, u
   return 0;
 }
 
-void ESAT_COMTransceiverInterfaceClass::setChipSelect()
+void ESAT_COMTransceiverHALClass::setChipSelect()
 {
   digitalWrite(chipSelectPin, LOW);
 }
 
-void ESAT_COMTransceiverInterfaceClass::setRTSMaximumThreshold(uint32_t threshold)
+void ESAT_COMTransceiverHALClass::setRTSMaximumThreshold(uint32_t threshold)
 {
   maximumRTS = threshold;
 }
 
-void ESAT_COMTransceiverInterfaceClass::SPIBulkRead(uint8_t numBytes, uint8_t* data)
+void ESAT_COMTransceiverHALClass::SPIBulkRead(uint8_t numBytes, uint8_t* data)
 {
   while (numBytes--)
   {
@@ -170,7 +170,7 @@ void ESAT_COMTransceiverInterfaceClass::SPIBulkRead(uint8_t numBytes, uint8_t* d
   }
 }
 
-void ESAT_COMTransceiverInterfaceClass::SPIBulkWrite(uint8_t numBytes, uint8_t* data)
+void ESAT_COMTransceiverHALClass::SPIBulkWrite(uint8_t numBytes, uint8_t* data)
 {
   while(numBytes--)
   {
@@ -178,12 +178,12 @@ void ESAT_COMTransceiverInterfaceClass::SPIBulkWrite(uint8_t numBytes, uint8_t* 
   }
 }
 
-uint8_t ESAT_COMTransceiverInterfaceClass::SPIWriteReadByte(uint8_t toWrite)
+uint8_t ESAT_COMTransceiverHALClass::SPIWriteReadByte(uint8_t toWrite)
 {
   return transceiverSPI -> transfer(toWrite);
 }
 
-void ESAT_COMTransceiverInterfaceClass::writeCommand(uint8_t byteCount, uint8_t* data)
+void ESAT_COMTransceiverHALClass::writeCommand(uint8_t byteCount, uint8_t* data)
 {
   if (requestToSend())
   {
@@ -199,14 +199,14 @@ void ESAT_COMTransceiverInterfaceClass::writeCommand(uint8_t byteCount, uint8_t*
   }
 } 
 
-uint8_t ESAT_COMTransceiverInterfaceClass::writeCommandAndRetrieveResponse(uint8_t commandByteCount, uint8_t* commandData,
+uint8_t ESAT_COMTransceiverHALClass::writeCommandAndRetrieveResponse(uint8_t commandByteCount, uint8_t* commandData,
                                                                         uint8_t responseByteCount, uint8_t* responseData)
 {
   writeCommand(commandByteCount, commandData);
   return retrieveResponse(responseByteCount, responseData);
 }
 
-void ESAT_COMTransceiverInterfaceClass::writeData(uint8_t command, uint8_t dataByteCount, uint8_t* data)
+void ESAT_COMTransceiverHALClass::writeData(uint8_t command, uint8_t dataByteCount, uint8_t* data)
 {
  if (requestToSend())
  {
@@ -217,6 +217,6 @@ void ESAT_COMTransceiverInterfaceClass::writeData(uint8_t command, uint8_t dataB
  }
 }
 
-ESAT_COMTransceiverInterfaceClass ReceptionTransceiverLowLevelDriver(SPI, CS_RX, INT_RX, SDN_RX, GPIO0_RX, GPIO1_RX, GPIO2_RX, GPIO3_RX);
+ESAT_COMTransceiverHALClass ReceptionTransceiverLowLevelDriver(SPI, CS_RX, INT_RX, SDN_RX, GPIO0_RX, GPIO1_RX, GPIO2_RX, GPIO3_RX);
 
-ESAT_COMTransceiverInterfaceClass TransmissionTransceiverLowLevelDriver(SPI1, CS_TX, INT_TX, SDN_TX, GPIO0_TX, GPIO1_TX, GPIO2_TX, GPIO3_TX);
+ESAT_COMTransceiverHALClass TransmissionTransceiverLowLevelDriver(SPI1, CS_TX, INT_TX, SDN_TX, GPIO0_TX, GPIO1_TX, GPIO2_TX, GPIO3_TX);

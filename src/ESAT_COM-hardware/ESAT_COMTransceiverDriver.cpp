@@ -37,7 +37,7 @@
 #include "configurations/ESAT_COM4GFSKTransmissionConfiguration.h"
 
 
-ESAT_COMTransceiverDriverClass::ESAT_COMTransceiverDriverClass(ESAT_COMTransceiverInterfaceClass& hardwareTransceiver)
+ESAT_COMTransceiverDriverClass::ESAT_COMTransceiverDriverClass(ESAT_COMTransceiverHALClass& hardwareTransceiver)
 {   
   //Attaches the hardware transceiver pointer to be used by this ESAT_COMTransceiverDriverClass object
   transceiver = &hardwareTransceiver;  
@@ -365,12 +365,12 @@ float ESAT_COMTransceiverDriverClass::getTransmissionPowerRate()
   }
 } 
 
-ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COMTransceiverDriverClass::initializeTransceiver(ESAT_COMTransceiverConfigurationClass* transceiverConfiguration)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverDriverClass::initializeTransceiver(ESAT_COMTransceiverConfigurationClass* transceiverConfiguration)
 { 
   transceiver -> reset();  
   // Load path (if defined).
-  ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError error = ESAT_COMTransceiverCommands.applyPatch(*transceiver);
-  if (ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS != error)
+  ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError error = ESAT_COMTransceiverCommands.applyPatch(*transceiver);
+  if (ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS != error)
   {
     // If fail rate is overcome.
     if (MAXIMUM_FAILED_INITIALIZATIONS <= failedInitializationCounter)
@@ -398,7 +398,7 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COMTransc
                                         ESAT_COMTransceiverCommandsClass::DONOTHING, false,
                                         ESAT_COMTransceiverCommandsClass::RADIO_HIGH);                                        
   error = transceiverConfiguration -> applyConfiguration(*transceiver);
-  if (ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS != error)
+  if (ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS != error)
   {
     // If fail rate is overcome.
     if (MAXIMUM_FAILED_INITIALIZATIONS <= failedInitializationCounter)
@@ -415,9 +415,9 @@ ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError ESAT_COMTransc
   // Check if chip is ready to accept commands.
   if ((intStatusReply.chipStatus & ESAT_COMTransceiverCommandsClass::INTERRUPT_STATUS_REPLY_CHIP_STATUS_CHIP_READY_BITMASK)&& !(intStatusReply.chipPending & ESAT_COMTransceiverCommandsClass::INTERRUPT_STATUS_REPLY_CHIP_PENDING_CHIP_READY_BITMASK)) 
   {
-    return ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS;
+    return ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS;
   }
-  return ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_CHIP_ERROR;
+  return ESAT_COMTransceiverHALClass::TRANSCEIVER_CHIP_ERROR;
 }
 
 uint8_t* ESAT_COMTransceiverDriverClass::nonBlockingRead(void)
@@ -764,17 +764,17 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   return noError;
 }
 
-ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::translateLowLevelDriverError(ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError error)
+ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::translateLowLevelDriverError(ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError error)
 {
     switch(error)
     {
-      case ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_SUCCESS:
+      case ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS:
         return ESAT_COMTransceiverDriverClass::noError;
-      case ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_CTS_TIMEOUT: 
+      case ESAT_COMTransceiverHALClass::TRANSCEIVER_CTS_TIMEOUT: 
         return ESAT_COMTransceiverDriverClass::CTSError;
-      case ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_COMMAND_ERROR:
+      case ESAT_COMTransceiverHALClass::TRANSCEIVER_COMMAND_ERROR:
       return ESAT_COMTransceiverDriverClass::commandError;
-      case ESAT_COMTransceiverInterfaceClass::TRANSCEIVER_CHIP_ERROR:
+      case ESAT_COMTransceiverHALClass::TRANSCEIVER_CHIP_ERROR:
         return ESAT_COMTransceiverDriverClass::chipError;
       default:
         return ESAT_COMTransceiverDriverClass::error;

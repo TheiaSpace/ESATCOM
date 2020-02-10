@@ -22,83 +22,83 @@
 
 #include <Arduino.h>
 #include "ESAT_COMTransceiverConfiguration.h"
-#include "../ESAT_COMTransceiverInterface.h"
+#include "../ESAT_COMTransceiverHAL.h"
 
 class ESAT_COMOOKTransmissionConfigurationClass: public ESAT_COMTransceiverConfigurationClass
 {
   public:
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError applyConfiguration(ESAT_COMTransceiverInterfaceClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError applyConfiguration(ESAT_COMTransceiverHALClass& transceiver);
     
   private:
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureGlobalProperties(ESAT_COMTransceiverInterfaceClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureGlobalProperties(ESAT_COMTransceiverHALClass& transceiver);
     
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureInterrupts(ESAT_COMTransceiverInterfaceClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureInterrupts(ESAT_COMTransceiverHALClass& transceiver);
     
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureFastResponseRegisterA(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureFastResponseRegisterB(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureFastResponseRegisterC(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureFastResponseRegisterD(ESAT_COMTransceiverInterfaceClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureFastResponseRegisterA(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureFastResponseRegisterB(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureFastResponseRegisterC(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureFastResponseRegisterD(ESAT_COMTransceiverHALClass& transceiver);
     
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configurePreamble(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configurePreambleLength(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configurePreamblePattern(ESAT_COMTransceiverInterfaceClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configurePreamble(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configurePreambleLength(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configurePreamblePattern(ESAT_COMTransceiverHALClass& transceiver);
     
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureSyncWord(ESAT_COMTransceiverInterfaceClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureSyncWord(ESAT_COMTransceiverHALClass& transceiver);
     
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configurePacket(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configurePacketCRC(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configurePacketWhitening(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configurePacketLength(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configurePacketFIFOThresholds(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configurePacketField1(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configurePacketField2(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configurePacketField3(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configurePacketField4(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configurePacketField5(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configurePacketReceptionField1(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configurePacketReceptionField2(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configurePacketReceptionField3(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configurePacketReceptionField4(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configurePacketReceptionField5(ESAT_COMTransceiverInterfaceClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configurePacket(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configurePacketCRC(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configurePacketWhitening(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configurePacketLength(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configurePacketFIFOThresholds(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configurePacketField1(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configurePacketField2(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configurePacketField3(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configurePacketField4(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configurePacketField5(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configurePacketReceptionField1(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configurePacketReceptionField2(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configurePacketReceptionField3(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configurePacketReceptionField4(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configurePacketReceptionField5(ESAT_COMTransceiverHALClass& transceiver);
     
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemModulationType(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemMappingControl(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemDSMControl(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemDataRate(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemTransmissionNCO(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemFrequencyDeviation(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemTransmissionRampDown(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemMDMControl(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemIFControl(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemDecimationControl(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemIFPKDThresholds(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemBCR(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemAFC(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemAGC(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemFSK4(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemOOK(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemRawEyeControl(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemAntennaDiversity(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemRSSI(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemRawSearch2(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemClockGeneratorBand(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemSpikeDetector(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemOneShotAFC(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureModemDSA(ESAT_COMTransceiverInterfaceClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemModulationType(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemMappingControl(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemDSMControl(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemDataRate(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemTransmissionNCO(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemFrequencyDeviation(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemTransmissionRampDown(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemMDMControl(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemIFControl(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemDecimationControl(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemIFPKDThresholds(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemBCR(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemAFC(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemAGC(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemFSK4(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemOOK(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemRawEyeControl(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemAntennaDiversity(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemRSSI(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemRawSearch2(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemClockGeneratorBand(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemSpikeDetector(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemOneShotAFC(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModemDSA(ESAT_COMTransceiverHALClass& transceiver);
     
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureReceptionFilter1Coefficients(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureReceptionFilter2Coefficients(ESAT_COMTransceiverInterfaceClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureReceptionFilter1Coefficients(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureReceptionFilter2Coefficients(ESAT_COMTransceiverHALClass& transceiver);
     
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configurePowerAmplifier(ESAT_COMTransceiverInterfaceClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configurePowerAmplifier(ESAT_COMTransceiverHALClass& transceiver);
     
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureSynthesizer(ESAT_COMTransceiverInterfaceClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureSynthesizer(ESAT_COMTransceiverHALClass& transceiver);
     
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureMatch1(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureMatch2(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureMatch3(ESAT_COMTransceiverInterfaceClass& transceiver);
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureMatch4(ESAT_COMTransceiverInterfaceClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureMatch1(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureMatch2(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureMatch3(ESAT_COMTransceiverHALClass& transceiver);
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureMatch4(ESAT_COMTransceiverHALClass& transceiver);
     
-    ESAT_COMTransceiverInterfaceClass::TransceiverLowLevelDriverError configureFrequencyControl(ESAT_COMTransceiverInterfaceClass& transceiver);    
+    ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureFrequencyControl(ESAT_COMTransceiverHALClass& transceiver);    
 };
 
 extern ESAT_COMOOKTransmissionConfigurationClass ESAT_COMOOKTransmissionConfiguration;

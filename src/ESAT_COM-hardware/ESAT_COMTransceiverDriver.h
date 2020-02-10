@@ -158,13 +158,13 @@ class ESAT_COMTransceiverDriverClass
     uint8_t getModulation();
     
     // Read last received signal strength indicator value.
-    uint8_t getReceivedSignalStrengthIndicator();
+    float getReceivedSignalStrengthIndicator();
       
     // Read the transceiver temperature.
-    uint16_t getTransceiverTemperature();
+    float getTransceiverTemperature();
     
     // Read the transceiver suplly voltage.
-    uint16_t getTransceiverVoltage();
+    float getTransceiverVoltage();
     
     // Return the transmisssion power (0.0 if it is a receiver).
     float getTransmissionPowerRate();
@@ -234,6 +234,8 @@ class ESAT_COMTransceiverDriverClass
     // Minimum value for mapping the power rate into the transceiver values.
     const float MINIMUM_POWER_VALUE = 0.0;  
 
+    // Reception chain losses for RSSI calculation.
+    const float RECEPTION_LOSSES_dB = 130.0;
     
     // Counter of the failed initialization trials.
     uint8_t failedInitializationCounter = 0;

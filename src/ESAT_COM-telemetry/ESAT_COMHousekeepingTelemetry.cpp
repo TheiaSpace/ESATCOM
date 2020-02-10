@@ -37,15 +37,15 @@ boolean ESAT_COMHousekeepingTelemetryClass::fillUserData(ESAT_CCSDSPacket& packe
   packet.writeFloat(TransmissionTransceiver.getFrequency());
   packet.writeByte((byte) TransmissionTransceiver.getChannel());
   packet.writeFloat(TransmissionTransceiver.getTransmissionPowerRate());
-  packet.writeWord((word) TransmissionTransceiver.getTransceiverVoltage());
-  packet.writeWord((word) TransmissionTransceiver.getTransceiverTemperature());
+  packet.writeFloat(TransmissionTransceiver.getTransceiverVoltage());
+  packet.writeFloat(TransmissionTransceiver.getTransceiverTemperature());
   // Reception transceiver telemetry.
   packet.writeByte((byte) ReceptionTransceiver.getModulation());
   packet.writeFloat(ReceptionTransceiver.getFrequency());
   packet.writeByte((byte) ReceptionTransceiver.getChannel());
-  packet.writeByte((byte) ReceptionTransceiver.getReceivedSignalStrengthIndicator());
-  packet.writeWord((word) ReceptionTransceiver.getTransceiverVoltage());
-  packet.writeWord((word) ReceptionTransceiver.getTransceiverTemperature());  
+  packet.writeFloat(ReceptionTransceiver.getReceivedSignalStrengthIndicator());
+  packet.writeFloat(ReceptionTransceiver.getTransceiverVoltage());
+  packet.writeFloat(ReceptionTransceiver.getTransceiverTemperature());  
   // MCU telemetry (calibrated)
   packet.writeFloat(ProcessorVoltage.read());
   packet.writeFloat(ProcessorTemperature.read());

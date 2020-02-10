@@ -316,18 +316,17 @@ uint8_t ESAT_COMTransceiverDriverClass::getModulation()
   }
 }
 
-uint8_t ESAT_COMTransceiverDriverClass::getReceivedSignalStrengthIndicator()
+float ESAT_COMTransceiverDriverClass::getReceivedSignalStrengthIndicator()
 {
   if (transceiverOperationMode != RXInterruptsMode)
   {
-    return 0;
-  } 
-  
+    return 0.0;
+  }   
   ESAT_COMTransceiverCommandsClass::ModemStatusReply reply = ESAT_COMTransceiverCommands.getModemStatus(*transceiver, 0xFF);
-  return reply.currentReceivedSignalStregnthIndicator;
+  return (reply.currentReceivedSignalStregnthIndicator / 2.0) - RECEPTION_LOSSES_dB;
 }
 
-uint16_t ESAT_COMTransceiverDriverClass::getTransceiverTemperature()
+float ESAT_COMTransceiverDriverClass::getTransceiverTemperature()
 {
   // If transceiver is disabled return 0 (better returning error but not yet)
   if ((transceiverOperationMode != RXInterruptsMode) && (transceiverOperationMode != TXInterruptsMode))
@@ -335,10 +334,10 @@ uint16_t ESAT_COMTransceiverDriverClass::getTransceiverTemperature()
     return 0;
   } 
   ESAT_COMTransceiverCommandsClass::ADCReadingsReply reply = ESAT_COMTransceiverCommands.getADCReading(*transceiver, ESAT_COMTransceiverCommandsClass::ADC_READ_ARGUMENT_READ_TEMPERATURE_BITMASK);
-  return reply.temperatureRawValue; //MAY need to clear upper nibble bc is 11 bit adc.
+  return (899.0 * reply.temperatureRawValue) / 4096.0 - 293.0; //MAY need to clear upper nibble bc is 11 bit adc.
 }
 
-uint16_t ESAT_COMTransceiverDriverClass::getTransceiverVoltage()
+float ESAT_COMTransceiverDriverClass::getTransceiverVoltage()
 {
   // If transceiver is disabled return 0 (better returning error but not yet)
   if ((transceiverOperationMode!=RXInterruptsMode) && (transceiverOperationMode!=TXInterruptsMode))
@@ -346,7 +345,7 @@ uint16_t ESAT_COMTransceiverDriverClass::getTransceiverVoltage()
     return 0;
   } 
    ESAT_COMTransceiverCommandsClass::ADCReadingsReply reply =  ESAT_COMTransceiverCommands.getADCReading(*transceiver, ESAT_COMTransceiverCommandsClass::ADC_READ_ARGUMENT_READ_VOLTAGE_BITMASK);
-  return reply.voltageRawValue; //MAY need to clear upper nibble bc is 11 bit adc.
+  return (3.0 * reply.voltageRawValue) / 1280.0; //MAY need to clear upper nibble bc is 11 bit adc.
 }
 
 float ESAT_COMTransceiverDriverClass::getTransmissionPowerRate()

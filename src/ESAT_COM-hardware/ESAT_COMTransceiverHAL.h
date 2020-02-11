@@ -27,7 +27,7 @@
 
 class ESAT_COMTransceiverHALClass
 {    
-  public:  
+  public:    
   enum TransceiverLowLevelDriverError
   {
       TRANSCEIVER_SUCCESS,
@@ -152,7 +152,7 @@ class ESAT_COMTransceiverHALClass
   uint8_t gpio3Pin;
   
   // Number of requests to send before aborting communications.
-  uint32_t maximumRTS = 20000;
+  uint32_t maximumRTS = 500;
   
   // Number of RTS performed.
   uint32_t RTSCounter;

@@ -46,7 +46,6 @@ ESAT_COMTransceiverDriverClass::ESAT_COMTransceiverDriverClass(ESAT_COMTransceiv
   transceiverOperationMode = notInitializedMode;
   transceiverModulationType = DEFAULT_MODULATION_TYPE;
   transmissionPowerRate = DEFAULT_TRANSMISSION_POWER_RATE;
-  failedInitializationCounter = 0;
 }
  
 int8_t ESAT_COMTransceiverDriverClass::available(void)
@@ -367,57 +366,44 @@ float ESAT_COMTransceiverDriverClass::getTransmissionPowerRate()
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverDriverClass::initializeTransceiver(ESAT_COMTransceiverConfigurationClass* transceiverConfiguration)
 { 
-  transceiver -> reset();  
-  // Load path (if defined).
-  ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError error = ESAT_COMTransceiverCommands.applyPatch(*transceiver);
-  if (ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS != error)
+  ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError error;
+  uint8_t failedInitializationCounter = 0;
+  do
   {
-    // If fail rate is overcome.
-    if (MAXIMUM_FAILED_INITIALIZATIONS <= failedInitializationCounter)
+    transceiver -> reset();  
+    // Load patch (if defined).
+    error = ESAT_COMTransceiverCommands.applyPatch(*transceiver);
+    if (ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS == error)
     {
-      return error;
-    }       
-    ++failedInitializationCounter;
-    delay(10);    
-    // Recursive retrial
-    return initializeTransceiver(transceiverConfiguration);
-  }
-  // Load configuration.
-  // TODO
-  // Think about a CTS timeout for these
-  // However, on WDS these commands don't request for CTS or check wrong interrupt level fault 
-  // (they may not provide them; applyPatch and setProperty yes). This hardens the way for checking 
-  // a communication fault.  
-  ESAT_COMTransceiverCommands.powerUp(*transceiver);
-  ESAT_COMTransceiverCommands.getInterruptStatus(*transceiver, 0, 0, 0);
-  //ESAT_COMTransceiverCommands.configureGPIODefault(*transceiver);
-  ESAT_COMTransceiverCommands.configureGPIO(*transceiver, 
+      ESAT_COMTransceiverCommands.powerUp(*transceiver);
+      ESAT_COMTransceiverCommands.getInterruptStatus(*transceiver, 0, 0, 0);
+      ESAT_COMTransceiverCommands.configureGPIO(*transceiver, 
                                         ESAT_COMTransceiverCommandsClass::DONOTHING, false,
                                         ESAT_COMTransceiverCommandsClass::CTS, false,
                                         ESAT_COMTransceiverCommandsClass::DONOTHING, false,
                                         ESAT_COMTransceiverCommandsClass::DONOTHING, false,
-                                        ESAT_COMTransceiverCommandsClass::RADIO_HIGH);                                        
-  error = transceiverConfiguration -> applyConfiguration(*transceiver);
-  if (ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS != error)
-  {
-    // If fail rate is overcome.
+                                        ESAT_COMTransceiverCommandsClass::RADIO_HIGH);
+      error = transceiverConfiguration -> applyConfiguration(*transceiver);
+      if (error == ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
+      {
+          ESAT_COMTransceiverCommandsClass::InterruptStatusReply intStatusReply = ESAT_COMTransceiverCommands.getInterruptStatus(*transceiver, 0, 0, 0);
+          // Check if chip is ready to accept commands.
+          if ((intStatusReply.chipStatus & ESAT_COMTransceiverCommandsClass::INTERRUPT_STATUS_REPLY_CHIP_STATUS_CHIP_READY_BITMASK)&& !(intStatusReply.chipPending & ESAT_COMTransceiverCommandsClass::INTERRUPT_STATUS_REPLY_CHIP_PENDING_CHIP_READY_BITMASK)) 
+          {
+            return ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS;
+          }
+          return ESAT_COMTransceiverHALClass::TRANSCEIVER_CHIP_ERROR;
+      }      
+    }
     if (MAXIMUM_FAILED_INITIALIZATIONS <= failedInitializationCounter)
     {
       return error;
-    }       
+    }
     ++failedInitializationCounter;
     delay(10);
-    // Recursive retrial
-    return initializeTransceiver(transceiverConfiguration);
   }
-  // Read interrupts and clear pending ones.
-  ESAT_COMTransceiverCommandsClass::InterruptStatusReply intStatusReply = ESAT_COMTransceiverCommands.getInterruptStatus(*transceiver, 0, 0, 0);
-  // Check if chip is ready to accept commands.
-  if ((intStatusReply.chipStatus & ESAT_COMTransceiverCommandsClass::INTERRUPT_STATUS_REPLY_CHIP_STATUS_CHIP_READY_BITMASK)&& !(intStatusReply.chipPending & ESAT_COMTransceiverCommandsClass::INTERRUPT_STATUS_REPLY_CHIP_PENDING_CHIP_READY_BITMASK)) 
-  {
-    return ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS;
-  }
-  return ESAT_COMTransceiverHALClass::TRANSCEIVER_CHIP_ERROR;
+  while (MAXIMUM_FAILED_INITIALIZATIONS <= failedInitializationCounter);
+  return error;   
 }
 
 uint8_t* ESAT_COMTransceiverDriverClass::nonBlockingRead(void)

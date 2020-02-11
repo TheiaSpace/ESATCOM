@@ -236,10 +236,7 @@ class ESAT_COMTransceiverDriverClass
 
     // Reception chain losses for RSSI calculation.
     const float RECEPTION_LOSSES_dB = 130.0;
-    
-    // Counter of the failed initialization trials.
-    uint8_t failedInitializationCounter = 0;
-    
+       
     // Low level driver entity.
     ESAT_COMTransceiverHALClass* transceiver;
     

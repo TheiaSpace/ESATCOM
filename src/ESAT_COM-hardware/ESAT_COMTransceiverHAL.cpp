@@ -104,31 +104,25 @@ void ESAT_COMTransceiverHALClass::readData(uint8_t command, uint8_t dataByteCoun
 }
 
 uint8_t ESAT_COMTransceiverHALClass::requestToSend()
-{
-  if (checkClearToSendPin())
-  {
-    RTSCounter = 0;
-    return 1;
-  }
-  else
+{  
+  do
   {    
-    if (RTSCounter++ >= maximumRTS) // Post-increment required.
+    if (checkClearToSendPin())
     {
-      return 0;
+      RTSCounter = 0;
+      return 1;
     }
-    else
-    {
-      delayMicroseconds(DELAY_BETWEEN_RTS_US);
-      return requestToSend();
-    }
+    delayMicroseconds(DELAY_BETWEEN_RTS_US);
   }
+  while (++RTSCounter < maximumRTS);
+  return 0;
 }
 
 void ESAT_COMTransceiverHALClass::reset()
 {
   powerUpTransceiver();
   delay(10);
-  //. Put radio in shutdown, wait and then release.
+  // Shutdown the radio, wait and power up.
   disable();
   delay(10); 
   powerUpTransceiver();

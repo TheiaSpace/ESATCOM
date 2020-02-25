@@ -126,7 +126,7 @@ void loop()
       primaryHeader.TELEMETRY;
     primaryHeader.secondaryHeaderFlag =
       primaryHeader.SECONDARY_HEADER_IS_PRESENT;
-    primaryHeader.applicationProcessIdentifier = 5;
+    primaryHeader.applicationProcessIdentifier = 4;
     primaryHeader.sequenceFlags =
       primaryHeader.UNSEGMENTED_USER_DATA;
     primaryHeader.packetSequenceCount =
@@ -172,10 +172,10 @@ void loop()
 
     ESAT_COM.writePacketToRadio(packet);
 
-//  if (ESAT_COM.readPacketFromRadio(RXPacket))
-//  {
-//    ESAT_COM.writePacketToUSB(RXPacket);
-//  }
+  if (ESAT_COM.readPacketFromRadio(RXPacket))
+  {
+    ESAT_COM.writePacketToUSB(RXPacket);
+  }
 
   while(ESAT_COM.readPacketFromUSB(packet))
   {

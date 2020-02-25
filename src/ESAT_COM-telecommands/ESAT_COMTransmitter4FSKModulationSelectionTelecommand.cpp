@@ -20,14 +20,13 @@
 
 #include "ESAT_COM-telecommands/ESAT_COMTransmitter4FSKModulationSelectionTelecommand.h"
 #include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
+#include "../ESAT_COM-hardware/ESAT_COMRadioStream.h"
 
 boolean ESAT_COMTransmitter4FSKModulationSelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   (void) packet.readByte();
-  if (TransmissionTransceiver.configureModulationType(ESAT_COMTransceiverDriverClass::fourFSK) != ESAT_COMTransceiverDriverClass::noError)
-  {
-    return false;
-  }
+  TransmissionTransceiver.configureModulationType(ESAT_COMTransceiverDriverClass::fourFSK);
+  ESAT_COMRadioStream.beginWriting();
   return true;  
 }
 

@@ -45,6 +45,7 @@ ESAT_COMTransceiverDriverClass::ESAT_COMTransceiverDriverClass(ESAT_COMTransceiv
   transmissionFrequency = DEFAULT_TRANSMISSION_FREQUENCY;
   transceiverOperationMode = notInitializedMode;
   transceiverModulationType = DEFAULT_MODULATION_TYPE;
+  transmitterModulationSource = DEFAULT_MODULATION_SOURCE;
   transmissionPowerRate = DEFAULT_TRANSMISSION_POWER_RATE;
 }
  
@@ -132,6 +133,7 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
       // Check error handling
       setFrequency(transmissionFrequency);
       setTransmissionPower(transmissionPowerRate);
+      configureModulationSource(transmitterModulationSource);
       break;
     }
     case RXMode:
@@ -189,11 +191,9 @@ int8_t ESAT_COMTransceiverDriverClass::checkTransmissionAvailability()
   return 0;
 }
 
-// TODO
-// Move to interface
 ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::configureModulationSource(ESAT_COMTransceiverDriverClass::ModulationSource modulationSource)
 {  
-
+  transmitterModulationSource = modulationSource;
   ESAT_COMTransceiverConfigurationClass* transceiverConfiguration;  
   switch (transceiverOperationMode)
   {
@@ -241,9 +241,8 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
 
 ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::configureModulationType(ESAT_COMTransceiverDriverClass::ModulationType modulationType)
 {
-  // Store new modulation type.
-  transceiverModulationType = modulationType;
-  return begin(transceiverOperationMode, transceiverModulationType);
+  transceiverModulationType = modulationType;  
+  return noError;
 }
 
 void ESAT_COMTransceiverDriverClass::disable(void)
@@ -560,10 +559,10 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   {
     transmissionPowerRateToBeSet = MINIMUM_TRANSMISSION_POWER_RATE;
   }
-  if (transmissionPowerRateToBeSet > MAXIMUM_TRANSMISSION_POWER_RATE)
+  else if (transmissionPowerRateToBeSet > MAXIMUM_TRANSMISSION_POWER_RATE)
   {
     transmissionPowerRateToBeSet = MAXIMUM_TRANSMISSION_POWER_RATE;
-  }
+  }  
   // Store set power.
   transmissionPowerRate = transmissionPowerRateToBeSet;
   const float mappedPowerValue = (transmissionPowerRateToBeSet / MAXIMUM_TRANSMISSION_POWER_RATE) * MAXIMUM_POWER_VALUE; 

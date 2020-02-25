@@ -147,7 +147,7 @@ void loop()
 
   if (ESAT_COM.readPacketFromRadio(RXPacket))
   {
-    ESAT_COM.writePacketToUSB(RXPacket);
+    ESAT_COM.writePacketToUSB(RXPacket); 
   }
   ++iterationCounter;  
   

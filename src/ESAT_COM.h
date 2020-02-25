@@ -93,6 +93,8 @@ class ESAT_COMClass
 
     // Set the time of the real-time clock.
     void setTime(ESAT_Timestamp timestamp);
+    
+    void updatePendingTelemetryLists();
 
     // Send a packet by radio.
     boolean writePacketToRadio(ESAT_CCSDSPacket& packet);
@@ -106,7 +108,7 @@ class ESAT_COMClass
   
     // TODO
     // Check APID
-    static const word APPLICATION_PROCESS_IDENTIFIER = 4;
+    static const word APPLICATION_PROCESS_IDENTIFIER = 5;
 
     // Version numbers.
     static const byte MAJOR_VERSION_NUMBER = 1;

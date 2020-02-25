@@ -213,6 +213,9 @@ class ESAT_COMTransceiverDriverClass
     // Clock frequency for computing the radio frequency.
     const uint32_t CRYSTAL_FOR_FREQUENCY_COMPUTING = 30000000;
     
+    // Default data source.
+    const enum ModulationSource DEFAULT_MODULATION_SOURCE = fifo;
+    
     // Default modulation schema.
     const enum ModulationType DEFAULT_MODULATION_TYPE = OOK;
     
@@ -253,6 +256,9 @@ class ESAT_COMTransceiverDriverClass
     
     // Interrupt flag for receiving transceiver.
     static volatile uint8_t receptionInterruptFlag;
+    
+    // Transmission data source.
+    ModulationSource transmitterModulationSource;
     
     // Modulation used by the transceiver.
     ModulationType transceiverModulationType;

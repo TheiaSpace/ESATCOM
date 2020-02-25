@@ -167,8 +167,7 @@ void loop()
     while(ESAT_COM.readTelemetry(RXPacket))
     {
       ESAT_COM.writePacketToUSB(RXPacket);
-    }
-    
+    }      
   }
 
     ESAT_COM.writePacketToRadio(packet);

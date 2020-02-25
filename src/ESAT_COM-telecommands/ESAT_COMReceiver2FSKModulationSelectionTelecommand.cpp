@@ -20,14 +20,13 @@
 
 #include "ESAT_COM-telecommands/ESAT_COMReceiver2FSKModulationSelectionTelecommand.h"
 #include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
+#include "../ESAT_COM-hardware/ESAT_COMRadioStream.h"
 
 boolean ESAT_COMReceiver2FSKModulationSelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   (void) packet.readByte();
-  if (ReceptionTransceiver.configureModulationType(ESAT_COMTransceiverDriverClass::twoFSK) != ESAT_COMTransceiverDriverClass::noError)
-  {
-    return false;
-  }
+  ReceptionTransceiver.configureModulationType(ESAT_COMTransceiverDriverClass::twoFSK);
+  ESAT_COMRadioStream.beginReading();
   return true;  
 }
 

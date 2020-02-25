@@ -217,6 +217,16 @@ void ESAT_COMClass::setTime(const ESAT_Timestamp timestamp)
   ESAT_COMBuiltinHardwareClock.write(timestamp);
 }
 
+void ESAT_COMClass::updatePendingTelemetryLists()
+{
+  const ESAT_FlagContainer availableTelemetry =
+    telemetryPacketBuilder.available();
+  const ESAT_FlagContainer availableAndEnabledTelemetry =
+    availableTelemetry & enabledTelemetry;
+  pendingTelemetry =
+    availableAndEnabledTelemetry;
+}
+
 boolean ESAT_COMClass::writePacketToRadio(ESAT_CCSDSPacket& packet)
 { 
   // Input CCSDS packet is already read and processed (empty).

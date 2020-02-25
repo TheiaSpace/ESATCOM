@@ -20,14 +20,13 @@
 
 #include "ESAT_COM-telecommands/ESAT_COMReceiverOOKModulationSelectionTelecommand.h"
 #include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
+#include "../ESAT_COM-hardware/ESAT_COMRadioStream.h"
 
 boolean ESAT_COMReceiverOOKModulationSelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   (void) packet.readByte();
-  if (ReceptionTransceiver.configureModulationType(ESAT_COMTransceiverDriverClass::OOK) != ESAT_COMTransceiverDriverClass::noError)
-  {
-    return false;
-  }
+  ReceptionTransceiver.configureModulationType(ESAT_COMTransceiverDriverClass::OOK);
+  ESAT_COMRadioStream.beginReading();
   return true;  
 }
 

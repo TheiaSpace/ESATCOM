@@ -314,6 +314,39 @@ uint8_t ESAT_COMTransceiverDriverClass::getModulation()
   }
 }
 
+int8_t ESAT_COMTransceiverDriverClass::getModulationSource()
+{
+  if (transceiverOperationMode != ESAT_COMTransceiverDriverClass::TXMode)
+  {
+    return -1;
+  }
+  switch (transmitterModulationSource)
+  {
+      case ESAT_COMTransceiverDriverClass::fifo:
+        return 0;
+      case ESAT_COMTransceiverDriverClass::randomGenerator:
+        return 1;
+      case ESAT_COMTransceiverDriverClass::gpio0_synchronous:
+        return 2;
+      case ESAT_COMTransceiverDriverClass::gpio0_asynchronous:
+        return 3;
+      case ESAT_COMTransceiverDriverClass::gpio1_synchronous:
+        return 4;
+      case ESAT_COMTransceiverDriverClass::gpio1_asynchronous:
+        return 5;
+      case ESAT_COMTransceiverDriverClass::gpio2_synchronous:
+        return 6;
+      case ESAT_COMTransceiverDriverClass::gpio2_asynchronous:
+        return 7;
+      case ESAT_COMTransceiverDriverClass::gpio3_synchronous:
+        return 8;
+      case ESAT_COMTransceiverDriverClass::gpio3_asynchronous:
+        return 9;
+      default:
+        return -1;
+  }
+}
+
 float ESAT_COMTransceiverDriverClass::getReceivedSignalStrengthIndicator()
 {
   if (transceiverOperationMode != RXMode)

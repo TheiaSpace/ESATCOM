@@ -150,12 +150,15 @@ class ESAT_COMTransceiverDriverClass
        
     // Return the channel configured for the current transceiver.
     uint8_t getChannel();
-    
+      
     // Return the center frequency configured for the current transceiver.
     float getFrequency();
     
     // Return the current set modulation.
     uint8_t getModulation();
+    
+    // Return the transmission data source.
+    int8_t getModulationSource();
     
     // Read last received signal strength indicator value.
     float getReceivedSignalStrengthIndicator();

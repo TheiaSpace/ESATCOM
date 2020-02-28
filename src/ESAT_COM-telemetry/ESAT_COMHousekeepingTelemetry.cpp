@@ -36,6 +36,7 @@ boolean ESAT_COMHousekeepingTelemetryClass::fillUserData(ESAT_CCSDSPacket& packe
   packet.writeByte((byte) TransmissionTransceiver.getModulation());
   packet.writeFloat(TransmissionTransceiver.getFrequency());
   packet.writeByte((byte) TransmissionTransceiver.getChannel());
+  packet.writeChar((char) TransmissionTransceiver.getModulationSource());
   packet.writeFloat(TransmissionTransceiver.getTransmissionPowerRate());
   packet.writeFloat(TransmissionTransceiver.getTransceiverVoltage());
   packet.writeFloat(TransmissionTransceiver.getTransceiverTemperature());

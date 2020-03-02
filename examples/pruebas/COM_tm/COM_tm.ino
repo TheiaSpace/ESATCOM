@@ -185,6 +185,7 @@ void loop()
   
   ESAT_COMHearthBeatLED.update();
   ESAT_COM.updatePendingTelemetryLists();
+  TransmissionTransceiver.updateManualDataStream();
   
   delay(1);
 }

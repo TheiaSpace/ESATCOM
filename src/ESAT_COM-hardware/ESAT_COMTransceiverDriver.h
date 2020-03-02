@@ -206,6 +206,9 @@ class ESAT_COMTransceiverDriverClass
     // Return if the process is wrong.
     TransceiverErrorCode startReception();      
     
+    // Handle the manual data transmission and reception.
+    void updateManualDataStream();
+        
     // Write a packet and wait for it to be sent, 
     // either by ISR or by polling checking methods.
     // Return if the process is wrong.
@@ -239,12 +242,17 @@ class ESAT_COMTransceiverDriverClass
     
     // Minimum value for mapping the power rate into the transceiver values.
     const float MINIMUM_POWER_VALUE = 0.0;  
+    
+    // Period for toggling a manual 1-0 bit stream.
+    const word OUTPUT_DATA_STREAM_TOGGLING_PERIOD_MS = 2000;
 
     // Reception chain losses for RSSI calculation.
     const float RECEPTION_LOSSES_dB = 130.0;
        
     // Low level driver entity.
     ESAT_COMTransceiverHALClass* transceiver;
+    
+    uint8_t outputDataStreamNextBit;
     
     boolean receptionAvailable;
     

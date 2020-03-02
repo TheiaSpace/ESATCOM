@@ -48,6 +48,8 @@
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterContinuousWaveSelectionTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterDisableRandomGeneratorTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterEnableRandomGeneratorTelecommand.h"
+#include "ESAT_COM-telecommands/ESAT_COMTransmitterDisableModulationTestModeTelecommand.h"
+#include "ESAT_COM-telecommands/ESAT_COMTransmitterEnableModulationTestModeTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterDisableTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterEnableTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterFrequencySelectionTelecommand.h"
@@ -155,6 +157,8 @@ void ESAT_COMClass::beginTelecommands()
   addTelecommand(ESAT_COMTransmitterChannelSelectionTelecommand);
   addTelecommand(ESAT_COMTransmitterDisableRandomGeneratorTelecommand);
   addTelecommand(ESAT_COMTransmitterEnableRandomGeneratorTelecommand);  
+  addTelecommand(ESAT_COMTransmitterDisableModulationTestModeTelecommand);
+  addTelecommand(ESAT_COMTransmitterEnableModulationTestModeTelecommand);  
   addTelecommand(ESAT_COMTransmitterDisableTelecommand);
   addTelecommand(ESAT_COMTransmitterEnableTelecommand); 
   addTelecommand(ESAT_COMTransmitterFrequencySelectionTelecommand);

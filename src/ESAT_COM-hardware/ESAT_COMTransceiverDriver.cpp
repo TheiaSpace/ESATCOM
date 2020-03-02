@@ -47,6 +47,7 @@ ESAT_COMTransceiverDriverClass::ESAT_COMTransceiverDriverClass(ESAT_COMTransceiv
   transceiverModulationType = DEFAULT_MODULATION_TYPE;
   transmitterModulationSource = DEFAULT_MODULATION_SOURCE;
   transmissionPowerRate = DEFAULT_TRANSMISSION_POWER_RATE;
+  outputDataStreamNextBit = 0;
 }
  
 int8_t ESAT_COMTransceiverDriverClass::available(void)
@@ -412,7 +413,7 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverD
       ESAT_COMTransceiverCommands.configureGPIO(*transceiver, 
                                         ESAT_COMTransceiverCommandsClass::DONOTHING, false,
                                         ESAT_COMTransceiverCommandsClass::CTS, false,
-                                        ESAT_COMTransceiverCommandsClass::DONOTHING, false,
+                                        ESAT_COMTransceiverCommandsClass::INPUT_READ, false,
                                         ESAT_COMTransceiverCommandsClass::DONOTHING, false,
                                         ESAT_COMTransceiverCommandsClass::RADIO_HIGH);
       error = transceiverConfiguration -> applyConfiguration(*transceiver);
@@ -780,6 +781,30 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   {    
   }    
   return noError;
+}
+
+void ESAT_COMTransceiverDriverClass::updateManualDataStream()
+{ 
+ const word milliseconds = millis() % OUTPUT_DATA_STREAM_TOGGLING_PERIOD_MS;
+ if (milliseconds > (OUTPUT_DATA_STREAM_TOGGLING_PERIOD_MS / 2))
+ {
+  if (transmitterModulationSource == gpio2_asynchronous)
+  {
+   transceiver -> writeDataStreamGPIO(outputDataStreamNextBit);
+  }
+  else
+  {
+   transceiver -> writeDataStreamGPIO(LOW);
+  }
+  if (outputDataStreamNextBit == 1)
+  {
+   outputDataStreamNextBit = 0;
+  }
+  else
+  {
+   outputDataStreamNextBit = 1;
+  }
+ }  
 }
 
 ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::translateLowLevelDriverError(ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError error)

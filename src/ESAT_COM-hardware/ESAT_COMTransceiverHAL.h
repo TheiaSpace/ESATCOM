@@ -121,6 +121,9 @@ class ESAT_COMTransceiverHALClass
   // number of bytes to write and the pointer for 
   // reading the data.
   void writeData(uint8_t command, uint8_t dataByteCount, uint8_t* data);
+  
+  // Writes a bit from a data stream to the manual transmission GPIO.
+  void writeDataStreamGPIO(uint8_t level);
          
   private:
   

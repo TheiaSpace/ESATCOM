@@ -135,6 +135,17 @@ transceiver to output a stream of random data.
 Telecommand handler for TRANSMITTER_DISABLE_RANDOM_GENERATOR (0x1A): configure the
 transceiver to transmit the desired data.
 
+# ESAT_COMTransmitterEnableModulationTestModeTelecommand
+
+Telecommand handler for TRANSMITTER_ENABLE_MODULATION_TEST_MODE (0x1B): configure the
+transceiver to output a "1-0-1-0" sequence.
+
+
+# ESAT_COMTransmitterDisableModulationTestModeTelecommand
+
+Telecommand handler for TRANSMITTER_DISABLE_MODULATION_TEST_MODE (0x1C): configure the
+transceiver to transmit the desired data.
+
 
 # ESAT_COMReceiverOOKModulationSelectionTelecommand
 

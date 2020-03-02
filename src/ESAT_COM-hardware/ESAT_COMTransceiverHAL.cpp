@@ -42,6 +42,7 @@ void ESAT_COMTransceiverHALClass::begin()
   pinMode(chipSelectPin, OUTPUT);
   digitalWrite(chipSelectPin, HIGH);
   pinMode(gpio1Pin, INPUT);
+  pinMode(gpio2Pin, OUTPUT);
   transceiverSPI -> begin();
   transceiverSPI -> setClockDivider(SPI_CLOCK_DIVIDER_FOR_STM32L4);
 }
@@ -209,6 +210,11 @@ void ESAT_COMTransceiverHALClass::writeData(uint8_t command, uint8_t dataByteCou
   SPIBulkWrite(dataByteCount, data);
   clearChipSelect();
  }
+}
+
+void ESAT_COMTransceiverHALClass::writeDataStreamGPIO(uint8_t level)
+{
+  digitalWrite(gpio2Pin, level);
 }
 
 ESAT_COMTransceiverHALClass ReceptionTransceiverLowLevelDriver(SPI, CS_RX, INT_RX, SDN_RX, GPIO0_RX, GPIO1_RX, GPIO2_RX, GPIO3_RX);

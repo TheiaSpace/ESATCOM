@@ -25,8 +25,9 @@
 boolean ESAT_COMReceiver4GFSKModulationSelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   (void) packet.readByte();
-  ReceptionTransceiver.configureModulationType(ESAT_COMTransceiverDriverClass::fourGaussianFSK);
+  ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::fourGaussianFSK);  
   ESAT_COMRadioStream.beginReading();
+  ReceptionTransceiver.startReception();
   return true;  
 }
 

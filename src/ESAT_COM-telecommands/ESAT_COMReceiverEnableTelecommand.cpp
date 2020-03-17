@@ -20,11 +20,14 @@
 
 #include "ESAT_COM-telecommands/ESAT_COMReceiverEnableTelecommand.h"
 #include "../ESAT_COM-hardware/ESAT_COMRadioStream.h"
+#include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 
 boolean ESAT_COMReceiverEnableTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   (void) packet.readByte();
+  ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode);
   ESAT_COMRadioStream.beginReading();
+  ReceptionTransceiver.startReception();
   return true;
 }
 

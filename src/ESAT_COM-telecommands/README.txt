@@ -64,6 +64,17 @@ transceiver and disable the reception.
 Telecommand handler for COM_SET_TIME (0x06): set the time of the real-time clock 
 of the ESAT COM board.
 
+# ESAT_COMEnableStandaloneModeTelecommand
+
+Telecommand handler for COM_ENABLE_STANDALONE_MODE (0x07): enable the
+COM telecommands self handling without OBC.
+
+
+# ESAT_COMDisableStandaloneModeTelecommand
+
+Telecommand handler for COM_DISABLE_STANDALONE_MODE (0x08): disable the
+COM telecommands self handling without OBC.
+
 
 # ESAT_COMTransmitterOOKModulationSelectionTelecommand
 

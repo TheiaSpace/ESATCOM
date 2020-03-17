@@ -25,8 +25,9 @@
 boolean ESAT_COMTransmitterDisableModulationTestModeTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   (void) packet.readByte();
-  if (TransmissionTransceiver.configureModulationSource(ESAT_COMTransceiverDriverClass::fifo) == ESAT_COMTransceiverDriverClass::noError)
+  if (TransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::fifo) == ESAT_COMTransceiverDriverClass::noError)
   {
+	TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
     ESAT_COMRadioStream.beginWriting();
     return true;
   }

@@ -25,7 +25,7 @@
 boolean ESAT_COMTransmitterOOKModulationSelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   (void) packet.readByte();
-  TransmissionTransceiver.configureModulationType(ESAT_COMTransceiverDriverClass::OOK);
+  TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::OOK);
   ESAT_COMRadioStream.beginWriting();
   return true;  
 }

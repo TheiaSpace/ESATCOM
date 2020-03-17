@@ -29,6 +29,10 @@ boolean ESAT_COMTransmitterTransmissionPowerAdjustmentTelecommandClass::handleUs
   {
     return false;
   }
+  if (TransmissionTransceiver.updateTransmissionPower() == ESAT_COMTransceiverDriverClass::wrongPowerError)
+  {
+	  return false;
+  }
   return true; 
 }
 

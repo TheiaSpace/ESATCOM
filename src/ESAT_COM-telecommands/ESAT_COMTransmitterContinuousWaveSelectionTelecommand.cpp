@@ -25,8 +25,8 @@
 boolean ESAT_COMTransmitterContinuousWaveSelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   (void) packet.readByte();
-  TransmissionTransceiver.configureModulationType(ESAT_COMTransceiverDriverClass::continuousWave);
-  TransmissionTransceiver.configureModulationSource(ESAT_COMTransceiverDriverClass::fifo);
+  TransmissionTransceiver.setModulationType(ESAT_COMTransceiverDriverClass::continuousWave);
+  TransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::fifo);
   return true;  
 }
 

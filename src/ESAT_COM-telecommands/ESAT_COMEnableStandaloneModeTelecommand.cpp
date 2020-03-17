@@ -18,17 +18,14 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "ESAT_COM-telecommands/ESAT_COMTransmitterEnableRandomGeneratorTelecommand.h"
-#include "../ESAT_COM-hardware/ESAT_COMRadioStream.h"
+#include "ESAT_COM-telecommands/ESAT_COMEnableStandaloneModeTelecommand.h"
+#include "ESAT_COM.h"
 
-boolean ESAT_COMTransmitterEnableRandomGeneratorTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
+boolean ESAT_COMEnableStandaloneModeTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   (void) packet.readByte();
-  if (TransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::randomGenerator) == ESAT_COMTransceiverDriverClass::noError)
-  {
-    return true;
-  }
-  return false;
+  ESAT_COM.enableCOMTelemetryRadioDelivery();
+  return true;
 }
 
-ESAT_COMTransmitterEnableRandomGeneratorTelecommandClass ESAT_COMTransmitterEnableRandomGeneratorTelecommand;
+ESAT_COMEnableStandaloneModeTelecommandClass ESAT_COMEnableStandaloneModeTelecommand;

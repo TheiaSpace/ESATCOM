@@ -38,146 +38,89 @@ class ESAT_COMClass
 {
   public:   
   
-    // Register a telecommand handler.
-    void addTelecommand(ESAT_CCSDSTelecommandPacketHandler& telecommand);
-
-    // Register a telemetry packet.
-    // The telemetry packet will be enabled by default;
-    // it can be disabled with disableTelemetry().
-    void addTelemetry(ESAT_CCSDSTelemetryPacketContents& telemetry);
-
-    // Set up the COM board.
-    // Use the radio input buffer to store packets coming from the
-    // radio interface.
-    // Use the radio output buffer to store outcoming packets ready
-    // to be transmitted.
-    // Use the serial buffer to store packets coming from the
-    // serial interface.
-    // Use the I2C input buffer to store packets coming from any other
-    // subsystem.
-    // Use the I2C output buffer to store packets to be sent to any other
-    // subsystem.
-    void begin(byte radioInputBuffer[],
-         const unsigned long radioInputBufferLength,
-         byte radioOutputBuffer[],
-         const unsigned long radioOutputBufferLength,
-         byte serialInputBuffer[],
-         const unsigned long serialInputBufferLength,
-         byte i2cInputBuffer[],
-         const unsigned long i2cInputBufferLength,
-         byte i2cOutpuBuffer[],
-         const unsigned long i2cOutpuBufferLength);
-
-    // Disable the generation of the telemetry packet with the given
-    // identifier.
-    void disableTelemetry(byte identifier);
-
-    // Enable the generation of the telemetry packet with the given
-    // identifier.
-    void enableTelemetry(byte identifier);
-
-    // Handle a telecommand.
-    void handleTelecommand(ESAT_CCSDSPacket& packet);
+     // Set up the COM board.
+     // Configures the APID and the version numbers.
+    void begin(word subsystemApplicationProcessIdentifier, 
+               byte subsystemMajorVersionNumber,
+               byte subsystemMinorVersionNumber,
+               byte subsystemPatchVersionNumber);
+               
+    // Disable COM telemetry delivery over radio without OBC interaction.
+    void disableCOMTelemetryRadioDelivery();
+               
+    // Enable COM telemetry delivery over radio without OBC interaction.
+    void enableCOMTelemetryRadioDelivery();
+    
+    // Check if COM telemetry delivery over radio is enabled.
+    boolean isCOMTelemetryRadioDeliveryEnabled();
+                
+    // Check wether a packet is a telecommand for the current subsystem.
+    boolean isSubsystemTelecommand(ESAT_CCSDSPacket& packet);
 
     // Fill the packet with data read from the radio interface.
     // Return true if there was a new packet; otherwise return false.
     boolean readPacketFromRadio(ESAT_CCSDSPacket& packet);
-  
-    // Fill the packet with data read from the USB interface.
-    // Return true if there was a new packet; otherwise return false.
-    boolean readPacketFromUSB(ESAT_CCSDSPacket& packet);
-
-    // Fill a new ESAT COM board telemetry packet.
-    // Return true if there was a new packet; otherwise return false.
-    boolean readTelemetry(ESAT_CCSDSPacket& packet);
-
-    // Set the time of the real-time clock.
-    void setTime(ESAT_Timestamp timestamp);
-    
-    void updatePendingTelemetryLists();
 
     // Send a packet by radio.
     boolean writePacketToRadio(ESAT_CCSDSPacket& packet);
-  
-    // Write a packet to USB serial interface.
-    void writePacketToUSB(ESAT_CCSDSPacket& packet);
+    
+    // Send a telecommand to the radio (for GS).
+    boolean writeTelecommandToRadio(ESAT_CCSDSPacket& packet);
+    
+    // Send a telemetry to the radio (for on-board module).
+    boolean writeTelemetryToRadio(ESAT_CCSDSPacket& packet);
 
     private:
+    
+    // Maximum packet data length radio will handle.
+    static const word PACKET_DATA_BUFFER_LENGTH = 256;
+
+    // Maximum whole packet length radio will handle.
+    static const word WHOLE_PACKET_BUFFER_LENGTH =
+    ESAT_CCSDSPrimaryHeader::LENGTH + PACKET_DATA_BUFFER_LENGTH;
+
+    // Maximum KISS frame length radio will handle.
+    static const word WHOLE_KISS_FRAME_MAX_LENGTH = 
+    ESAT_KISSStream::frameLength(WHOLE_PACKET_BUFFER_LENGTH);
+        
     // Unique identifier of the COM board for telemetry and
     // telecommand purposes.
-  
-    // TODO
-    // Check APID
-    static const word APPLICATION_PROCESS_IDENTIFIER = 5;
-
+    word applicationProcessIdentifier;
+    
+    boolean isTelemetryRadioDeliveryEnabled = false;
+    
     // Version numbers.
-    static const byte MAJOR_VERSION_NUMBER = 1;
-    static const byte MINOR_VERSION_NUMBER = 0;
-    static const byte PATCH_VERSION_NUMBER = 0;
+    byte majorVersionNumber;
+    byte minorVersionNumber;
+    byte patchVersionNumber;
     
     // KISS frame transmission buffer.
     ESAT_Buffer radioOutputBuffer;
-
-    // List of enabled telemetry packet identifiers.
-    ESAT_FlagContainer enabledTelemetry;
-
-    // List of pending telemetry packet identifiers.
-    ESAT_FlagContainer pendingTelemetry;
+    
+    // Backend array for the radioOutputBuffer.
+    byte radioInputBufferBackendArray[WHOLE_PACKET_BUFFER_LENGTH];
+    
+    // Backend array for the radioInputBuffer.
+    byte radioOutputBufferBackendArray[WHOLE_KISS_FRAME_MAX_LENGTH];
     
     // Use this to write packets to the radio interface.
     ESAT_KISSStream radioWriter;    
 
     // Use this to read CCSDS packets from the radio interface.
     ESAT_CCSDSPacketFromKISSFrameReader radioReader;
-  
-    // Use this to read packets from the USB interface.
-    ESAT_CCSDSPacketFromKISSFrameReader usbReader;
-  
-    // Use this to write packets to the USB interface.
-    ESAT_CCSDSPacketToKISSFrameWriter usbWriter;
 
-    // Use this for handling telecommand packets.
-    ESAT_CCSDSTelecommandPacketDispatcher telecommandPacketDispatcher =
-      ESAT_CCSDSTelecommandPacketDispatcher(APPLICATION_PROCESS_IDENTIFIER);     
-
-    // Use this for building telemetry packets.
-    ESAT_CCSDSTelemetryPacketBuilder telemetryPacketBuilder =
-      ESAT_CCSDSTelemetryPacketBuilder(APPLICATION_PROCESS_IDENTIFIER,
-                                       MAJOR_VERSION_NUMBER,
-                                       MINOR_VERSION_NUMBER,
-                                       PATCH_VERSION_NUMBER,
-                                       ESAT_COMBuiltinHardwareClock);
-    // Configure the hardware.
+    // Configures the board hardware.
     void beginHardware();
   
-    // Configure the radio stream middleware.
-    // Use the radio input buffer to store packets coming from the
-    // waves.
-    // Use the radio output buffer to store packets ready to be radiated.
-    // Use the USB input buffer to store packets coming from USB.
-    // Use the I2C input buffer to store packets coming from any other
-    // subsystem.
-    // Use the I2C output buffer to store packets to be sent to any other
-    // subsystem.
-    void beginRadioSoftware(byte radioInputBufferArray[],
-                const unsigned long radioInputBufferLength,
-                byte radioOutputBufferArray[],
-                const unsigned long radioOutputBufferLength,
-                byte usbInputBuffer[],
-                const unsigned long usbInputBufferLength,
-                byte i2cInputBuffer[],
-                const unsigned long i2cInputBufferLength,
-                byte i2cOutpuBuffer[],
-                const unsigned long i2cOutpuBufferLength);
+    // Configures the radio stream middleware.
+    void beginRadioSoftware();
 
-    // Configure the telecommand handlers.
+    // Configures the telecommand handlers.
     void beginTelecommands();
 
-    // Configure the telemetry packets.
+    // Configures the telemetry packets.
     void beginTelemetry();
 
-    // Reset the telemetry queue.
-    void resetTelemetryQueue();
 };
 
 extern ESAT_COMClass ESAT_COM;

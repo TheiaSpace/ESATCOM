@@ -41,15 +41,14 @@ ESAT_COMTransceiverDriverClass::ESAT_COMTransceiverDriverClass(ESAT_COMTransceiv
 {   
   //Attaches the hardware transceiver pointer to be used by this ESAT_COMTransceiverDriverClass object
   transceiver = &hardwareTransceiver;  
-  receptionFrequency = DEFAULT_RECEPTION_FREQUENCY;
-  transmissionFrequency = DEFAULT_TRANSMISSION_FREQUENCY;
-  transceiverOperationMode = notInitializedMode;
-  transceiverModulationType = DEFAULT_MODULATION_TYPE;
-  transmitterModulationSource = DEFAULT_MODULATION_SOURCE;
-  transmissionPowerRate = DEFAULT_TRANSMISSION_POWER_RATE;
+  // transceiverFrequency = DEFAULT_FREQUENCY;
+  // transceiverOperationMode = notInitializedMode;
+  // transceiverModulationType = DEFAULT_MODULATION_TYPE;
+  // transmitterModulationSource = DEFAULT_MODULATION_SOURCE;
+  // transmissionPowerRate = DEFAULT_TRANSMISSION_POWER_RATE;
   outputDataStreamNextBit = 0;
 }
- 
+
 int8_t ESAT_COMTransceiverDriverClass::available(void)
 {
   switch (transceiverOperationMode)
@@ -129,12 +128,10 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
       //Clear flag
       transmissionInterruptFlag = 0;
       //Enable interrupts. If ISR is fired during init and is not cleared interrupts may not be retriggered
-      attachInterrupt(digitalPinToInterrupt(transceiver -> getInterruptPin()), setTransmissionTransceiverInterruptFlag,  FALLING);  
-      // TODO
-      // Check error handling
-      setFrequency(transmissionFrequency);
-      setTransmissionPower(transmissionPowerRate);
-      configureModulationSource(transmitterModulationSource);
+      attachInterrupt(digitalPinToInterrupt(transceiver -> getInterruptPin()), setTransmissionTransceiverInterruptFlag,  FALLING);        
+      setModulationSource(transmitterModulationSource);
+      updateFrequency(transceiverFrequency);
+      updateTransmissionPower(transmissionPowerRate);
       break;
     }
     case RXMode:
@@ -150,9 +147,7 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
       receptionInterruptFlag = 0;
       //Enable interrupts. If ISR is fired during init and is not cleared interrupts may not be retriggered
       attachInterrupt(digitalPinToInterrupt(transceiver -> getInterruptPin()), setReceptionTransceiverInterruptFlag,  FALLING);
-      //Starts reception
-      setFrequency(receptionFrequency);
-      startReception(); 
+      updateFrequency(transceiverFrequency);
       break;
     }
     default:
@@ -192,7 +187,7 @@ int8_t ESAT_COMTransceiverDriverClass::checkTransmissionAvailability()
   return 0;
 }
 
-ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::configureModulationSource(ESAT_COMTransceiverDriverClass::ModulationSource modulationSource)
+ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::setModulationSource(ESAT_COMTransceiverDriverClass::ModulationSource modulationSource)
 {  
   transmitterModulationSource = modulationSource;
   ESAT_COMTransceiverConfigurationClass* transceiverConfiguration;  
@@ -240,7 +235,7 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   return translateLowLevelDriverError(transceiverConfiguration -> configureModulationSource(*transceiver, (uint8_t)(modulationSourceMask | modulationTypeMask)));
 }
 
-ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::configureModulationType(ESAT_COMTransceiverDriverClass::ModulationType modulationType)
+ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::setModulationType(ESAT_COMTransceiverDriverClass::ModulationType modulationType)
 {
   transceiverModulationType = modulationType;  
   return noError;
@@ -262,21 +257,7 @@ uint8_t ESAT_COMTransceiverDriverClass::getChannel()
 
 float ESAT_COMTransceiverDriverClass::getFrequency()
 {
-  switch (transceiverOperationMode)
-  {
-    case TXMode:
-    {
-      return transmissionFrequency;
-    }
-    case RXMode:
-    {
-      return receptionFrequency;
-    }
-    default:
-    {
-      return -1.0;
-    }    
-  }
+  return transceiverFrequency;    
 }
 
 
@@ -479,80 +460,31 @@ void ESAT_COMTransceiverDriverClass::setReceptionTransceiverInterruptFlag (void)
     receptionInterruptFlag = 0xFF;  
 }
 
-void ESAT_COMTransceiverDriverClass::setChannel(uint8_t channel)
+ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::setChannel(uint8_t channel)
 {
-  transceiverRadioChannel = channel;
+	if (channel < lowestChannel || channel > highestChannel)
+	{
+		return wrongChannelError;
+	}
+	transceiverRadioChannel = channel;
+	return noError;
 }
 
 ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::setFrequency(float frequency)
 {
-  ESAT_COMTransceiverConfigurationClass* transceiverConfiguration;  
   // Store set frequency.
-  switch (transceiverOperationMode)
-  {
-    case TXMode:
-    {
-      transmissionFrequency = frequency;
-      transceiverConfiguration = transmissionConfigurationData;
-      break;
-    }
-    case RXMode:
-    {
-      receptionFrequency = frequency;
-      transceiverConfiguration = receptionConfigurationData;
-      break;
-    }
-    default:
-    {
-      return wrongModeError;
-    }    
-  }   
-  // See Si446x Data Sheet section 5.3.1
-  // Also the Si446x PLL Synthesizer / VCO_CNT Calculator Rev 0.4
-  uint8_t band;
-  uint8_t outdiv;
-  // Non-continuous frequency bands
-   if (frequency <= 1050.0 && frequency >= 850.0)
-  {
-    outdiv = 4;
-    band = 0;
-  }
-  else if (frequency <= 525.0 && frequency >= 425.0)
-  {
-    outdiv = 8;
-    band = 2;
-  }
-  else if (frequency <= 350.0 && frequency >= 284.0)
-  {
-    outdiv = 12;
-    band = 3;
-  }
-  else if (frequency <= 175.0 && frequency >= 142.0)
-  {
-    outdiv = 24;
-    band = 5;
-  }
-  else
-  {
-    return wrongFrequencyError;
-  }  
-  TransceiverErrorCode error = translateLowLevelDriverError(transceiverConfiguration -> configureClockGenerator(*transceiver, band));
-  if (noError != error)
-  {
-    return error;
-  }
-  frequency *= 1000000.0; // Convert to Hz
-  // Now generate the RF frequency properties
-  // Need the Xtal/XO freq from the radio_config file:
-  unsigned long f_pfd = 2 * CRYSTAL_FOR_FREQUENCY_COMPUTING / outdiv;
-  unsigned int pll_integer = ((unsigned int)(frequency / f_pfd)) - 1; //Computes integer part less one.
-  float ratio = frequency / (float)f_pfd; //The integer part is recalculated in floating point.
-  float rest  = ratio - (float)pll_integer; //To get the decimal part plus one.
-  unsigned long pll_fractional = (unsigned long)(rest * 524288UL); // Decimal part is casted to integer multiplying by 2^19.
-  unsigned int pll_fractional_msb = pll_fractional / 0x10000; //And is assigned "properly" to registers.
-  unsigned int pll_fractional_middle = (pll_fractional - pll_fractional_msb * 0x10000) / 0x100;
-  unsigned int pll_fractional_lsb = (pll_fractional - pll_fractional_msb * 0x10000 - pll_fractional_middle * 0x100);  
-  return translateLowLevelDriverError(transceiverConfiguration -> setFrequency(*transceiver, (uint8_t)pll_integer, (uint8_t)pll_fractional_msb, (uint8_t)pll_fractional_middle, (uint8_t)pll_fractional_lsb));
+  transceiverFrequency = frequency;
+  return noError;
+}
+
+void ESAT_COMTransceiverDriverClass::setHighestChannel(uint8_t channel)
+{
+  highestChannel = channel;
+}
+    
+void ESAT_COMTransceiverDriverClass::setLowestChannel(uint8_t channel);
+{
+  lowestChannel = channel;
 }
  
 ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::disableInterrupts(void)
@@ -599,8 +531,7 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   }  
   // Store set power.
   transmissionPowerRate = transmissionPowerRateToBeSet;
-  const float mappedPowerValue = (transmissionPowerRateToBeSet / MAXIMUM_TRANSMISSION_POWER_RATE) * MAXIMUM_POWER_VALUE; 
-  return translateLowLevelDriverError(transmissionConfigurationData -> setTransmissionPower(*transceiver, (uint8_t) mappedPowerValue));  
+  return noError; 
 }
  
 ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::startReception (void)
@@ -805,6 +736,82 @@ void ESAT_COMTransceiverDriverClass::updateManualDataStream()
    outputDataStreamNextBit = 1;
   }
  }  
+}
+
+TransceiverErrorCode ESAT_COMTransceiverDriverClass::updateFrequency()
+{
+  float frequency = transceiverFrequency;
+  // Get configuration
+  ESAT_COMTransceiverConfigurationClass* transceiverConfiguration;
+  switch (transceiverOperationMode)
+  {
+    case TXMode:
+    {
+      transceiverConfiguration = transmissionConfigurationData;
+      break;
+    }
+    case RXMode:
+    {
+      transceiverConfiguration = receptionConfigurationData;
+      break;
+    }
+    default:
+    {
+      return wrongModeError;
+    }    
+  }   
+  // See Si446x Data Sheet section 5.3.1
+  // Also the Si446x PLL Synthesizer / VCO_CNT Calculator Rev 0.4
+  uint8_t band;
+  uint8_t outdiv;
+  // Non-continuous frequency bands
+   if (frequency <= 1050.0 && frequency >= 850.0)
+  {
+    outdiv = 4;
+    band = 0;
+  }
+  else if (frequency <= 525.0 && frequency >= 425.0)
+  {
+    outdiv = 8;
+    band = 2;
+  }
+  else if (frequency <= 350.0 && frequency >= 284.0)
+  {
+    outdiv = 12;
+    band = 3;
+  }
+  else if (frequency <= 175.0 && frequency >= 142.0)
+  {
+    outdiv = 24;
+    band = 5;
+  }
+  else
+  {
+    return wrongFrequencyError;
+  }  
+  TransceiverErrorCode error = translateLowLevelDriverError(transceiverConfiguration -> configureClockGenerator(*transceiver, band));
+  if (noError != error)
+  {
+    return error;
+  }
+  frequency *= 1000000.0; // Convert to Hz
+  // Now generate the RF frequency properties
+  // Need the Xtal/XO freq from the radio_config file:
+  unsigned long f_pfd = 2 * CRYSTAL_FOR_FREQUENCY_COMPUTING / outdiv;
+  unsigned int pll_integer = ((unsigned int)(frequency / f_pfd)) - 1; //Computes integer part less one.
+  float ratio = frequency / (float)f_pfd; //The integer part is recalculated in floating point.
+  float rest  = ratio - (float)pll_integer; //To get the decimal part plus one.
+  unsigned long pll_fractional = (unsigned long)(rest * 524288UL); // Decimal part is casted to integer multiplying by 2^19.
+  unsigned int pll_fractional_msb = pll_fractional / 0x10000; //And is assigned "properly" to registers.
+  unsigned int pll_fractional_middle = (pll_fractional - pll_fractional_msb * 0x10000) / 0x100;
+  unsigned int pll_fractional_lsb = (pll_fractional - pll_fractional_msb * 0x10000 - pll_fractional_middle * 0x100);  
+  return translateLowLevelDriverError(transceiverConfiguration -> setFrequency(*transceiver, (uint8_t)pll_integer, (uint8_t)pll_fractional_msb, (uint8_t)pll_fractional_middle, (uint8_t)pll_fractional_lsb));
+}	
+
+TransceiverErrorCode ESAT_COMTransceiverDriverClass::updateTransmissionPower()
+{
+  const float mappedPowerValue = (transmissionPowerRate / MAXIMUM_TRANSMISSION_POWER_RATE) * MAXIMUM_POWER_VALUE; 
+  return translateLowLevelDriverError(transmissionConfigurationData -> setTransmissionPower(*transceiver, (uint8_t) mappedPowerValue)); 
 }
 
 ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::translateLowLevelDriverError(ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError error)

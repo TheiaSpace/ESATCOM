@@ -67,13 +67,14 @@ class ESAT_COMTransceiverDriverClass
       notInitializedError = 1,
       wrongModeError = 2,
       wrongFrequencyError = 3,
-      wrongPowerError = 4,
+	  wrongChannelError = 4,
+      wrongPowerError = 5,
       // Low level errors
-      CTSError = 5,
-      commandError = 6,
-      chipError = 7, // Fired if the interrupt line changes unexpectedly.
+      CTSError = 6,
+      commandError = 7,
+      chipError = 8, // Fired if the interrupt line changes unexpectedly.
       // GenericError
-      error = 8,
+      error = 9,
     };
     
     // Data type for the different radio working modes.
@@ -84,27 +85,15 @@ class ESAT_COMTransceiverDriverClass
       RXMode = 2,
     };
   
-    // Highest reserved channel for reception.
-    const uint8_t HIGHEST_RECEPTION_CHANNEL = 31;
-    
     // Highest allowed frequency (in MHz) for reception.
     const float HIGHEST_RECEPTION_FREQUENCY = 1050.0;
-    
-    // Highest reserved channel for transmission.
-    const uint8_t HIGHEST_TRANSMISSION_CHANNEL = 15;
     
     // Highest allowed frequency (in MHz) for transmission.
     const float HIGHEST_TRANSMISSION_FREQUENCY = 1050.0;
     
-    // Lowest reserved channel for reception.
-    const uint8_t LOWEST_RECEPTION_CHANNEL = 16;
-    
     // Lowest allowed frequency (in MHz) for reception.
     const float LOWEST_RECEPTION_FREQUENCY = 142.0;
-    
-    // Lowest reserved channel for transmission.
-    const uint8_t LOWEST_TRANSMISSION_CHANNEL = 0;
-    
+        
     // Lowest allowed frequency (in MHz) for transmission.
     const float LOWEST_TRANSMISSION_FREQUENCY = 142.0;
     
@@ -122,7 +111,7 @@ class ESAT_COMTransceiverDriverClass
     
     // Transmission transceiver device.
     static const uint8_t TRANSMISSION_TRANSCEIVER = 1;
-    
+            
     // Constructor. Initializes the transceiver API software
     // and attaches it to a physical interface.    
     ESAT_COMTransceiverDriverClass(ESAT_COMTransceiverHALClass& hardwareTransceiver);
@@ -138,12 +127,13 @@ class ESAT_COMTransceiverDriverClass
     TransceiverErrorCode begin(TransceiverMode mode);
     
     // Changes modulation source.
-    // Return if the process is wrong.      
-    TransceiverErrorCode configureModulationSource(ModulationSource modulationSource);
-    
-    // Changes modulation type by reconfiguring the chip.
     // Return if the process is wrong.
-    TransceiverErrorCode configureModulationType(ModulationType modulationType);
+    TransceiverErrorCode setModulationSource(ModulationSource modulationSource);
+    
+    // Changes modulation type. Only valid for enabling continuous wave.
+	// This does not reset the chip.
+    // Return if the process is wrong.
+    TransceiverErrorCode setModulationType(ModulationType modulationType);
     
     // Disable and hold the transceiver in reset state.
     void disable();
@@ -171,7 +161,7 @@ class ESAT_COMTransceiverDriverClass
     
     // Return the transmisssion power (0.0 if it is a receiver).
     float getTransmissionPowerRate();
-    
+       
     // Retrieve the reception pointer buffer without
     // polling before wheter a packet has been received
     // or not, thus not holding the process.    
@@ -188,7 +178,7 @@ class ESAT_COMTransceiverDriverClass
     uint8_t* read();
        
     // Changes TX/RX channel.
-    void setChannel(uint8_t channel);
+    TransceiverErrorCode setChannel(uint8_t channel);
     
     // Changes center frequency.
     // Return if the process is wrong.
@@ -197,6 +187,12 @@ class ESAT_COMTransceiverDriverClass
     // Disable the interrupts
     // Return if the change go wrong or not.
     TransceiverErrorCode disableInterrupts();
+    
+    // Configure the transceiver lowest channel.
+    void setHighestChannel(uint8_t channel);
+    
+    // Configure the transceiver highest channel.
+    void setLowestChannel(uint8_t channel);    
     
     // Changes TX power.
     // Return if the process is wrong.
@@ -208,6 +204,12 @@ class ESAT_COMTransceiverDriverClass
     
     // Handle the manual data transmission and reception.
     void updateManualDataStream();
+	
+	// Updates the last set frequency to the transceiver.
+	TransceiverErrorCode updateFrequency();
+	
+	// Updates the last set transmitter power to the transceiver.
+	TransceiverErrorCode updateTransmissionPower();
         
     // Write a packet and wait for it to be sent, 
     // either by ISR or by polling checking methods.
@@ -225,12 +227,9 @@ class ESAT_COMTransceiverDriverClass
     // Default modulation schema.
     const enum ModulationType DEFAULT_MODULATION_TYPE = OOK;
     
-    // Default frequency for reception.
-    const float DEFAULT_RECEPTION_FREQUENCY = 433.0; // In MHz.
-    
-    // Default frequency for transmission.
-    const float DEFAULT_TRANSMISSION_FREQUENCY = 433.0; // In MHz.    
-    
+    // Default radio frequency.
+    const float DEFAULT_FREQUENCY = 433.0; // In MHz.
+        
     // Default transmission power rate.
     const float DEFAULT_TRANSMISSION_POWER_RATE = 100.0;
     
@@ -248,6 +247,12 @@ class ESAT_COMTransceiverDriverClass
 
     // Reception chain losses for RSSI calculation.
     const float RECEPTION_LOSSES_dB = 130.0;
+    
+    // Highest channel allowed for the transceiver band.
+    uint8_t highestChannel = 31;
+    
+    // Lowest channel allowed for the transceiver band.
+    uint8_t lowestChannel = 0;
        
     // Low level driver entity.
     ESAT_COMTransceiverHALClass* transceiver;
@@ -262,29 +267,26 @@ class ESAT_COMTransceiverDriverClass
     // Reception configuration object pointer.
     ESAT_COMTransceiverConfigurationClass* receptionConfigurationData;    
     
-    // Reception frequency.
-    float receptionFrequency;
-    
     // Interrupt flag for receiving transceiver.
     static volatile uint8_t receptionInterruptFlag;
     
     // Transmission data source.
-    ModulationSource transmitterModulationSource;
+    ModulationSource transmitterModulationSource = DEFAULT_MODULATION_SOURCE;
     
     // Modulation used by the transceiver.
-    ModulationType transceiverModulationType;
+    ModulationType transceiverModulationType = DEFAULT_MODULATION_TYPE;
     
     // Current transceiver configuration mode (TX/RX).
-    TransceiverMode transceiverOperationMode;
+    TransceiverMode transceiverOperationMode = notInitializedMode;
     
     // Transceiver radio channel.
     uint8_t transceiverRadioChannel;
     
+    // Radio frequency.
+    float transceiverFrequency = DEFAULT_FREQUENCY;
+    
     // Transmission configuration object pointer.
     ESAT_COMTransceiverConfigurationClass* transmissionConfigurationData;    
-      
-    // Transmission frequency.
-    float transmissionFrequency;
     
     // Interrupt flag for transmitting transceiver.
     static volatile uint8_t transmissionInterruptFlag;
@@ -293,7 +295,7 @@ class ESAT_COMTransceiverDriverClass
     boolean transmissionInProgress;
     
     // Transmitter power rate.
-    float transmissionPowerRate; 
+    float transmissionPowerRate = DEFAULT_TRANSMISSION_POWER_RATE; 
     
     // Initializes the transceiver according to the working
     // mode and modulation set.

@@ -25,8 +25,9 @@
 boolean ESAT_COMReceiverOOKModulationSelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   (void) packet.readByte();
-  ReceptionTransceiver.configureModulationType(ESAT_COMTransceiverDriverClass::OOK);
+  ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::OOK);
   ESAT_COMRadioStream.beginReading();
+  ReceptionTransceiver.startReception();
   return true;  
 }
 

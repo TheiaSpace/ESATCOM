@@ -24,7 +24,7 @@
 boolean ESAT_COMTransmitterEnableModulationTestModeTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   (void) packet.readByte();
-  if (TransmissionTransceiver.configureModulationSource(ESAT_COMTransceiverDriverClass::gpio2_asynchronous) == ESAT_COMTransceiverDriverClass::noError)
+  if (TransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::gpio2_asynchronous) == ESAT_COMTransceiverDriverClass::noError)
   {    
     return true;
   }

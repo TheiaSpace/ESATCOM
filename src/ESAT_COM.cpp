@@ -22,6 +22,7 @@
 #include <ESAT_CCSDSPacketFromKISSFrameReader.h>
 #include <ESAT_CCSDSPacketToKISSFrameWriter.h>
 #include <ESAT_I2CSlave.h>
+#include <ESAT_SubsystemPacketHandler.h>
 #include "ESAT_COM.h"
 #include "ESAT_COM-hardware/ESAT_COMHearthBeatLED.h"
 #include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
@@ -55,44 +56,29 @@
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterFrequencySelectionTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterOOKModulationSelectionTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterTransmissionPowerAdjustmentTelecommand.h"
-
+// Telemetries
 #include "ESAT_COM-telemetry/ESAT_COMHousekeepingTelemetry.h"
 #include "ESAT_COM-hardware/ESAT_COMRadioStream.h"
 
-void ESAT_COMClass::addTelecommand(ESAT_CCSDSTelecommandPacketHandler& telecommand)
+void ESAT_COMClass::begin(word subsystemApplicationProcessIdentifier, 
+               byte subsystemMajorVersionNumber,
+               byte subsystemMinorVersionNumber,
+               byte subsystemPatchVersionNumber)
 {
-  telecommandPacketDispatcher.add(telecommand);
-}
-
-void ESAT_COMClass::addTelemetry(ESAT_CCSDSTelemetryPacketContents& telemetry)
-{
-  telemetryPacketBuilder.add(telemetry);
-  enableTelemetry(telemetry.packetIdentifier());
-}
-
-void ESAT_COMClass::begin(byte radioInputBuffer[],
-         const unsigned long radioInputBufferLength,
-         byte radioOutputBuffer[],
-         const unsigned long radioOutputBufferLength,
-         byte serialInputBuffer[],
-         const unsigned long serialInputBufferLength,
-         byte i2cInputBuffer[],
-         const unsigned long i2cInputBufferLength,
-         byte i2cOutpuBuffer[],
-         const unsigned long i2cOutpuBufferLength)
-{
+  applicationProcessIdentifier = subsystemApplicationProcessIdentifier;    
+  majorVersionNumber = subsystemMajorVersionNumber,
+  minorVersionNumber = subsystemMinorVersionNumber;
+  patchVersionNumber = subsystemPatchVersionNumber;
+  ESAT_SubsystemPacketHandler.begin(applicationProcessIdentifier,
+                                    majorVersionNumber,
+                                    minorVersionNumber,
+                                    patchVersionNumber,
+                                    ESAT_COMBuiltinHardwareClock,
+                                    WireCOM,
+                                    RADIO_PACKET_DATA_BUFFER_LENGTH);
   beginTelemetry();
   beginTelecommands();  
-  beginRadioSoftware(radioInputBuffer,
-        radioInputBufferLength,
-        radioOutputBuffer,
-        radioOutputBufferLength,
-        serialInputBuffer,
-        serialInputBufferLength,
-        i2cInputBuffer,
-        i2cInputBufferLength,
-        i2cOutpuBuffer,
-        i2cOutpuBufferLength);
+  beginRadioSoftware();
   beginHardware();
 }
 
@@ -101,69 +87,53 @@ void ESAT_COMClass::beginHardware()
   ESAT_COMHearthBeatLED.begin();
   WireCOM.begin(byte(APPLICATION_PROCESS_IDENTIFIER));
   // Despite this function may look like software initialization, 
-  // it initializes and configures radio transceivers.   
+  // it initializes and configures radio transceivers. 
+  TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
+  ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode);  
   ESAT_COMRadioStream.begin();
-  }
+}
 
- void ESAT_COMClass::beginRadioSoftware(byte radioInputBufferArray[],
-        const unsigned long radioInputBufferLength,
-        byte radioOutputBufferArray[],
-        const unsigned long radioOutputBufferLength,
-        byte usbInputBuffer[],
-        const unsigned long usbInputBufferLength,
-        byte i2cInputBuffer[],
-        const unsigned long i2cInputBufferLength,
-        byte i2cOutpuBuffer[],
-        const unsigned long i2cOutpuBufferLength)
+void ESAT_COMClass::beginRadioSoftware()
 {
   radioReader = ESAT_CCSDSPacketFromKISSFrameReader(ESAT_COMRadioStream,
-                radioInputBufferArray,
-                radioInputBufferLength);
-  radioOutputBuffer = ESAT_Buffer(radioOutputBufferArray, radioOutputBufferLength);
-  radioWriter = ESAT_KISSStream(radioOutputBuffer);
-  usbReader =  ESAT_CCSDSPacketFromKISSFrameReader(Serial,
-                                                   usbInputBuffer,
-                                                   usbInputBufferLength);
-  usbWriter = ESAT_CCSDSPacketToKISSFrameWriter(Serial);
-  ESAT_I2CSlave.begin(WireCOM,
-                    i2cOutpuBuffer,
-                    i2cOutpuBufferLength,
-                    i2cInputBuffer,
-                    i2cInputBufferLength);
+                radioInputBufferBackendArray,
+                WHOLE_PACKET_BUFFER_LENGTH);
+  radioOutputBuffer = ESAT_Buffer(radioOutputBufferBackendArray, WHOLE_KISS_FRAME_MAX_LENGTH);
+  radioWriter = ESAT_KISSStream(radioOutputBuffer);  
 }
 
 void ESAT_COMClass::beginTelecommands()
 {
   // System telecommands.
-  addTelecommand(ESAT_COMDisableTelemetryTelecommand);
-  addTelecommand(ESAT_COMEnableTelemetryTelecommand);
-  addTelecommand(ESAT_COMSetTimeTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMDisableTelemetryTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMEnableTelemetryTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMSetTimeTelecommand);
   // Reception telecommands.
-  addTelecommand(ESAT_COMReceiverOOKModulationSelectionTelecommand);
-  addTelecommand(ESAT_COMReceiver2FSKModulationSelectionTelecommand);
-  addTelecommand(ESAT_COMReceiver2GFSKModulationSelectionTelecommand);
-  addTelecommand(ESAT_COMReceiver4FSKModulationSelectionTelecommand);
-  addTelecommand(ESAT_COMReceiver4GFSKModulationSelectionTelecommand);
-  addTelecommand(ESAT_COMReceiverChannelSelectionTelecommand);
-  addTelecommand(ESAT_COMReceiverDisableTelecommand);
-  addTelecommand(ESAT_COMReceiverEnableTelecommand);
-  addTelecommand(ESAT_COMReceiverFrequencySelectionTelecommand); 
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMReceiverOOKModulationSelectionTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMReceiver2FSKModulationSelectionTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMReceiver2GFSKModulationSelectionTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMReceiver4FSKModulationSelectionTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMReceiver4GFSKModulationSelectionTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMReceiverChannelSelectionTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMReceiverDisableTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMReceiverEnableTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMReceiverFrequencySelectionTelecommand); 
   // Transmission telecommands.
-  addTelecommand(ESAT_COMTransmitterOOKModulationSelectionTelecommand);
-  addTelecommand(ESAT_COMTransmitter2FSKModulationSelectionTelecommand);
-  addTelecommand(ESAT_COMTransmitter2GFSKModulationSelectionTelecommand);
-  addTelecommand(ESAT_COMTransmitter4FSKModulationSelectionTelecommand);
-  addTelecommand(ESAT_COMTransmitter4GFSKModulationSelectionTelecommand);
-  addTelecommand(ESAT_COMTransmitterChannelSelectionTelecommand);
-  addTelecommand(ESAT_COMTransmitterDisableRandomGeneratorTelecommand);
-  addTelecommand(ESAT_COMTransmitterEnableRandomGeneratorTelecommand);  
-  addTelecommand(ESAT_COMTransmitterDisableModulationTestModeTelecommand);
-  addTelecommand(ESAT_COMTransmitterEnableModulationTestModeTelecommand);  
-  addTelecommand(ESAT_COMTransmitterDisableTelecommand);
-  addTelecommand(ESAT_COMTransmitterEnableTelecommand); 
-  addTelecommand(ESAT_COMTransmitterFrequencySelectionTelecommand);
-  addTelecommand(ESAT_COMTransmitterTransmissionPowerAdjustmentTelecommand);
-  addTelecommand(ESAT_COMTransmitterContinuousWaveSelectionTelecommand); 
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterOOKModulationSelectionTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitter2FSKModulationSelectionTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitter2GFSKModulationSelectionTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitter4FSKModulationSelectionTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitter4GFSKModulationSelectionTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterChannelSelectionTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterDisableRandomGeneratorTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterEnableRandomGeneratorTelecommand);  
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterDisableModulationTestModeTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterEnableModulationTestModeTelecommand);  
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterDisableTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterEnableTelecommand); 
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterFrequencySelectionTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterTransmissionPowerAdjustmentTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterContinuousWaveSelectionTelecommand); 
 }
 
 void ESAT_COMClass::beginTelemetry()
@@ -172,63 +142,39 @@ void ESAT_COMClass::beginTelemetry()
   enableTelemetry(ESAT_COMHousekeepingTelemetry.packetIdentifier());
 }
 
-void ESAT_COMClass::disableTelemetry(const byte identifier)
+void ESAT_COMClass::disableCOMTelemetryRadioDelivery()
 {
-  enabledTelemetry.clear(identifier);
+  isTelemetryRadioDeliveryEnabled = false;
+}
+           
+void ESAT_COMClass::enableCOMTelemetryRadioDelivery()
+{
+  isTelemetryRadioDeliveryEnabled = true;
 }
 
-void ESAT_COMClass::enableTelemetry(const byte identifier)
+boolean ESAT_COMClass::isCOMTelemetryRadioDeliveryEnabled()
 {
-  enabledTelemetry.set(identifier);
+  return isTelemetryRadioDeliveryEnabled;
 }
 
-void ESAT_COMClass::handleTelecommand(ESAT_CCSDSPacket& packet)
+boolean ESAT_COMClass::isSubsystemTelecommand(ESAT_CCSDSPacket& packet)
 {
-  // We hide the complexity of handling telecommands with a
-  // telecommand packet dispatcher.
-  (void) telecommandPacketDispatcher.dispatch(packet);
+  packet.rewind();
+  const ESAT_CCSDSPrimaryHeader primaryHeader = packet.readPrimaryHeader();
+  if (primaryHeader.packetType != primaryHeader.TELECOMMAND)
+  {
+    return false;
+  }
+  if (applicationProcessIdentifier == primaryHeader.applicationProcessIdentifier)
+  {
+    return true;
+  }
+  return false;
 }
 
 boolean ESAT_COMClass::readPacketFromRadio(ESAT_CCSDSPacket& packet)
 {
   return radioReader.read(packet);
-}
-
-boolean ESAT_COMClass::readPacketFromUSB(ESAT_CCSDSPacket& packet)
-{
-  return usbReader.read(packet);
-}
-
-boolean ESAT_COMClass::readTelemetry(ESAT_CCSDSPacket& packet)
-{
-  // We hide the complexity of building telemetry packets with a
-  // telemetry packet builder.
-  // We build telemetry packets as long as they are pending.
-  if (pendingTelemetry.available())
-  {
-    const byte identifier = byte(pendingTelemetry.readNext());
-    pendingTelemetry.clear(identifier);
-    return telemetryPacketBuilder.build(packet, identifier);
-  }
-  else
-  {
-    return false;
-  }
-}
-
-void ESAT_COMClass::setTime(const ESAT_Timestamp timestamp)
-{
-  ESAT_COMBuiltinHardwareClock.write(timestamp);
-}
-
-void ESAT_COMClass::updatePendingTelemetryLists()
-{
-  const ESAT_FlagContainer availableTelemetry =
-    telemetryPacketBuilder.available();
-  const ESAT_FlagContainer availableAndEnabledTelemetry =
-    availableTelemetry & enabledTelemetry;
-  pendingTelemetry =
-    availableAndEnabledTelemetry;
 }
 
 boolean ESAT_COMClass::writePacketToRadio(ESAT_CCSDSPacket& packet)
@@ -280,9 +226,26 @@ boolean ESAT_COMClass::writePacketToRadio(ESAT_CCSDSPacket& packet)
   return false;
 }
 
-void ESAT_COMClass::writePacketToUSB(ESAT_CCSDSPacket& packet)
+boolean ESAT_COMClass::writeTelecommandToRadio(ESAT_CCSDSPacket& packet)
 {
-  (void) usbWriter.unbufferedWrite(packet);
+  packet.rewind();
+  const ESAT_CCSDSPrimaryHeader primaryHeader = packet.readPrimaryHeader();
+  if (primaryHeader.packetType != primaryHeader.TELECOMMAND)
+  {
+    return false;
+  }
+  return writePacketToRadio(packet);
+}
+
+boolean ESAT_COMClass::writeTelemetryToRadio(ESAT_CCSDSPacket& packet)
+{
+  packet.rewind();
+  const ESAT_CCSDSPrimaryHeader primaryHeader = packet.readPrimaryHeader();
+  if (primaryHeader.packetType != primaryHeader.TELEMETRY)
+  {
+    return false;
+  }
+  return writePacketToRadio(packet);
 }
 
 ESAT_COMClass ESAT_COM;

@@ -63,17 +63,12 @@ int ESAT_COMRadioStreamClass::availableWrite()
  // Begin reception.
  void ESAT_COMRadioStreamClass::beginReading()
  {
-   ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode);
-  // DEBUG_PRINTLN("Starting transceiver");
-   ReceptionTransceiver.startReception();
-   //DEBUG_PRINTLN("Starting reception");
    rxBufferAvailableBytes=0; 
  } 
  
  // Begin transmission.
  void ESAT_COMRadioStreamClass::beginWriting()
- {
-   TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
+ {   
    initializeTXBuffer(DEFAULT_TX_BUFFER_VALUE);
    flush();
  }

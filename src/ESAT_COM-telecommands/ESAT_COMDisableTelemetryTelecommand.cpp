@@ -19,6 +19,7 @@
  */
 
 #include "ESAT_COM-telecommands/ESAT_COMDisableTelemetryTelecommand.h"
+#include <ESAT_SubsystemPacketHandler.h>
 #include "ESAT_COM.h"
 
 boolean ESAT_COMDisableTelemetryTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
@@ -31,7 +32,7 @@ boolean ESAT_COMDisableTelemetryTelecommandClass::handleUserData(ESAT_CCSDSPacke
   }
   else
   {
-    ESAT_COM.disableTelemetry(identifier);
+    ESAT_SubsystemPacketHandler.disableTelemetry(identifier);
     return true;
   }
 }

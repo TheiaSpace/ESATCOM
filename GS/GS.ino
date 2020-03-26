@@ -1,5 +1,5 @@
 /*
- * ESAT COM Main Program version 1.0.0
+ * ESAT COM Ground Station Main Program version 1.0.0
  * Copyright (C) 2020 Theia Space, Universidad Politécnica
  * de Madrid.
  *
@@ -24,7 +24,7 @@
 #include "ESAT_COM-hardware/ESAT_COMHearthBeatLED.h"
 #include "ESAT_COM-hardware/ESAT_COMTransceiverHAL.h"
 
-const word COM_APPLICATION_PROCESS_IDENTIFIER = 5;
+const word COM_APPLICATION_PROCESS_IDENTIFIER = 6;
 const byte COM_MAJOR_VERSION_NUMBER = 1;
 const byte COM_MINOR_VERSION_NUMBER = 0;
 const byte COM_PATCH_VERSION_NUMBER = 0;
@@ -52,7 +52,7 @@ void setup()
   iterationCounter = 0;
   counter = 0;
   Serial.begin(9600);
-  Serial.blockOnOverrun(false); 
+  Serial.blockOnOverrun(false);
   
 //  Serial.println("Press any key to start");
 //  while (Serial.available() <= 0)
@@ -70,20 +70,20 @@ void setup()
 //    Serial.read();
 //  }
 //  Serial.println("Go on!");
-  
+   
   iterationCounter = 0;
   delay(1000);
      
-  ReceptionTransceiver.setLowestChannel(0);
-  ReceptionTransceiver.setHighestChannel(15);  
-  TransmissionTransceiver.setLowestChannel(16);
-  TransmissionTransceiver.setHighestChannel(31);
-  ReceptionTransceiver.setModulationType(ESAT_COMTransceiverDriverClass::OOK);  
+  ReceptionTransceiver.setLowestChannel(16);
+  ReceptionTransceiver.setHighestChannel(31);  
+  TransmissionTransceiver.setLowestChannel(0);
+  TransmissionTransceiver.setHighestChannel(15);  
+  ReceptionTransceiver.setModulationType(ESAT_COMTransceiverDriverClass::OOK);
   ReceptionTransceiver.setFrequency(433.0);
-  ReceptionTransceiver.setChannel(5);
+  ReceptionTransceiver.setChannel(30);
   TransmissionTransceiver.setModulationType(ESAT_COMTransceiverDriverClass::OOK);
   TransmissionTransceiver.setFrequency(433.0);
-  TransmissionTransceiver.setChannel(30);
+  TransmissionTransceiver.setChannel(5);
   TransmissionTransceiver.setTransmissionPower(100.0);
   ESAT_COM.begin(COM_APPLICATION_PROCESS_IDENTIFIER,
                COM_MAJOR_VERSION_NUMBER,
@@ -113,68 +113,27 @@ void loop()
     if  (ESAT_SubsystemPacketHandler.readSubsystemsOwnTelemetry(packet))
     {
       // To USB
-      packet.rewind();
-      ESAT_SubsystemPacketHandler.writePacketToUSB(packet);
-      // To radio if standalone mode is enabled
-      if (ESAT_COM.isCOMTelemetryRadioDeliveryEnabled())
-      {
-        packet.rewind();
-        ESAT_COM.writePacketToRadio(packet);        
-      }
+     ESAT_SubsystemPacketHandler.writePacketToUSB(packet);
     }
     // Handle USB telecommands.
-    packet.rewind();
     if (ESAT_SubsystemPacketHandler.readPacketFromUSB(packet))
-    {
-      packet.rewind();
-      ESAT_SubsystemPacketHandler.dispatchTelecommand(packet);
-    }
-    // Handle radio received telecommands.
-    packet.rewind();
-    if (ESAT_COM.readPacketFromRadio(packet))
     {
       if (ESAT_COM.isSubsystemTelecommand(packet))
       {
         // Own telecommand: self processed.
-        packet.rewind();
         ESAT_SubsystemPacketHandler.dispatchTelecommand(packet);
       }
-      else
+	  else
       {
-        // Other telecommands: queued to I2C transmission to OCDH.
-        packet.rewind();
-        ESAT_SubsystemPacketHandler.queueTelecommandToI2C(packet);
-      }
-    }    
-    // Handle I2C written packets.
-    // They can be either radio telecommands or any subsystem telemetry.
-    packet.rewind();
-    if (ESAT_SubsystemPacketHandler.readPacketFromI2C(packet))
-    {
-      packet.rewind();
-      if (ESAT_COM.isSubsystemTelecommand(packet))
-      {
-        // Radio telecommands are processed.
-        packet.rewind();
-        ESAT_SubsystemPacketHandler.dispatchTelecommand(packet);
-      }
-      else
-      {
-       // Any telemetry is transmitted.
-       packet.rewind();
-       ESAT_COM.writePacketToRadio(packet);
-      }
+        // Other telecommands: send it to radio.
+        ESAT_COM.writePacketToRadio(packet);
+      }	  
     }
-    // Handle I2C requests. 
-    // They can be telemetry requests and/or telecommands queue status queries.    
-    // Note that this device is an I2C slave and the transactions will happen
-    // when the master (OBC) will decide. This function only prepares the context
-    // for them to happen under such requests.
-    if (ESAT_SubsystemPacketHandler.pendingI2CPacketRequest())
+    // Handle radio received telemetry.
+    if (ESAT_COM.readPacketFromRadio(packet))
     {
-      ESAT_SubsystemPacketHandler.respondToI2CPacketRequest();
-    }
-    
+		  ESAT_SubsystemPacketHandler.writePacketToUSB(packet);      
+    }        
     iterationCounter = 0;
     ++counter;       
   }

@@ -23,9 +23,12 @@
 
 boolean ESAT_COMTransmitterChannelSelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
-  const uint8_t channel = constrain((uint8_t) packet.readByte(), TransmissionTransceiver.LOWEST_TRANSMISSION_CHANNEL, TransmissionTransceiver.HIGHEST_TRANSMISSION_CHANNEL);
-  TransmissionTransceiver.setChannel((uint8_t) channel);
-  return true;  
+  const uint8_t channel = packet.readByte();
+  if (TransmissionTransceiver.setChannel(channel) == ESAT_COMTransceiverDriverClass::noError)
+  {  
+	return true;  
+  }
+  return false;
 }
 
 ESAT_COMTransmitterChannelSelectionTelecommandClass ESAT_COMTransmitterChannelSelectionTelecommand;

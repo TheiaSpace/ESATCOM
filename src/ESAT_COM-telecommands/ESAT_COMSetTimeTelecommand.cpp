@@ -20,6 +20,7 @@
 
 #include "ESAT_COM-telecommands/ESAT_COMSetTimeTelecommand.h"
 #include "ESAT_COM.h"
+#include <ESAT_SubsystemPacketHandler.h>
 
 boolean ESAT_COMSetTimeTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
@@ -31,7 +32,7 @@ boolean ESAT_COMSetTimeTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
   }
   else
   {
-    ESAT_COM.setTime(timestamp);
+    ESAT_SubsystemPacketHandler.setTime(timestamp);
     return true;
   }
 }

@@ -75,22 +75,23 @@ void ESAT_COMClass::begin(word subsystemApplicationProcessIdentifier,
                                     patchVersionNumber,
                                     ESAT_COMBuiltinHardwareClock,
                                     WireCOM,
-                                    RADIO_PACKET_DATA_BUFFER_LENGTH);
+                                    PACKET_DATA_BUFFER_LENGTH);
   beginTelemetry();
   beginTelecommands();  
-  beginRadioSoftware();
+  beginRadioSoftware();  
   beginHardware();
 }
 
 void ESAT_COMClass::beginHardware()
 {  
+  DEBUG_PRINTLN("HARDWARE BEGIN");
   ESAT_COMHearthBeatLED.begin();
-  WireCOM.begin(byte(APPLICATION_PROCESS_IDENTIFIER));
+  //WireCOM.begin(byte(applicationProcessIdentifier));
   // Despite this function may look like software initialization, 
   // it initializes and configures radio transceivers. 
   TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
   ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode);  
-  ESAT_COMRadioStream.begin();
+  //ESAT_COMRadioStream.begin();
 }
 
 void ESAT_COMClass::beginRadioSoftware()
@@ -138,8 +139,8 @@ void ESAT_COMClass::beginTelecommands()
 
 void ESAT_COMClass::beginTelemetry()
 {
-  addTelemetry(ESAT_COMHousekeepingTelemetry);
-  enableTelemetry(ESAT_COMHousekeepingTelemetry.packetIdentifier());
+  ESAT_SubsystemPacketHandler.addTelemetry(ESAT_COMHousekeepingTelemetry);
+  ESAT_SubsystemPacketHandler.enableTelemetry(ESAT_COMHousekeepingTelemetry.packetIdentifier());
 }
 
 void ESAT_COMClass::disableCOMTelemetryRadioDelivery()
@@ -182,10 +183,12 @@ boolean ESAT_COMClass::writePacketToRadio(ESAT_CCSDSPacket& packet)
   // Input CCSDS packet is already read and processed (empty).
   if (packet.available() == 0)
   {    
-    return true;
+    DEBUG_PRINTLN("packet empty");
+	return true;
   }
   if (ESAT_COMRadioStream.availableWrite() <= 0)
   {
+	DEBUG_PRINTLN("Buffer full empty");
     return false;   
   }   
   radioOutputBuffer.flush();
@@ -214,6 +217,7 @@ boolean ESAT_COMClass::writePacketToRadio(ESAT_CCSDSPacket& packet)
   {
     radioWriter.endFrame();    
     radioOutputBuffer.writeTo(ESAT_COMRadioStream);
+	DEBUG_PRINTLN("Frame closed");
     return true;
   }
   // If  the CCSDS packet isn't empty but output buffer is full, transmission is
@@ -221,6 +225,7 @@ boolean ESAT_COMClass::writePacketToRadio(ESAT_CCSDSPacket& packet)
   else if (radioOutputBuffer.position() >= 126)
   {    
     radioOutputBuffer.writeTo(ESAT_COMRadioStream);
+	DEBUG_PRINTLN("Frame unclosed");
   }
   // Returned if output buffer is full.
   return false;

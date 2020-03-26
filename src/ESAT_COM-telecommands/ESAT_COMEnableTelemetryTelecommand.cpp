@@ -20,6 +20,7 @@
 
 #include "ESAT_COM-telecommands/ESAT_COMEnableTelemetryTelecommand.h"
 #include "ESAT_COM.h"
+#include <ESAT_SubsystemPacketHandler.h>
 
 boolean ESAT_COMEnableTelemetryTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
@@ -31,7 +32,7 @@ boolean ESAT_COMEnableTelemetryTelecommandClass::handleUserData(ESAT_CCSDSPacket
   }
   else
   {
-    ESAT_COM.enableTelemetry(identifier);
+    ESAT_SubsystemPacketHandler.enableTelemetry(identifier);
     return true;
   }
 }

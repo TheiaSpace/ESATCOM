@@ -37,9 +37,20 @@
 class ESAT_COMClass
 {
   public:   
+  	    
+    // Maximum packet data length radio will handle.
+    static const word PACKET_DATA_BUFFER_LENGTH = 256;
+
+    // Maximum whole packet length radio will handle.
+    static const word WHOLE_PACKET_BUFFER_LENGTH =
+    ESAT_CCSDSPrimaryHeader::LENGTH + PACKET_DATA_BUFFER_LENGTH;
+
+    // Maximum KISS frame length radio will handle.
+    static const word WHOLE_KISS_FRAME_MAX_LENGTH = 
+    ESAT_KISSStream::frameLength(WHOLE_PACKET_BUFFER_LENGTH);
   
-     // Set up the COM board.
-     // Configures the APID and the version numbers.
+    // Set up the COM board.
+    // Configures the APID and the version numbers.
     void begin(word subsystemApplicationProcessIdentifier, 
                byte subsystemMajorVersionNumber,
                byte subsystemMinorVersionNumber,
@@ -71,18 +82,7 @@ class ESAT_COMClass
     boolean writeTelemetryToRadio(ESAT_CCSDSPacket& packet);
 
     private:
-    
-    // Maximum packet data length radio will handle.
-    static const word PACKET_DATA_BUFFER_LENGTH = 256;
-
-    // Maximum whole packet length radio will handle.
-    static const word WHOLE_PACKET_BUFFER_LENGTH =
-    ESAT_CCSDSPrimaryHeader::LENGTH + PACKET_DATA_BUFFER_LENGTH;
-
-    // Maximum KISS frame length radio will handle.
-    static const word WHOLE_KISS_FRAME_MAX_LENGTH = 
-    ESAT_KISSStream::frameLength(WHOLE_PACKET_BUFFER_LENGTH);
-        
+	
     // Unique identifier of the COM board for telemetry and
     // telecommand purposes.
     word applicationProcessIdentifier;

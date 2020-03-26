@@ -30,7 +30,7 @@ boolean ESAT_COMTransmitterFrequencySelectionTelecommandClass::handleUserData(ES
   }
   if (TransmissionTransceiver.updateFrequency() == ESAT_COMTransceiverDriverClass::wrongFrequencyError)
   {
-	return false
+	return false;
   }
   return true; 
 }

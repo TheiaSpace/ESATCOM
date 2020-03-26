@@ -125,6 +125,11 @@ class ESAT_COMTransceiverDriverClass
     // mode (transmission or reception).
     // Return if the initialization went wrong or not.      
     TransceiverErrorCode begin(TransceiverMode mode);
+	
+	// Initializes the transceiver according to the working
+    // mode and modulation set.
+    // Return if the initialization went wrong or not.
+    TransceiverErrorCode begin(TransceiverMode mode, ModulationType modulationType);
     
     // Changes modulation source.
     // Return if the process is wrong.
@@ -295,13 +300,8 @@ class ESAT_COMTransceiverDriverClass
     boolean transmissionInProgress;
     
     // Transmitter power rate.
-    float transmissionPowerRate = DEFAULT_TRANSMISSION_POWER_RATE; 
-    
-    // Initializes the transceiver according to the working
-    // mode and modulation set.
-    // Return if the initialization went wrong or not.
-    TransceiverErrorCode begin(TransceiverMode mode, ModulationType modulationType);
-      
+    float transmissionPowerRate = DEFAULT_TRANSMISSION_POWER_RATE;     
+     
     // Check if there is a packet ready to be read.
     int8_t checkReceptionAvailability();
     

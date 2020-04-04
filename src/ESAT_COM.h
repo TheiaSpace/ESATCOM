@@ -24,6 +24,7 @@
 #include <Arduino.h>
 #include <ESAT_Buffer.h>
 #include <ESAT_CCSDSPacket.h>
+#include <ESAT_CCSDSPacketQueue.h>
 #include <ESAT_CCSDSTelemetryPacketContents.h>
 #include <ESAT_CCSDSPacketFromKISSFrameReader.h>
 #include <ESAT_CCSDSPacketToKISSFrameWriter.h>
@@ -67,26 +68,43 @@ class ESAT_COMClass
                 
     // Check wether a packet is a telecommand for the current subsystem.
     boolean isSubsystemTelecommand(ESAT_CCSDSPacket& packet);
+    
+    // Queues a telecommand to the radio output buffer (for GS).
+    boolean queueTelecommandToRadio(ESAT_CCSDSPacket& packet);
+    
+    // Queues a telemetry to the radio output buffer(for on-board module).
+    boolean queueTelemetryToRadio(ESAT_CCSDSPacket& packet);
 
     // Fill the packet with data read from the radio interface.
     // Return true if there was a new packet; otherwise return false.
     boolean readPacketFromRadio(ESAT_CCSDSPacket& packet);
+	
+	// Performs the background tasks.
+	void update();
 
-    // Send a packet by radio.
-    boolean writePacketToRadio(ESAT_CCSDSPacket& packet);
-    
-    // Send a telecommand to the radio (for GS).
-    boolean writeTelecommandToRadio(ESAT_CCSDSPacket& packet);
-    
-    // Send a telemetry to the radio (for on-board module).
-    boolean writeTelemetryToRadio(ESAT_CCSDSPacket& packet);
-
-    private:
+    private:	
+	
+	// Multi-source transmission state machine states.
+	enum RadioTransmissionState
+	{
+		IDLE,
+		TRANSMITTING_EXTERNAL_DATA, // I2C received data
+		EXTERNAL_DATA_TRANSMITTED,
+		TRANSMITTING_OWN_DATA, // User controlled data
+		OWN_DATA_TRANSMITTED
+	};
+	
+	// Size of the board external (I2C) data radio transmission buffer.
+	const unsigned long EXTERNAL_DATA_TRANSMISSION_QUEUE_CAPACITY = 7;
+	
+	// Size of the board own data radio transmission buffer.
+	const unsigned long OWN_DATA_TRANSMISSION_QUEUE_CAPACITY = 2;
 	
     // Unique identifier of the COM board for telemetry and
     // telecommand purposes.
     word applicationProcessIdentifier;
     
+	// Allows the board to deliver its telemetry to the radio.
     boolean isTelemetryRadioDeliveryEnabled = false;
     
     // Version numbers.
@@ -108,6 +126,15 @@ class ESAT_COMClass
 
     // Use this to read CCSDS packets from the radio interface.
     ESAT_CCSDSPacketFromKISSFrameReader radioReader;
+	
+	// Use this to store the packet while it is sent.
+	ESAT_CCSDSPacket ongoingTransmissionPacket;
+	
+	// Current state of the multi-source transmission state machine.
+	RadioTransmissionState ongoingTransmissionState;
+	
+	// Use this queue to store the user controlled data.
+	ESAT_CCSDSPacketQueue ownDataQueue;
 
     // Configures the board hardware.
     void beginHardware();
@@ -120,6 +147,9 @@ class ESAT_COMClass
 
     // Configures the telemetry packets.
     void beginTelemetry();
+
+    // Starts the radio transmission.
+    boolean writePacketToRadio(ESAT_CCSDSPacket& packet);
 
 };
 

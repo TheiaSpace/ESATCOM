@@ -75,7 +75,8 @@ void ESAT_COMClass::begin(word subsystemApplicationProcessIdentifier,
                                     patchVersionNumber,
                                     ESAT_COMBuiltinHardwareClock,
                                     WireCOM,
-                                    PACKET_DATA_BUFFER_LENGTH);
+                                    WHOLE_PACKET_BUFFER_LENGTH,
+									EXTERNAL_DATA_TRANSMISSION_QUEUE_CAPACITY);
   beginTelemetry();
   beginTelecommands();  
   beginRadioSoftware();  
@@ -86,21 +87,31 @@ void ESAT_COMClass::beginHardware()
 {  
   DEBUG_PRINTLN("HARDWARE BEGIN");
   ESAT_COMHearthBeatLED.begin();
-  //WireCOM.begin(byte(applicationProcessIdentifier));
+  WireCOM.begin(byte(3));
   // Despite this function may look like software initialization, 
   // it initializes and configures radio transceivers. 
+  DEBUG_PRINTLN("TX BEGIN");
   TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
-  ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode);  
-  //ESAT_COMRadioStream.begin();
+  DEBUG_PRINTLN("RX BEGIN");
+  ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode);
+  // todo
+  // may be moved to init sw
+  DEBUG_PRINTLN("STREAM BEGIN");
+  ESAT_COMRadioStream.begin();
 }
 
 void ESAT_COMClass::beginRadioSoftware()
 {
+  DEBUG_PRINTLN("RADIO SOFTWARE BEGIN");
   radioReader = ESAT_CCSDSPacketFromKISSFrameReader(ESAT_COMRadioStream,
                 radioInputBufferBackendArray,
                 WHOLE_PACKET_BUFFER_LENGTH);
   radioOutputBuffer = ESAT_Buffer(radioOutputBufferBackendArray, WHOLE_KISS_FRAME_MAX_LENGTH);
-  radioWriter = ESAT_KISSStream(radioOutputBuffer);  
+  radioWriter = ESAT_KISSStream(radioOutputBuffer); 
+  ownDataQueue = ESAT_CCSDSPacketQueue(OWN_DATA_TRANSMISSION_QUEUE_CAPACITY,
+									   WHOLE_PACKET_BUFFER_LENGTH);
+  ongoingTransmissionPacket = ESAT_CCSDSPacket(WHOLE_PACKET_BUFFER_LENGTH);
+  ongoingTransmissionState = IDLE;  
 }
 
 void ESAT_COMClass::beginTelecommands()
@@ -173,9 +184,96 @@ boolean ESAT_COMClass::isSubsystemTelecommand(ESAT_CCSDSPacket& packet)
   return false;
 }
 
+boolean ESAT_COMClass::queueTelecommandToRadio(ESAT_CCSDSPacket& packet)
+{
+  packet.rewind();
+  const ESAT_CCSDSPrimaryHeader primaryHeader = packet.readPrimaryHeader();
+  if (primaryHeader.packetType != primaryHeader.TELECOMMAND)
+  {
+    return false;
+  }
+  return ownDataQueue.write(packet);
+}
+
+boolean ESAT_COMClass::queueTelemetryToRadio(ESAT_CCSDSPacket& packet)
+{
+  packet.rewind();
+  const ESAT_CCSDSPrimaryHeader primaryHeader = packet.readPrimaryHeader();
+  if (primaryHeader.packetType != primaryHeader.TELEMETRY)
+  {
+    return false;
+  }
+  return ownDataQueue.write(packet);
+}
+
 boolean ESAT_COMClass::readPacketFromRadio(ESAT_CCSDSPacket& packet)
 {
   return radioReader.read(packet);
+}
+
+void ESAT_COMClass::update()
+{
+	switch(ongoingTransmissionState)
+	{
+		case IDLE:
+		case EXTERNAL_DATA_TRANSMITTED:
+			if (ESAT_SubsystemPacketHandler.readPacketFromI2C(ongoingTransmissionPacket))
+			{
+				ongoingTransmissionPacket.rewind();	
+				// If the packet is a telecommand for the subsystem, dispatches it instead of broadcasting it.
+				// On the next cycle a new packet will be retrieved from the I2C queue (if available).
+				if (isSubsystemTelecommand(ongoingTransmissionPacket))
+				{
+					ongoingTransmissionPacket.rewind();
+					ESAT_SubsystemPacketHandler.dispatchTelecommand(ongoingTransmissionPacket);
+					break;
+				}
+				ongoingTransmissionState = TRANSMITTING_EXTERNAL_DATA; // Packet transmission will begin on the next cycle.			
+				break;
+			}
+			if (ownDataQueue.length() > 0 && ownDataQueue.read(ongoingTransmissionPacket))
+			{
+				ongoingTransmissionPacket.rewind();			
+				ongoingTransmissionState = TRANSMITTING_OWN_DATA;
+				break;
+			}
+			break;
+		case  TRANSMITTING_EXTERNAL_DATA:
+			if (ESAT_COM.writePacketToRadio(ongoingTransmissionPacket)) //Packet was fully transmitted.
+			{					
+				ongoingTransmissionState = EXTERNAL_DATA_TRANSMITTED;
+			}
+			else
+			{
+				ongoingTransmissionState = TRANSMITTING_EXTERNAL_DATA; // Part of the packet could not be transmitted.
+			}
+			break;			
+		case TRANSMITTING_OWN_DATA:
+			if (ESAT_COM.writePacketToRadio(ongoingTransmissionPacket))
+			{					
+				ongoingTransmissionState = OWN_DATA_TRANSMITTED;
+			}
+			else
+			{
+				ongoingTransmissionState = TRANSMITTING_OWN_DATA;
+			}
+			break;
+		case OWN_DATA_TRANSMITTED:
+			if (ownDataQueue.length() > 0 && ownDataQueue.read(ongoingTransmissionPacket))
+			{
+				ongoingTransmissionPacket.rewind();			
+				ongoingTransmissionState = TRANSMITTING_OWN_DATA;
+				break;
+			}
+			ongoingTransmissionState = IDLE;
+			break;
+		default:
+			ongoingTransmissionState = IDLE;
+			break;
+	}
+	// Updates the transmission bit banging sequence.
+	TransmissionTransceiver.updateManualDataStream();
+	ESAT_COMHearthBeatLED.update();	
 }
 
 boolean ESAT_COMClass::writePacketToRadio(ESAT_CCSDSPacket& packet)
@@ -229,28 +327,6 @@ boolean ESAT_COMClass::writePacketToRadio(ESAT_CCSDSPacket& packet)
   }
   // Returned if output buffer is full.
   return false;
-}
-
-boolean ESAT_COMClass::writeTelecommandToRadio(ESAT_CCSDSPacket& packet)
-{
-  packet.rewind();
-  const ESAT_CCSDSPrimaryHeader primaryHeader = packet.readPrimaryHeader();
-  if (primaryHeader.packetType != primaryHeader.TELECOMMAND)
-  {
-    return false;
-  }
-  return writePacketToRadio(packet);
-}
-
-boolean ESAT_COMClass::writeTelemetryToRadio(ESAT_CCSDSPacket& packet)
-{
-  packet.rewind();
-  const ESAT_CCSDSPrimaryHeader primaryHeader = packet.readPrimaryHeader();
-  if (primaryHeader.packetType != primaryHeader.TELEMETRY)
-  {
-    return false;
-  }
-  return writePacketToRadio(packet);
 }
 
 ESAT_COMClass ESAT_COM;

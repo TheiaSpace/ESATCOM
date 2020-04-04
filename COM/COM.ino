@@ -38,6 +38,8 @@ word iterationCounter;
 
 ESAT_CCSDSPacket packet(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
 
+ESAT_CCSDSPacket transmissionPacket(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
+
 // Start peripherals and do the initial bookkeeping here:
 // - Activate the reception of telecommands from the USB interface.
 // - Activate the emission of telemetry through the USB interface.
@@ -53,7 +55,7 @@ void setup()
   counter = 0;
   Serial.begin(9600);
   Serial.blockOnOverrun(false); 
-  
+//  
 //  Serial.println("Press any key to start");
 //  while (Serial.available() <= 0)
 //  {
@@ -107,6 +109,18 @@ void loop()
 {
   if (iterationCounter >= PERIOD)
   { 
+   Serial.println("");
+   Serial.print("Transmitter: ");
+   Serial.print(TransmissionTransceiver.getTransceiverVoltage(), 3);
+   Serial.print(" V, ");
+   Serial.print(TransmissionTransceiver.getTransceiverTemperature(), 2);
+   Serial.println("ºC.");
+   Serial.print("Receiver: ");
+   Serial.print(ReceptionTransceiver.getTransceiverVoltage(), 3);
+   Serial.print(" V, ");
+   Serial.print(ReceptionTransceiver.getTransceiverTemperature(), 2);
+   Serial.println("ºC.");
+   
     // Prepare telemetry.   
     ESAT_SubsystemPacketHandler.prepareSubsystemsOwnTelemetry();
     // Send own telemetry.
@@ -114,75 +128,68 @@ void loop()
     {
       // To USB
       packet.rewind();
-      ESAT_SubsystemPacketHandler.writePacketToUSB(packet);
+      //ESAT_SubsystemPacketHandler.writePacketToUSB(packet);
       // To radio if standalone mode is enabled
-      if (ESAT_COM.isCOMTelemetryRadioDeliveryEnabled())
+      if (1)//(ESAT_COM.isCOMTelemetryRadioDeliveryEnabled())
       {
         packet.rewind();
-        ESAT_COM.writePacketToRadio(packet);        
-      }
+        ESAT_COM.queueTelemetryToRadio(packet);        
+      }      
     }
-    // Handle USB telecommands.
+
+    iterationCounter = 0;
+    ++counter;   
+  }
+      
+  // Handle USB telecommands.
+  packet.rewind();
+  if (ESAT_SubsystemPacketHandler.readPacketFromUSB(packet))
+  {
     packet.rewind();
-    if (ESAT_SubsystemPacketHandler.readPacketFromUSB(packet))
+    ESAT_SubsystemPacketHandler.dispatchTelecommand(packet);
+  }
+
+// Handle radio received telecommands.
+  packet.rewind();
+  if (ESAT_COM.readPacketFromRadio(packet))
+  {
+    if (ESAT_COM.isSubsystemTelecommand(packet))
     {
+      // Own telecommand: self processed.
       packet.rewind();
       ESAT_SubsystemPacketHandler.dispatchTelecommand(packet);
     }
-    // Handle radio received telecommands.
-    packet.rewind();
-    if (ESAT_COM.readPacketFromRadio(packet))
+    else
     {
-      if (ESAT_COM.isSubsystemTelecommand(packet))
-      {
-        // Own telecommand: self processed.
-        packet.rewind();
-        ESAT_SubsystemPacketHandler.dispatchTelecommand(packet);
-      }
-      else
-      {
-        // Other telecommands: queued to I2C transmission to OCDH.
-        packet.rewind();
-        ESAT_SubsystemPacketHandler.queueTelecommandToI2C(packet);
-      }
-    }    
-    // Handle I2C written packets.
-    // They can be either radio telecommands or any subsystem telemetry.
-    packet.rewind();
-    if (ESAT_SubsystemPacketHandler.readPacketFromI2C(packet))
-    {
+      // Other telecommands: queued to I2C transmission to OCDH.
       packet.rewind();
-      if (ESAT_COM.isSubsystemTelecommand(packet))
-      {
-        // Radio telecommands are processed.
-        packet.rewind();
-        ESAT_SubsystemPacketHandler.dispatchTelecommand(packet);
-      }
-      else
-      {
-       // Any telemetry is transmitted.
-       packet.rewind();
-       ESAT_COM.writePacketToRadio(packet);
-      }
+      ESAT_SubsystemPacketHandler.queueTelecommandToI2C(packet);
     }
-    // Handle I2C requests. 
-    // They can be telemetry requests and/or telecommands queue status queries.    
-    // Note that this device is an I2C slave and the transactions will happen
-    // when the master (OBC) will decide. This function only prepares the context
-    // for them to happen under such requests.
-    if (ESAT_SubsystemPacketHandler.pendingI2CPacketRequest())
-    {
-      ESAT_SubsystemPacketHandler.respondToI2CPacketRequest();
-    }
-    
-    iterationCounter = 0;
-    ++counter;       
+  } 
+     
+  // Handle I2C requests. 
+  // They can be telemetry requests and/or telecommands queue status queries.    
+  // Note that this device is an I2C slave and the transactions will happen
+  // when the master (OBC) will decide. This function only prepares the context
+  // for them to happen under such requests.
+  if (ESAT_SubsystemPacketHandler.pendingI2CPacketRequest())
+  {
+    ESAT_SubsystemPacketHandler.respondToI2CPacketRequest();
   }
+    
+  ++iterationCounter; 
 
-  ++iterationCounter;  
-  
-  ESAT_COMHearthBeatLED.update();
-  TransmissionTransceiver.updateManualDataStream();
+  // Handles:
+  //  -I2C written packets: radio telecommands or any subsystem telemetry.
+  //                        Radio telecommands are handled and subsystem
+  //                        is queued to be transmitted by the radio when it
+  //                        were possible.
+  //  -Radio transmissions: broadcasts either I2C received (and queued) telemetries
+  //                        and queued own subsystem's telemetry using a sequential 
+  //                        dispatching algorithm.
+  //  -Manual data stream:  updates the bit-banged transmission testing sequence.
+  //  -Heath beat LED update.
+  ESAT_COM.update(); 
   
   delay(1);
 }

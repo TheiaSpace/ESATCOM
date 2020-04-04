@@ -131,7 +131,7 @@ class ESAT_COMTransceiverHALClass
   const uint16_t DELAY_BETWEEN_RTS_US = 20;
   
   // SPI clock divider value.
-  const uint8_t SPI_CLOCK_DIVIDER_FOR_STM32L4 = 10;
+  const uint8_t SPI_CLOCK_DIVIDER_FOR_STM32L4 = 20;// 10;
   
   // Transceiver chip select pin.
   uint8_t chipSelectPin;

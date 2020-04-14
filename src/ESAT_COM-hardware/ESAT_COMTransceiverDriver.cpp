@@ -36,6 +36,10 @@
 #include "configurations/ESAT_COM4FSKTransmissionConfiguration.h"
 #include "configurations/ESAT_COM4GFSKTransmissionConfiguration.h"
 
+#define DEBUG_PRINT(val)
+#define DEBUG_PRINTFORMAT(val, format)
+#define DEBUG_PRINTLN(val)
+#define DEBUG_PRINTLNFORMAT(val, format)
 
 ESAT_COMTransceiverDriverClass::ESAT_COMTransceiverDriverClass(ESAT_COMTransceiverHALClass& hardwareTransceiver)
 {   

@@ -107,22 +107,22 @@ void loop()
 {
   if (iterationCounter >= PERIOD)
   {
-   Serial.println("");
-   Serial.print("Transmitter: ");
-   Serial.print(TransmissionTransceiver.getTransceiverVoltage(), 3);
-   Serial.print(" V, ");
-   Serial.print(TransmissionTransceiver.getTransceiverTemperature(), 2);
-   Serial.println("ºC.");
-   Serial.print("Receiver: ");
-   Serial.print(ReceptionTransceiver.getTransceiverVoltage(), 3);
-   Serial.print(" V, ");
-   Serial.print(ReceptionTransceiver.getTransceiverTemperature(), 2);
-   Serial.println("ºC.");
+//   Serial.println("");
+//   Serial.print("Transmitter: ");
+//   Serial.print(TransmissionTransceiver.getTransceiverVoltage(), 3);
+//   Serial.print(" V, ");
+//   Serial.print(TransmissionTransceiver.getTransceiverTemperature(), 2);
+//   Serial.println("ºC.");
+//   Serial.print("Receiver: ");
+//   Serial.print(ReceptionTransceiver.getTransceiverVoltage(), 3);
+//   Serial.print(" V, ");
+//   Serial.print(ReceptionTransceiver.getTransceiverTemperature(), 2);
+//   Serial.println("ºC.");
     
     // Prepare telemetry.   
     ESAT_SubsystemPacketHandler.prepareSubsystemsOwnTelemetry();
     // Send own telemetry.
-    if  (ESAT_SubsystemPacketHandler.readSubsystemsOwnTelemetry(packet))
+    if  (0)//(ESAT_SubsystemPacketHandler.readSubsystemsOwnTelemetry(packet))
     {
       // To USB
      ESAT_SubsystemPacketHandler.writePacketToUSB(packet);
@@ -130,31 +130,30 @@ void loop()
     iterationCounter = 0;
     ++counter;       
   }
-
-  // Handle USB telecommands.
-    if (ESAT_SubsystemPacketHandler.readPacketFromUSB(packet))
-    {
-      if (ESAT_COM.isSubsystemTelecommand(packet))
-      {
-        // Own telecommand: self processed.
-        ESAT_SubsystemPacketHandler.dispatchTelecommand(packet);
-      }
-    else
-      {
-        // Other telecommands: send it to radio.
-        ESAT_COM.writePacketToRadio(packet);
-      }   
-    }
+//
+//  // Handle USB telecommands.
+//    if (ESAT_SubsystemPacketHandler.readPacketFromUSB(packet))
+//    {
+//      if (ESAT_COM.isSubsystemTelecommand(packet))
+//      {
+//        // Own telecommand: self processed.
+//        ESAT_SubsystemPacketHandler.dispatchTelecommand(packet);
+//      }
+//    else
+//      {
+//        // Other telecommands: send it to radio.
+//        ESAT_COM.writePacketToRadio(packet);
+//      }   
+//    }
     // Handle radio received telemetry.
     if (ESAT_COM.readPacketFromRadio(packet))
     {
-      ESAT_SubsystemPacketHandler.writePacketToUSB(packet);      
+      //ESAT_SubsystemPacketHandler.writePacketToUSB(packet);      
+      Serial.println(packet);
     }        
 
   ++iterationCounter;  
   
   ESAT_COMHearthBeatLED.update();
   TransmissionTransceiver.updateManualDataStream();
-  
-  delay(1);
 }

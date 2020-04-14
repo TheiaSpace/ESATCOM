@@ -81,6 +81,9 @@ class ESAT_COMClass
 	
 	// Performs the background tasks.
 	void update();
+		
+    // Starts the radio transmission.
+    boolean writePacketToRadio(ESAT_CCSDSPacket& packet);
 
     private:	
 	
@@ -95,7 +98,7 @@ class ESAT_COMClass
 	};
 	
 	// Size of the board external (I2C) data radio transmission buffer.
-	const unsigned long EXTERNAL_DATA_TRANSMISSION_QUEUE_CAPACITY = 7;
+	const unsigned long EXTERNAL_DATA_TRANSMISSION_QUEUE_CAPACITY = 17;
 	
 	// Size of the board own data radio transmission buffer.
 	const unsigned long OWN_DATA_TRANSMISSION_QUEUE_CAPACITY = 2;
@@ -147,9 +150,6 @@ class ESAT_COMClass
 
     // Configures the telemetry packets.
     void beginTelemetry();
-
-    // Starts the radio transmission.
-    boolean writePacketToRadio(ESAT_CCSDSPacket& packet);
 
 };
 

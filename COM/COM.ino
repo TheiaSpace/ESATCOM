@@ -55,7 +55,7 @@ void setup()
   counter = 0;
   Serial.begin(9600);
   Serial.blockOnOverrun(false); 
-//  
+  
 //  Serial.println("Press any key to start");
 //  while (Serial.available() <= 0)
 //  {
@@ -74,7 +74,7 @@ void setup()
 //  Serial.println("Go on!");
   
   iterationCounter = 0;
-  delay(1000);
+  delay(3000);
      
   ReceptionTransceiver.setLowestChannel(0);
   ReceptionTransceiver.setHighestChannel(15);  
@@ -108,19 +108,7 @@ void setup()
 void loop()
 {
   if (iterationCounter >= PERIOD)
-  { 
-   Serial.println("");
-   Serial.print("Transmitter: ");
-   Serial.print(TransmissionTransceiver.getTransceiverVoltage(), 3);
-   Serial.print(" V, ");
-   Serial.print(TransmissionTransceiver.getTransceiverTemperature(), 2);
-   Serial.println("ºC.");
-   Serial.print("Receiver: ");
-   Serial.print(ReceptionTransceiver.getTransceiverVoltage(), 3);
-   Serial.print(" V, ");
-   Serial.print(ReceptionTransceiver.getTransceiverTemperature(), 2);
-   Serial.println("ºC.");
-   
+  {    
     // Prepare telemetry.   
     ESAT_SubsystemPacketHandler.prepareSubsystemsOwnTelemetry();
     // Send own telemetry.

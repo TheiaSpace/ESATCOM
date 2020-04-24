@@ -196,14 +196,27 @@ boolean ESAT_COMClass::queueTelecommandToRadio(ESAT_CCSDSPacket& packet)
 }
 
 boolean ESAT_COMClass::queueTelemetryToRadio(ESAT_CCSDSPacket& packet)
-{
+{  
   packet.rewind();
   const ESAT_CCSDSPrimaryHeader primaryHeader = packet.readPrimaryHeader();
   if (primaryHeader.packetType != primaryHeader.TELEMETRY)
   {
-    return false;
+	return false;
   }
-  return ownDataQueue.write(packet);
+  packet.rewind();
+  Serial.println();
+  Serial.print("Own data queue write space: ");
+  Serial.println(ownDataQueue.available(), DEC);
+  Serial.print("Own data queue length: ");
+  Serial.println(ownDataQueue.length(), DEC);
+  boolean returnbuff = ownDataQueue.write(packet);
+  Serial.print("Returnbuff: ");
+  Serial.println(returnbuff, DEC);
+  Serial.print("Own data queue write space: ");
+  Serial.println(ownDataQueue.available(), DEC);
+  Serial.print("Own data queue length: ");
+  Serial.println(ownDataQueue.length(), DEC);
+  return returnbuff;
 }
 
 boolean ESAT_COMClass::readPacketFromRadio(ESAT_CCSDSPacket& packet)
@@ -216,90 +229,98 @@ void ESAT_COMClass::update()
 	switch(ongoingTransmissionState)
 	{
 		case IDLE:
-			//Serial.println("IDLE");
+			// // Serial.println("IDLE");
 		case EXTERNAL_DATA_TRANSMITTED:
-			//Serial.println("EXTERNAL_DATA_TRANSMITTED");
-			//Serial.print("I2C queue space to write: ");
-			//Serial.println(ESAT_I2CSlave.getQueueAvailability(), DEC);
-			//Serial.print("I2C queue packets to be read: ");
-			//Serial.println(ESAT_I2CSlave.getQueueLength(), DEC);
+			// // Serial.println("EXTERNAL_DATA_TRANSMITTED");
+			// // Serial.print("I2C queue space to write: ");
+			// // Serial.println(ESAT_I2CSlave.getQueueAvailability(), DEC);
+			// // Serial.print("I2C queue packets to be read: ");
+			// // Serial.println(ESAT_I2CSlave.getQueueLength(), DEC);
 			if (ESAT_SubsystemPacketHandler.readPacketFromI2C(ongoingTransmissionPacket))
 			{
-				//Serial.println("External packet read");
+				// Serial.println("External packet read. New I2C Queue status: ");
+				// Serial.print("I2C queue space to write: ");
+				// Serial.println(ESAT_I2CSlave.getQueueAvailability(), DEC);
+				// Serial.print("I2C queue packets to be read: ");
+				// Serial.println(ESAT_I2CSlave.getQueueLength(), DEC);
 				ongoingTransmissionPacket.rewind();	
 				// If the packet is a telecommand for the subsystem, dispatches it instead of broadcasting it.
 				// On the next cycle a new packet will be retrieved from the I2C queue (if available).
 				if (isSubsystemTelecommand(ongoingTransmissionPacket))
 				{
-					//Serial.println("It's a COM telecomand. Processed.");
+					// Serial.println("It's a COM telecomand. Processed.");
 					ongoingTransmissionPacket.rewind();
 					ESAT_SubsystemPacketHandler.dispatchTelecommand(ongoingTransmissionPacket);
 					break;
 				}
 				ongoingTransmissionPacket.rewind();
-				//Serial.println(ongoingTransmissionPacket);
-				//Serial.println("Go to: TRANSMITTING_EXTERNAL_DATA");
+				// // Serial.println(ongoingTransmissionPacket);
+				// Serial.println("Go to: TRANSMITTING_EXTERNAL_DATA");
 				ongoingTransmissionState = TRANSMITTING_EXTERNAL_DATA; // Packet transmission will begin on the next cycle.			
 				break;
-			}
-			if (ownDataQueue.length() > 0 && ownDataQueue.read(ongoingTransmissionPacket))
-			{
-				//Serial.println("Own packet read");
+			}	
+			//Serial.println("Reading own TM");
+			if (ownDataQueue.read(ongoingTransmissionPacket))
+			{				
+				// Serial.println("Own packet read");
+				// ongoingTransmissionPacket.rewind();	
+				// // Serial.println(ongoingTransmissionPacket);
 				ongoingTransmissionPacket.rewind();	
-				//Serial.println(ongoingTransmissionPacket);
-				ongoingTransmissionPacket.rewind();	
-				//Serial.println("Go to: TRANSMITTING_OWN_DATA");				
+				// Serial.println("Go to: TRANSMITTING_OWN_DATA");				
 				ongoingTransmissionState = TRANSMITTING_OWN_DATA;
 				break;
 			}
 			break;
 		case  TRANSMITTING_EXTERNAL_DATA:
-			//Serial.println("TRANSMITTING_EXTERNAL_DATA");
+			// Serial.println("TRANSMITTING_EXTERNAL_DATA");
+			Serial.print("Current packet APID: ");
+			Serial.println(ongoingTransmissionPacket.readPrimaryHeader().applicationProcessIdentifier, DEC);
 			if (ESAT_COM.writePacketToRadio(ongoingTransmissionPacket)) //Packet was fully transmitted.
 			{	
-				//Serial.println("External packet successfully transmitted");
-				//Serial.println("Go to: EXTERNAL_DATA_TRANSMITTED");
+				// Serial.println("External packet successfully transmitted");
+				// Serial.println("Go to: EXTERNAL_DATA_TRANSMITTED");
 				ongoingTransmissionState = EXTERNAL_DATA_TRANSMITTED;
 			}
 			else
 			{
-				//Serial.println("External packet not fully transmitted yet. Retry.");
-				//Serial.println("Keep on: TRANSMITTING_EXTERNAL_DATA");
+				// Serial.println("External packet not fully transmitted yet. Retry.");
+				// Serial.println("Keep on: TRANSMITTING_EXTERNAL_DATA");
 				ongoingTransmissionState = TRANSMITTING_EXTERNAL_DATA; // Part of the packet could not be transmitted.
 			}
 			break;			
 		case TRANSMITTING_OWN_DATA:
-			//Serial.println("TRANSMITTING_OWN_DATA");
+			// Serial.println("TRANSMITTING_OWN_DATA");
 			if (ESAT_COM.writePacketToRadio(ongoingTransmissionPacket))
 			{		
-				//Serial.println("Own packet successfully transmitted");
-				//Serial.println("Go to: OWN_DATA_TRANSMITTED");
+				// Serial.println("Own packet successfully transmitted");
+				// Serial.println("Go to: OWN_DATA_TRANSMITTED");
 				ongoingTransmissionState = OWN_DATA_TRANSMITTED;
 			}
 			else
 			{
-				//Serial.println("Own packet not fully transmitted yet. Retry.");
-				//Serial.println("Keep on: TRANSMITTING_OWN_DATA");
+				// Serial.println("Own packet not fully transmitted yet. Retry.");
+				// Serial.println("Keep on: TRANSMITTING_OWN_DATA");
 				ongoingTransmissionState = TRANSMITTING_OWN_DATA;
 			}
 			break;
 		case OWN_DATA_TRANSMITTED:
-			//Serial.println("OWN_DATA_TRANSMITTED");
-			if (ownDataQueue.length() > 0 && ownDataQueue.read(ongoingTransmissionPacket))
+			// Serial.println("OWN_DATA_TRANSMITTED");
+			//Serial.println("Reading own TM");
+			if (ownDataQueue.read(ongoingTransmissionPacket))
 			{
-				//Serial.println("Own data read");
+				// Serial.println("Own data read");
 				ongoingTransmissionPacket.rewind();	
-				//Serial.println("Go to: TRANSMITTING_OWN_DATA");
+				// Serial.println("Go to: TRANSMITTING_OWN_DATA");
 				ongoingTransmissionState = TRANSMITTING_OWN_DATA;
 				break;
 			}
-			//Serial.println("No data");
-			//Serial.println("Go to: IDLE");
+			// Serial.println("No data");
+			// Serial.println("Go to: IDLE");
 			ongoingTransmissionState = IDLE;
 			break;
 		default:
-			//Serial.println("Wrong state");
-			//Serial.println("Go to: IDLE");
+			// Serial.print("Wrong state, ");
+			// Serial.println("Go to: IDLE");
 			ongoingTransmissionState = IDLE;
 			break;
 	}

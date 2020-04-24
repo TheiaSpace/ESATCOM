@@ -43,7 +43,6 @@ void ESAT_COMTransceiverHALClass::begin()
   digitalWrite(chipSelectPin, HIGH);
   pinMode(gpio1Pin, INPUT);
   pinMode(gpio2Pin, OUTPUT);
-  DEBUG_PRINTLN("SPI begin");
   transceiverSPI -> begin();
   transceiverSPI -> setClockDivider(SPI_CLOCK_DIVIDER_FOR_STM32L4);
 }

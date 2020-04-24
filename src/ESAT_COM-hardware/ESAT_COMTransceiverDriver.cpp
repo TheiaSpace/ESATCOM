@@ -36,11 +36,6 @@
 #include "configurations/ESAT_COM4FSKTransmissionConfiguration.h"
 #include "configurations/ESAT_COM4GFSKTransmissionConfiguration.h"
 
-#define DEBUG_PRINT(val)
-#define DEBUG_PRINTFORMAT(val, format)
-#define DEBUG_PRINTLN(val)
-#define DEBUG_PRINTLNFORMAT(val, format)
-
 ESAT_COMTransceiverDriverClass::ESAT_COMTransceiverDriverClass(ESAT_COMTransceiverHALClass& hardwareTransceiver)
 {   
   //Attaches the hardware transceiver pointer to be used by this ESAT_COMTransceiverDriverClass object
@@ -64,13 +59,11 @@ int8_t ESAT_COMTransceiverDriverClass::available(void)
         noInterrupts();
         if (transmissionInterruptFlag == 0xFF)
         {  
-		  DEBUG_PRINTLN("TX interrupt");
-          transmissionInterruptFlag = 0;          
+		  transmissionInterruptFlag = 0;          
           interrupts();   
           return checkTransmissionAvailability();
         }        
         interrupts();
-		DEBUG_PRINTLN("NO TX interrupt");
         return 0;
       }
       else
@@ -82,7 +75,6 @@ int8_t ESAT_COMTransceiverDriverClass::available(void)
     {  
       if (receptionAvailable == true) // If reception was available but still not read, return 1
       {
-        DEBUG_PRINT("ReceptionAvailable");
         return 1;
       }
       else // If received data was read and reception reenabled.
@@ -91,13 +83,11 @@ int8_t ESAT_COMTransceiverDriverClass::available(void)
         // Check if interrupt flag is set.
         if (receptionInterruptFlag) 
         { 
-          DEBUG_PRINTLN("Pending available interrupt");
           receptionInterruptFlag = 0;
           interrupts(); 
           return checkReceptionAvailability(); // Retrieve received packet and set available flag.          
         }
         interrupts();
-		DEBUG_PRINTLN("NO RX interrupt");
         return 0;
       }
     }
@@ -111,9 +101,7 @@ int8_t ESAT_COMTransceiverDriverClass::available(void)
 ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::begin(ESAT_COMTransceiverDriverClass::TransceiverMode mode)
 {
   // Configure hardware
-  DEBUG_PRINTLN("Initialize transceiver spi hw");
   transceiver -> begin();
-  DEBUG_PRINTLN("Own transceiver being");
   return begin(mode, transceiverModulationType);  
 } 
 
@@ -126,55 +114,35 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   {
     case TXMode:
     {
-	  DEBUG_PRINTLN("TXMode");
-	  DEBUG_PRINTLN("Led begin");
       ESAT_COMTransmissionLED.begin();
-      DEBUG_PRINTLN("SW configuration file");
       transmissionConfigurationData = switchTransmissionConfiguration(transceiverModulationType);
-	  DEBUG_PRINTLN("Intitialize transceiver");
       error = translateLowLevelDriverError(initializeTransceiver(transmissionConfigurationData));
       if(noError != error)
-      { 
-		DEBUG_PRINT("ERROR: ");
-		DEBUG_PRINTLNFORMAT(error, DEC);
+      {
         return error;
       }
-      //Clear flag
-	  DEBUG_PRINTLN("Clear int flag");
+      // Clear flag.
       transmissionInterruptFlag = 0;
-      //Enable interrupts. If ISR is fired during init and is not cleared interrupts may not be retriggered
-	  DEBUG_PRINTLN("Attach interrupt");
+      // Enable interrupts. If the ISR is fired during init and is not cleared, interrupts may not be retriggered.
       attachInterrupt(digitalPinToInterrupt(transceiver -> getInterruptPin()), setTransmissionTransceiverInterruptFlag,  FALLING);
-	  DEBUG_PRINTLN("Configure modulation source");
       setModulationSource(transmitterModulationSource);
-	  DEBUG_PRINTLN("Update frequency");
       updateFrequency();
-	  DEBUG_PRINTLN("Update power");
       updateTransmissionPower();
       break;
     }
     case RXMode:
     {
-      DEBUG_PRINTLN("RXMode");
-	  DEBUG_PRINTLN("Led begin");
-      ESAT_COMReceptionLED.begin();
-	  DEBUG_PRINTLN("SW configuration file");	  
+      ESAT_COMReceptionLED.begin();  
       receptionConfigurationData = switchReceptionConfiguration(transceiverModulationType);
-	  DEBUG_PRINTLN("Intitialize transceiver");
       error = translateLowLevelDriverError(initializeTransceiver(receptionConfigurationData));
       if(noError != error)
-      {        		
-	    DEBUG_PRINT("ERROR: ");
-		DEBUG_PRINTLNFORMAT(error, DEC);        
+      {       
 		return error;
       }     
-	  //Clear flag
-	  DEBUG_PRINTLN("Clear int flag");
+	  //Clear flag.
       receptionInterruptFlag = 0;
-      //Enable interrupts. If ISR is fired during init and is not cleared interrupts may not be retriggered
-	  DEBUG_PRINTLN("Attach interrupt");
+      //Enable interrupts. If the ISR is fired during init and is not cleared, interrupts may not be retriggered.
       attachInterrupt(digitalPinToInterrupt(transceiver -> getInterruptPin()), setReceptionTransceiverInterruptFlag,  FALLING);
-	  DEBUG_PRINTLN("Update frequency");
       updateFrequency();
       break;
     }
@@ -191,8 +159,7 @@ int8_t ESAT_COMTransceiverDriverClass::checkReceptionAvailability()
   ESAT_COMTransceiverCommandsClass::InterruptStatusReply intStatusReply = ESAT_COMTransceiverCommands.getInterruptStatus(*transceiver, 0, 0, 0);
   if (intStatusReply.packetHandlerPending & ESAT_COMTransceiverCommandsClass::INTERRUPT_STATUS_REPLY_PACKET_HANDLER_PENDING_PACKET_RECEIVED_BITMASK) // If packet has ended.
   {
-    DEBUG_PRINTLN("Packet RX pending");
-    // Retrieve from fifo
+    // Retrieve data from the FIFO.
     receptionAvailable = true;
     ESAT_COMReceptionLED.write(100.0);
     ESAT_COMTransceiverCommands.readReceptionFIFOBuffer(*transceiver, RADIO_MAX_PACKET_LENGTH, receptionBuffer);
@@ -369,10 +336,9 @@ float ESAT_COMTransceiverDriverClass::getReceivedSignalStrengthIndicator()
 
 float ESAT_COMTransceiverDriverClass::getTransceiverTemperature()
 {
-  // If transceiver is disabled return 0 (better returning error but not yet)
+  // If the transceiver is disabled return 0.
   if ((transceiverOperationMode != RXMode) && (transceiverOperationMode != TXMode))
   {
-	DEBUG_PRINTLN("WRONG OP MODE!!");
     return 0;
   } 
   ESAT_COMTransceiverCommandsClass::ADCReadingsReply reply = ESAT_COMTransceiverCommands.getADCReading(*transceiver, ESAT_COMTransceiverCommandsClass::ADC_READ_ARGUMENT_READ_TEMPERATURE_BITMASK);
@@ -381,10 +347,9 @@ float ESAT_COMTransceiverDriverClass::getTransceiverTemperature()
 
 float ESAT_COMTransceiverDriverClass::getTransceiverVoltage()
 {
-  // If transceiver is disabled return 0 (better returning error but not yet)
+  // If transceiver is disabled return 0.
   if ((transceiverOperationMode!=RXMode) && (transceiverOperationMode!=TXMode))
   {
-	DEBUG_PRINTLN("WRONG OP MODE!!");
     return 0;
   } 
    ESAT_COMTransceiverCommandsClass::ADCReadingsReply reply =  ESAT_COMTransceiverCommands.getADCReading(*transceiver, ESAT_COMTransceiverCommandsClass::ADC_READ_ARGUMENT_READ_VOLTAGE_BITMASK);
@@ -416,80 +381,25 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverD
   {
     transceiver -> reset();  
     // Load patch (if defined).
-    error = ESAT_COMTransceiverCommands.applyPatch(*transceiver);
-	
-	DEBUG_PRINT("patch error: ");
-	DEBUG_PRINTFORMAT(error, DEC);
+    error = ESAT_COMTransceiverCommands.applyPatch(*transceiver);	
     if (ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS == error)
     {
-	  DEBUG_PRINTLN("(None)");
-	  
-	  DEBUG_PRINTLN("Part info:");
-	  ESAT_COMTransceiverCommandsClass::PartInfoReply ppr = ESAT_COMTransceiverCommands.partInfo(*transceiver);	  
-	  DEBUG_PRINT("Chip revision: ");
-	  DEBUG_PRINTLNFORMAT(ppr.chipRevision, HEX);
-	  DEBUG_PRINT("Part number: ");
-	  DEBUG_PRINTLNFORMAT(ppr.partNumber, HEX);
-	  DEBUG_PRINT("Part build: ");
-	  DEBUG_PRINTLNFORMAT(ppr.partBuild, HEX);
-	  DEBUG_PRINT("ID: ");
-	  DEBUG_PRINTLNFORMAT(ppr.ID, HEX);
-	  DEBUG_PRINT("Customer ID: ");
-	  DEBUG_PRINTLNFORMAT(ppr.customerID, HEX);
-	  DEBUG_PRINT("ROM ID: ");
-	  DEBUG_PRINTLNFORMAT(ppr.ROMID, HEX);
-	  
-      ESAT_COMTransceiverCommands.powerUp(*transceiver);
-      ESAT_COMTransceiverCommands.getInterruptStatus(*transceiver, 0, 0, 0);
-      ESAT_COMTransceiverCommands.configureGPIO(*transceiver, 
-                                        ESAT_COMTransceiverCommandsClass::DONOTHING, false,
-                                        ESAT_COMTransceiverCommandsClass::CTS, false,
-                                        ESAT_COMTransceiverCommandsClass::INPUT_READ, false,
-                                        ESAT_COMTransceiverCommandsClass::DONOTHING, false,
-                                        ESAT_COMTransceiverCommandsClass::RADIO_HIGH);
-      error = transceiverConfiguration -> applyConfiguration(*transceiver);
-	  DEBUG_PRINT("configuration error: ");
-	  switch(error)
-	  {
-		case ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS:
-			DEBUG_PRINTLN("SUCCESS");
-			break;
-		case ESAT_COMTransceiverHALClass::TRANSCEIVER_CTS_TIMEOUT:
-			DEBUG_PRINTLN("CTS Timeout");
-			break;	
-		case ESAT_COMTransceiverHALClass::TRANSCEIVER_CHIP_ERROR:
-			DEBUG_PRINTLN("Chip error");
-			break;	
-		case ESAT_COMTransceiverHALClass::TRANSCEIVER_COMMAND_ERROR:
-			DEBUG_PRINTLN("Command error");
-			break;	
-		default:
-			break;
-	  }	  
+	  (void) ESAT_COMTransceiverCommands.partInfo(*transceiver);	  
+      (void) ESAT_COMTransceiverCommands.powerUp(*transceiver);
+      (void) ESAT_COMTransceiverCommands.getInterruptStatus(*transceiver, 0, 0, 0);
+      (void) ESAT_COMTransceiverCommands.configureGPIO(*transceiver, 
+													ESAT_COMTransceiverCommandsClass::DONOTHING, false,
+													ESAT_COMTransceiverCommandsClass::CTS, false,
+													ESAT_COMTransceiverCommandsClass::INPUT_READ, false,
+													ESAT_COMTransceiverCommandsClass::DONOTHING, false,
+													ESAT_COMTransceiverCommandsClass::RADIO_HIGH);
+      error = transceiverConfiguration -> applyConfiguration(*transceiver);  
       if (error == ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
       {
           ESAT_COMTransceiverCommandsClass::InterruptStatusReply intStatusReply = ESAT_COMTransceiverCommands.getInterruptStatus(*transceiver, 0, 0, 0);
-          // Check if chip is ready to accept commands.
-		  DEBUG_PRINT("Int pending: ");
-		  DEBUG_PRINTLNFORMAT(intStatusReply.interruptPending, BIN);
-		  DEBUG_PRINT("Int status: ");
-		  DEBUG_PRINTLNFORMAT(intStatusReply.interruptStatus, BIN);
-		  DEBUG_PRINT("PH pending: ");
-		  DEBUG_PRINTLNFORMAT(intStatusReply.packetHandlerPending, BIN);
-		  DEBUG_PRINT("PH status: ");
-		  DEBUG_PRINTLNFORMAT(intStatusReply.packetHandlerStatus, BIN);
-		  DEBUG_PRINT("Modem pending: ");
-		  DEBUG_PRINTLNFORMAT(intStatusReply.modemPending, BIN);
-		  DEBUG_PRINT("Modem status: ");
-		  DEBUG_PRINTLNFORMAT(intStatusReply.modemStatus, BIN);
-		  DEBUG_PRINT("Chip pending: ");
-		  DEBUG_PRINTLNFORMAT(intStatusReply.chipPending, BIN);
-		  DEBUG_PRINT("Chip status: ");
-		  DEBUG_PRINTLNFORMAT(intStatusReply.chipStatus, BIN);
-		  
-		  //ESAT_COMTransceiverCommands.nop(*transceiver);
-		  
-          if ((intStatusReply.chipStatus & ESAT_COMTransceiverCommandsClass::INTERRUPT_STATUS_REPLY_CHIP_STATUS_CHIP_READY_BITMASK)&& !(intStatusReply.chipPending & ESAT_COMTransceiverCommandsClass::INTERRUPT_STATUS_REPLY_CHIP_PENDING_CHIP_READY_BITMASK)) 
+          // Check if the chip is ready to accept commands.		  
+          if ((intStatusReply.chipStatus & ESAT_COMTransceiverCommandsClass::INTERRUPT_STATUS_REPLY_CHIP_STATUS_CHIP_READY_BITMASK) 
+			  && !(intStatusReply.chipPending & ESAT_COMTransceiverCommandsClass::INTERRUPT_STATUS_REPLY_CHIP_PENDING_CHIP_READY_BITMASK)) 
           {
             return ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS;
           }
@@ -644,30 +554,24 @@ ESAT_COMTransceiverConfigurationClass* ESAT_COMTransceiverDriverClass::switchRec
   {
     case (twoFSK):
     {
-	  DEBUG_PRINTLN("2FSK");
-      return &ESAT_COM2FSKReceptionConfiguration;
+	  return &ESAT_COM2FSKReceptionConfiguration;
     }
     case (twoGaussianFSK):
     {
-	  DEBUG_PRINTLN("2GFSK");
       return &ESAT_COM2GFSKReceptionConfiguration;
     }
     case (fourFSK):
     {
-	  DEBUG_PRINTLN("4FSK");
       return &ESAT_COM4FSKReceptionConfiguration;
     }
     case (fourGaussianFSK):
     {
-	  DEBUG_PRINTLN("4GFSK");
       return &ESAT_COM4GFSKReceptionConfiguration;
     }
     case (continuousWave):
-		DEBUG_PRINTLN("(CW)");
     case (OOK):
     default:
     {
-	  DEBUG_PRINTLN("OOK");
       return &ESAT_COMOOKReceptionConfiguration;
     }
   }  
@@ -680,30 +584,24 @@ ESAT_COMTransceiverConfigurationClass* ESAT_COMTransceiverDriverClass::switchTra
 
     case (twoFSK):
     {
-	  DEBUG_PRINTLN("2FSK");
       return &ESAT_COM2FSKTransmissionConfiguration;
     }
     case (twoGaussianFSK):
     {
-	  DEBUG_PRINTLN("2GFSK");
       return &ESAT_COM2GFSKTransmissionConfiguration;
     }
     case (fourFSK):
     {
-      DEBUG_PRINTLN("4FSK");
       return &ESAT_COM4FSKTransmissionConfiguration;
     }
     case (fourGaussianFSK):
     {
-	  DEBUG_PRINTLN("4GFSK");
       return &ESAT_COM4GFSKTransmissionConfiguration;
     }
     case (continuousWave):
-		DEBUG_PRINTLN("(CW)");
     case (OOK):
     default:
     {
-  	  DEBUG_PRINTLN("OOK");
       return &ESAT_COMOOKTransmissionConfiguration;
     }
   }  

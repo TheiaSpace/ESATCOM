@@ -41,8 +41,8 @@
 class ESAT_COMClass
 {
   public: 
-	// Task for reading and delivering the COM board telemetry periodically.
-  	class OnBoardTelemetryDeliveryTaskClass: public ESAT_Task
+	// Task for reading and delivering the telemetry periodically.
+  	class PeriodicalTelemetryDeliveryTaskClass: public ESAT_Task
 	{
 	  public:
 		// Delivery period (in us).
@@ -50,7 +50,7 @@ class ESAT_COMClass
 		{
 		  return 1000000;
 		}
-
+		// Task execution.
 		void run();		
 	};
   
@@ -65,8 +65,8 @@ class ESAT_COMClass
     static const word WHOLE_KISS_FRAME_MAX_LENGTH = 
     ESAT_KISSStream::frameLength(WHOLE_PACKET_BUFFER_LENGTH);
 		
-	// Instance of OnBoardTelemetryDeliveryTaskClass.
-	OnBoardTelemetryDeliveryTaskClass OnBoardTelemetryDeliveryTask;	
+	// Instance of TelemetryDeliveryTaskClass.
+	PeriodicalTelemetryDeliveryTaskClass PeriodicalTelemetryDeliveryTask;	
   
     // Set up the COM board.
     // Configures the APID and the version numbers.
@@ -114,6 +114,9 @@ class ESAT_COMClass
 		TRANSMITTING_OWN_DATA, // User controlled data
 		OWN_DATA_TRANSMITTED
 	};
+	
+	// I2C Address of the COM board.
+	const byte COM_I2C_ADDRESS = 3;
 	
 	// Size of the board external (I2C) data radio transmission buffer.
 	const unsigned long EXTERNAL_DATA_TRANSMISSION_QUEUE_CAPACITY = 17;

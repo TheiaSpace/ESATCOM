@@ -82,32 +82,10 @@ void ESAT_COMClass::begin(word subsystemApplicationProcessIdentifier,
   beginHardware();
 }
 
-void ESAT_COMClass::OnBoardTelemetryDeliveryTaskClass::run()
-{
-		  ESAT_CCSDSPacket telemetryPacket(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
-		  // Prepare telemetry.   
-		  ESAT_SubsystemPacketHandler.prepareSubsystemsOwnTelemetry();
-		  // Send own telemetry.
-		  if  (ESAT_SubsystemPacketHandler.readSubsystemsOwnTelemetry(telemetryPacket))
-		  {
-			// To USB
-			telemetryPacket.rewind();
-			ESAT_SubsystemPacketHandler.writePacketToUSB(telemetryPacket);
-			// To radio if standalone mode is enabled
-			if (1)//(ESAT_COM.isCOMTelemetryRadioDeliveryEnabled())
-			{
-			  telemetryPacket.rewind();
-			  ESAT_COM.queueTelemetryToRadio(telemetryPacket);        
-			}      
-		  }
-		}
-
 void ESAT_COMClass::beginHardware()
 {  
   ESAT_COMHearthBeatLED.begin();
-  // TODO
-  // This address
-  WireCOM.begin(byte(3));
+  WireCOM.begin(byte(COM_I2C_ADDRESS));
   TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
   ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode); 
 }
@@ -164,6 +142,7 @@ void ESAT_COMClass::beginTelemetry()
 {
   ESAT_SubsystemPacketHandler.addTelemetry(ESAT_COMHousekeepingTelemetry);
   ESAT_SubsystemPacketHandler.enableTelemetry(ESAT_COMHousekeepingTelemetry.packetIdentifier());
+  ESAT_COMTaskScheduler.add(ESAT_COM.PeriodicalTelemetryDeliveryTask);
 }
 
 void ESAT_COMClass::disableCOMTelemetryRadioDelivery()

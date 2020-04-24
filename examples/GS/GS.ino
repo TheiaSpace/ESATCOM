@@ -20,23 +20,34 @@
 
 #include <ESAT_COM.h>
 #include <ESAT_SubsystemPacketHandler.h>
+#include <ESAT_Task.h>
+#include <ESAT_TaskScheduler.h>
 #include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 #include "ESAT_COM-hardware/ESAT_COMHearthBeatLED.h"
 #include "ESAT_COM-hardware/ESAT_COMTransceiverHAL.h"
 
-const word COM_APPLICATION_PROCESS_IDENTIFIER = 6;
-const byte COM_MAJOR_VERSION_NUMBER = 1;
-const byte COM_MINOR_VERSION_NUMBER = 0;
-const byte COM_PATCH_VERSION_NUMBER = 0;
-
-// Cycle period in iterations.
-const word PERIOD = 1000;
-
-word counter;
-
-word iterationCounter;
+const word GS_APPLICATION_PROCESS_IDENTIFIER = 6;
+const byte GS_MAJOR_VERSION_NUMBER = 1;
+const byte GS_MINOR_VERSION_NUMBER = 0;
+const byte GS_PATCH_VERSION_NUMBER = 0;
 
 ESAT_CCSDSPacket packet(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
+
+// Configures the priodical delivery of the board telemetry.
+// This funcion is called periodically by the scheduler according
+// to the period set.
+void ESAT_COMClass::PeriodicalTelemetryDeliveryTaskClass::run()
+{
+  ESAT_CCSDSPacket telemetryPacket(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
+  // Prepare telemetry.   
+  ESAT_SubsystemPacketHandler.prepareSubsystemsOwnTelemetry();
+  // Read GS telemetry.
+  if (ESAT_SubsystemPacketHandler.readSubsystemsOwnTelemetry(telemetryPacket))
+  {
+    // Write to USB.
+   ESAT_SubsystemPacketHandler.writePacketToUSB(telemetryPacket);
+  }    
+}
 
 // Start peripherals and do the initial bookkeeping here:
 // - Activate the reception of telecommands from the USB interface.
@@ -49,8 +60,6 @@ ESAT_CCSDSPacket packet(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
 // once.
 void setup()
 {
-  iterationCounter = 0;
-  counter = 0;
   Serial.begin(9600);
   Serial.blockOnOverrun(false);
   
@@ -71,7 +80,6 @@ void setup()
 //  }
 //  Serial.println("Go on!");
    
-  iterationCounter = 0;
   delay(3000);
      
   ReceptionTransceiver.setLowestChannel(16);
@@ -85,11 +93,12 @@ void setup()
   TransmissionTransceiver.setFrequency(433.0);
   TransmissionTransceiver.setChannel(5);
   TransmissionTransceiver.setTransmissionPower(100.0);
-  ESAT_COM.begin(COM_APPLICATION_PROCESS_IDENTIFIER,
-               COM_MAJOR_VERSION_NUMBER,
-               COM_MINOR_VERSION_NUMBER,
-               COM_PATCH_VERSION_NUMBER);
+  ESAT_COM.begin(GS_APPLICATION_PROCESS_IDENTIFIER,
+               GS_MAJOR_VERSION_NUMBER,
+               GS_MINOR_VERSION_NUMBER,
+               GS_PATCH_VERSION_NUMBER);
   interrupts();  
+  ESAT_COMTaskScheduler.begin();
   ReceptionTransceiver.startReception();  
   delay(1000);
 }
@@ -105,42 +114,39 @@ void setup()
 // This function is run in an infinite loop that starts after setup().
 void loop()
 {
-  if (iterationCounter >= PERIOD)
-  { 
-    // Prepare telemetry.   
-    ESAT_SubsystemPacketHandler.prepareSubsystemsOwnTelemetry();
-    // Send own telemetry.
-    if  (ESAT_SubsystemPacketHandler.readSubsystemsOwnTelemetry(packet))
-    {
-      // To USB
-     ESAT_SubsystemPacketHandler.writePacketToUSB(packet);
-    }    
-    iterationCounter = 0;
-    ++counter;       
-  }
   // Handle USB telecommands.
     if (ESAT_SubsystemPacketHandler.readPacketFromUSB(packet))
     {
+      packet.rewind();
       if (ESAT_COM.isSubsystemTelecommand(packet))
       {
         // Own telecommand: self processed.
+        packet.rewind();
         ESAT_SubsystemPacketHandler.dispatchTelecommand(packet);
       }
-    else
+      else
       {
-        // Other telecommands: send it to radio.
+        // Other telecommands: send it to the radio.
+        packet.rewind();
         ESAT_COM.writePacketToRadio(packet);
       }   
     }
+    
     // Handle radio received telemetry.
+    packet.rewind();
     if (ESAT_COM.readPacketFromRadio(packet))
     {
-      ESAT_SubsystemPacketHandler.writePacketToUSB(packet);      
-      //Serial.println(packet);
+      packet.rewind();
+      ESAT_SubsystemPacketHandler.writePacketToUSB(packet);    
     }        
-
-  ++iterationCounter;  
+ 
+  // Handles:
+  //  -Radio transmissions: broadcasts nong-GS received telecommands.
+  //  -Manual data stream:  updates the bit-banged transmission testing sequence.
+  //  -Heath beat LED update.  
+  ESAT_COM.update();  
   
-  ESAT_COMHearthBeatLED.update();
-  TransmissionTransceiver.updateManualDataStream();
+  // Updates the periodic tasks:
+  // - PeriodicalTelemetryDeliveryTask: Delivers system telemetry to the USB port.
+  ESAT_COMTaskScheduler.run();
 }

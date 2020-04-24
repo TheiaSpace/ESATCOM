@@ -85,24 +85,16 @@ void ESAT_COMClass::begin(word subsystemApplicationProcessIdentifier,
 
 void ESAT_COMClass::beginHardware()
 {  
-  DEBUG_PRINTLN("HARDWARE BEGIN");
   ESAT_COMHearthBeatLED.begin();
+  // TODO
+  // This address
   WireCOM.begin(byte(3));
-  // Despite this function may look like software initialization, 
-  // it initializes and configures radio transceivers. 
-  DEBUG_PRINTLN("TX BEGIN");
   TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
-  DEBUG_PRINTLN("RX BEGIN");
-  ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode);
-  // todo
-  // may be moved to init sw
-  DEBUG_PRINTLN("STREAM BEGIN");
-  ESAT_COMRadioStream.begin();
+  ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode); 
 }
 
 void ESAT_COMClass::beginRadioSoftware()
-{
-  DEBUG_PRINTLN("RADIO SOFTWARE BEGIN");
+{  
   radioReader = ESAT_CCSDSPacketFromKISSFrameReader(ESAT_COMRadioStream,
                 radioInputBufferBackendArray,
                 WHOLE_PACKET_BUFFER_LENGTH);
@@ -112,6 +104,7 @@ void ESAT_COMClass::beginRadioSoftware()
 									   WHOLE_PACKET_BUFFER_LENGTH);
   ongoingTransmissionPacket = ESAT_CCSDSPacket(WHOLE_PACKET_BUFFER_LENGTH);
   ongoingTransmissionState = IDLE;  
+  ESAT_COMRadioStream.begin();
 }
 
 void ESAT_COMClass::beginTelecommands()
@@ -192,6 +185,7 @@ boolean ESAT_COMClass::queueTelecommandToRadio(ESAT_CCSDSPacket& packet)
   {
     return false;
   }
+  packet.rewind();
   return ownDataQueue.write(packet);
 }
 
@@ -204,19 +198,7 @@ boolean ESAT_COMClass::queueTelemetryToRadio(ESAT_CCSDSPacket& packet)
 	return false;
   }
   packet.rewind();
-  Serial.println();
-  Serial.print("Own data queue write space: ");
-  Serial.println(ownDataQueue.available(), DEC);
-  Serial.print("Own data queue length: ");
-  Serial.println(ownDataQueue.length(), DEC);
-  boolean returnbuff = ownDataQueue.write(packet);
-  Serial.print("Returnbuff: ");
-  Serial.println(returnbuff, DEC);
-  Serial.print("Own data queue write space: ");
-  Serial.println(ownDataQueue.available(), DEC);
-  Serial.print("Own data queue length: ");
-  Serial.println(ownDataQueue.length(), DEC);
-  return returnbuff;
+  return ownDataQueue.write(packet);
 }
 
 boolean ESAT_COMClass::readPacketFromRadio(ESAT_CCSDSPacket& packet)
@@ -229,102 +211,74 @@ void ESAT_COMClass::update()
 	switch(ongoingTransmissionState)
 	{
 		case IDLE:
-			// // Serial.println("IDLE");
 		case EXTERNAL_DATA_TRANSMITTED:
-			// // Serial.println("EXTERNAL_DATA_TRANSMITTED");
-			// // Serial.print("I2C queue space to write: ");
-			// // Serial.println(ESAT_I2CSlave.getQueueAvailability(), DEC);
-			// // Serial.print("I2C queue packets to be read: ");
-			// // Serial.println(ESAT_I2CSlave.getQueueLength(), DEC);
 			if (ESAT_SubsystemPacketHandler.readPacketFromI2C(ongoingTransmissionPacket))
-			{
-				// Serial.println("External packet read. New I2C Queue status: ");
-				// Serial.print("I2C queue space to write: ");
-				// Serial.println(ESAT_I2CSlave.getQueueAvailability(), DEC);
-				// Serial.print("I2C queue packets to be read: ");
-				// Serial.println(ESAT_I2CSlave.getQueueLength(), DEC);
+			{	
 				ongoingTransmissionPacket.rewind();	
-				// If the packet is a telecommand for the subsystem, dispatches it instead of broadcasting it.
-				// On the next cycle a new packet will be retrieved from the I2C queue (if available).
+				// If the packet is a telecommand for the subsystem, it is dispatched 
+				// instead of broadcasted and on the next cycle a new packet will be
+				// retrieved from the I2C queue (if there are any available).
 				if (isSubsystemTelecommand(ongoingTransmissionPacket))
-				{
-					// Serial.println("It's a COM telecomand. Processed.");
+				{					
 					ongoingTransmissionPacket.rewind();
 					ESAT_SubsystemPacketHandler.dispatchTelecommand(ongoingTransmissionPacket);
 					break;
 				}
 				ongoingTransmissionPacket.rewind();
-				// // Serial.println(ongoingTransmissionPacket);
-				// Serial.println("Go to: TRANSMITTING_EXTERNAL_DATA");
-				ongoingTransmissionState = TRANSMITTING_EXTERNAL_DATA; // Packet transmission will begin on the next cycle.			
+				ongoingTransmissionState = TRANSMITTING_EXTERNAL_DATA;
+				// Packet transmission will begin on the next cycle.
 				break;
-			}	
-			//Serial.println("Reading own TM");
+			}				
 			if (ownDataQueue.read(ongoingTransmissionPacket))
 			{				
-				// Serial.println("Own packet read");
-				// ongoingTransmissionPacket.rewind();	
-				// // Serial.println(ongoingTransmissionPacket);
-				ongoingTransmissionPacket.rewind();	
-				// Serial.println("Go to: TRANSMITTING_OWN_DATA");				
+				ongoingTransmissionPacket.rewind();				
 				ongoingTransmissionState = TRANSMITTING_OWN_DATA;
+				// Packet transmission will begin on the next cycle.
 				break;
 			}
 			break;
 		case  TRANSMITTING_EXTERNAL_DATA:
-			// Serial.println("TRANSMITTING_EXTERNAL_DATA");
-			Serial.print("Current packet APID: ");
-			Serial.println(ongoingTransmissionPacket.readPrimaryHeader().applicationProcessIdentifier, DEC);
-			if (ESAT_COM.writePacketToRadio(ongoingTransmissionPacket)) //Packet was fully transmitted.
+			if (ESAT_COM.writePacketToRadio(ongoingTransmissionPacket)) 			
 			{	
-				// Serial.println("External packet successfully transmitted");
-				// Serial.println("Go to: EXTERNAL_DATA_TRANSMITTED");
+				// Packet was successfully transmitted.
 				ongoingTransmissionState = EXTERNAL_DATA_TRANSMITTED;
 			}
 			else
 			{
-				// Serial.println("External packet not fully transmitted yet. Retry.");
-				// Serial.println("Keep on: TRANSMITTING_EXTERNAL_DATA");
-				ongoingTransmissionState = TRANSMITTING_EXTERNAL_DATA; // Part of the packet could not be transmitted.
+				// Part of the packet could not be transmitted. It will be 
+				// resumed on the next cycle.
+				ongoingTransmissionState = TRANSMITTING_EXTERNAL_DATA; 
 			}
 			break;			
 		case TRANSMITTING_OWN_DATA:
-			// Serial.println("TRANSMITTING_OWN_DATA");
 			if (ESAT_COM.writePacketToRadio(ongoingTransmissionPacket))
 			{		
-				// Serial.println("Own packet successfully transmitted");
-				// Serial.println("Go to: OWN_DATA_TRANSMITTED");
+				// Packet was successfully transmitted.;
 				ongoingTransmissionState = OWN_DATA_TRANSMITTED;
 			}
 			else
 			{
-				// Serial.println("Own packet not fully transmitted yet. Retry.");
-				// Serial.println("Keep on: TRANSMITTING_OWN_DATA");
+				// Part of the packet could not be transmitted. It will be 
+				// resumed on the next cycle.
 				ongoingTransmissionState = TRANSMITTING_OWN_DATA;
 			}
 			break;
 		case OWN_DATA_TRANSMITTED:
-			// Serial.println("OWN_DATA_TRANSMITTED");
-			//Serial.println("Reading own TM");
 			if (ownDataQueue.read(ongoingTransmissionPacket))
 			{
-				// Serial.println("Own data read");
-				ongoingTransmissionPacket.rewind();	
-				// Serial.println("Go to: TRANSMITTING_OWN_DATA");
-				ongoingTransmissionState = TRANSMITTING_OWN_DATA;
+				ongoingTransmissionPacket.rewind();
+				ongoingTransmissionState = TRANSMITTING_OWN_DATA;				
+				// Packet transmission will begin on the next cycle.
 				break;
 			}
-			// Serial.println("No data");
-			// Serial.println("Go to: IDLE");
+			// No packets to be transmitted.
 			ongoingTransmissionState = IDLE;
 			break;
 		default:
-			// Serial.print("Wrong state, ");
-			// Serial.println("Go to: IDLE");
 			ongoingTransmissionState = IDLE;
 			break;
 	}
-	// Updates the transmission bit banging sequence.
+	// Updates the transmission manual bit banging sequence.
 	TransmissionTransceiver.updateManualDataStream();
 	ESAT_COMHearthBeatLED.update();	
 }
@@ -333,52 +287,50 @@ boolean ESAT_COMClass::writePacketToRadio(ESAT_CCSDSPacket& packet)
 { 
   // Input CCSDS packet is already read and processed (empty).
   if (packet.available() == 0)
-  {    
-    DEBUG_PRINTLN("packet empty");
+  {  
 	return true;
   }
+  // Transmission buuffer is full and radio is busy.
   if (ESAT_COMRadioStream.availableWrite() <= 0)
   {
-	DEBUG_PRINTLN("Buffer full empty");
     return false;   
   }   
   radioOutputBuffer.flush();
   // Handle the preparation of a KISS frame.
   if (packet.position() == 0)
   { 
-    // 2 Bytes (KISS header) + 2 (max) * 6 bytes (Primary header) = 14 bytes: 
-    // must fit in the radioOutputBuffer.
+    // 2 bytes (KISS header) + 2 (max) * 6 bytes (Primary header) = 
+	// 14 bytes. They must fit in the radioOutputBuffer.
     radioWriter.beginFrame();
     packet.readPrimaryHeader().writeTo(radioWriter);    
   }  
-  // Fifo maximum size is 129 bytes, first is length => remains 128 
-  // [127 is the largest index from zero], and we need at least 2 free
-  // bytes for scaping last character (if it were necessary) 
-  // => 129 - 1 (length) - 2 (scape margin) - 1 (zero offset) = 125.  
-  // If there is data to be written and still fits in the output buffer 
-  // we write to it.
+  // FIFO size is 129 bytes and the first is the length, so there
+  // are 128 free bytes. 2 free bytes should be reserved for scaping 
+  // the last character if it were necessary. This leaves 126 free
+  // bytes, being 125 the largest allowed index for indexing the buffer.
+  // If there is some data to be written and still fits in the buffer, 
+  // it will be written.
   while (packet.available() && (radioOutputBuffer.position() < 126)) 
   {
     const byte readByte = packet.read();
     radioWriter.write(readByte);    
   } 
-  // If the CCSDS input packet is over, KISS frame is closed and start the
-  // transmission.
+  // If the CCSDS input packet is over, KISS frame is closed and the 
+  // transmission starts.
   if ((packet.available() == 0) && (radioOutputBuffer.position() < 127))
   {
     radioWriter.endFrame();    
     radioOutputBuffer.writeTo(ESAT_COMRadioStream);
-	DEBUG_PRINTLN("Frame closed");
     return true;
   }
-  // If  the CCSDS packet isn't empty but output buffer is full, transmission is
-  // started but without closing the KISS frame and false is returned.
+  // If the CCSDS packet isn't empty but the output buffer is already full, 
+  // the transmission starts without closing the KISS frame and false is 
+  // returned as the whole CCSDS packet wasn't completely sent yet.
   else if (radioOutputBuffer.position() >= 126)
   {    
     radioOutputBuffer.writeTo(ESAT_COMRadioStream);
-	DEBUG_PRINTLN("Frame unclosed");
   }
-  // Returned if output buffer is full.
+  // Returned if the output buffer is full.
   return false;
 }
 

@@ -20,6 +20,8 @@
 
 #include <ESAT_COM.h>
 #include <ESAT_SubsystemPacketHandler.h>
+#include <ESAT_Task.h>
+#include <ESAT_TaskScheduler.h>
 #include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 #include "ESAT_COM-hardware/ESAT_COMHearthBeatLED.h"
 #include "ESAT_COM-hardware/ESAT_COMTransceiverHAL.h"
@@ -29,16 +31,38 @@ const byte COM_MAJOR_VERSION_NUMBER = 1;
 const byte COM_MINOR_VERSION_NUMBER = 0;
 const byte COM_PATCH_VERSION_NUMBER = 0;
 
-// Cycle period in iterations.
-const word PERIOD = 1000;
+class TelemetryDeliveryTaskClass: public ESAT_Task
+{
+  public:
+    unsigned long period()
+    {
+      return 1000000;
+    }
 
-word counter;
+    void run()
+    {
+      ESAT_CCSDSPacket telemetryPacket(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
+      // Prepare telemetry.   
+      ESAT_SubsystemPacketHandler.prepareSubsystemsOwnTelemetry();
+      // Send own telemetry.
+      if  (ESAT_SubsystemPacketHandler.readSubsystemsOwnTelemetry(telemetryPacket))
+      {
+        // To USB
+        telemetryPacket.rewind();
+        ESAT_SubsystemPacketHandler.writePacketToUSB(telemetryPacket);
+        // To radio if standalone mode is enabled
+        if (1)//(ESAT_COM.isCOMTelemetryRadioDeliveryEnabled())
+        {
+          telemetryPacket.rewind();
+          ESAT_COM.queueTelemetryToRadio(telemetryPacket);        
+        }      
+      }
+    }
+};
 
-word iterationCounter;
-
+ESAT_TaskScheduler scheduler;
 ESAT_CCSDSPacket packet(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
-
-ESAT_CCSDSPacket transmissionPacket(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
+TelemetryDeliveryTaskClass TelemetryDeliveryTask;
 
 // Start peripherals and do the initial bookkeeping here:
 // - Activate the reception of telecommands from the USB interface.
@@ -51,10 +75,9 @@ ESAT_CCSDSPacket transmissionPacket(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
 // once.
 void setup()
 {
-  iterationCounter = 0;
-  counter = 0;
   Serial.begin(9600);
   Serial.blockOnOverrun(false); 
+  scheduler.add(TelemetryDeliveryTask);
   
 //  Serial.println("Press any key to start");
 //  while (Serial.available() <= 0)
@@ -73,7 +96,6 @@ void setup()
 //  }
 //  Serial.println("Go on!");
   
-  iterationCounter = 0;
   delay(3000);
      
   ReceptionTransceiver.setLowestChannel(0);
@@ -94,6 +116,7 @@ void setup()
   interrupts();  
   ReceptionTransceiver.startReception();  
   delay(1000);
+  scheduler.begin();
 }
 
 // Body of the main loop of the program:
@@ -106,29 +129,7 @@ void setup()
 //   packets to the ground station or it can store them for later use).
 // This function is run in an infinite loop that starts after setup().
 void loop()
-{
-  if (iterationCounter >= PERIOD)
-  {    
-    // Prepare telemetry.   
-    ESAT_SubsystemPacketHandler.prepareSubsystemsOwnTelemetry();
-    // Send own telemetry.
-    if  (ESAT_SubsystemPacketHandler.readSubsystemsOwnTelemetry(packet))
-    {
-      // To USB
-      packet.rewind();
-      //ESAT_SubsystemPacketHandler.writePacketToUSB(packet);
-      // To radio if standalone mode is enabled
-      if (1)//(ESAT_COM.isCOMTelemetryRadioDeliveryEnabled())
-      {
-        packet.rewind();
-        ESAT_COM.queueTelemetryToRadio(packet);        
-      }      
-    }
-
-    iterationCounter = 0;
-    ++counter;   
-  }
-      
+{      
   // Handle USB telecommands.
   packet.rewind();
   if (ESAT_SubsystemPacketHandler.readPacketFromUSB(packet))
@@ -137,7 +138,7 @@ void loop()
     ESAT_SubsystemPacketHandler.dispatchTelecommand(packet);
   }
 
-// Handle radio received telecommands.
+  // Handle radio received telecommands.
   packet.rewind();
   if (ESAT_COM.readPacketFromRadio(packet))
   {
@@ -153,7 +154,7 @@ void loop()
       packet.rewind();
       ESAT_SubsystemPacketHandler.queueTelecommandToI2C(packet);
     }
-  } 
+   } 
      
   // Handle I2C requests. 
   // They can be telemetry requests and/or telecommands queue status queries.    
@@ -164,9 +165,7 @@ void loop()
   {
     ESAT_SubsystemPacketHandler.respondToI2CPacketRequest();
   }
-    
-  ++iterationCounter; 
-
+ 
   // Handles:
   //  -I2C written packets: radio telecommands or any subsystem telemetry.
   //                        Radio telecommands are handled and subsystem
@@ -177,7 +176,6 @@ void loop()
   //                        dispatching algorithm.
   //  -Manual data stream:  updates the bit-banged transmission testing sequence.
   //  -Heath beat LED update.
-  ESAT_COM.update(); 
-  
-  delay(1);
+  ESAT_COM.update();   
+  scheduler.run();
 }

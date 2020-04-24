@@ -415,7 +415,6 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverC
 {
   if (numProperties > 12)
   {
-	DEBUG_PRINTLN("Numprops > 12"); 
     return ESAT_COMTransceiverHALClass::TRANSCEIVER_COMMAND_ERROR;
   }
   uint8_t cmdIndex;
@@ -433,11 +432,6 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverC
     // Timeout.
     return ESAT_COMTransceiverHALClass::TRANSCEIVER_CTS_TIMEOUT;
   }
-  // if (transceiver.checkInterruptPin() == 0)
-  // {
-	 // DEBUG_PRINTLN("Interrupt error"); 
-     // return ESAT_COMTransceiverHALClass::TRANSCEIVER_CHIP_ERROR;
-  // }
   return ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS;
 }
 

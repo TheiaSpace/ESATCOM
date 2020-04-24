@@ -24,20 +24,15 @@
  
  int ESAT_COMRadioStreamClass::available()
 {
-  //DEBUG_PRINTLN("Available called");
-  // If reception buffer is empty.
+  // If the reception buffer is empty.
   if (rxBufferAvailableBytes <= 0)
   {
-    //DEBUG_PRINTLN("Buffer is empty");
-    // Check if the fifo has new data and retrieve it to the driver 
-    // buffer.
+    // Check if the FIFO has new data and retrieve it to 
+	// the driver buffer.
     if (ReceptionTransceiver.available() > 0)
     {
-      DEBUG_PRINTLN("........................................");
-      DEBUG_PRINT("FIFO with bytes: ");
       // First byte is packet length.
       rxBufferAvailableBytes = (int) *(ReceptionTransceiver.nonBlockingRead());
-      DEBUG_PRINTLN((byte) rxBufferAvailableBytes);
       // Set the reading pointer to the beginning of the user data.
       lastReadByte = ReceptionTransceiver.nonBlockingRead() + 1;
     }
@@ -53,10 +48,8 @@ int ESAT_COMRadioStreamClass::availableWrite()
 }
  
  void ESAT_COMRadioStreamClass::begin()
- {
-  DEBUG_PRINTLN("Starting reading");
+ {  
   beginReading();
-  DEBUG_PRINTLN("Starting writing");
   beginWriting();  
  } 
  
@@ -73,11 +66,12 @@ int ESAT_COMRadioStreamClass::availableWrite()
    flush();
  }
 
-// Now this is useless because all writings flush the buffer and this buffer is not accessible outside.
+// Useless function. All the writings flush the buffer and this buffer 
+// is not accessible outside.
 void ESAT_COMRadioStreamClass::flush()
 {
-  TransmissionTransceiver.nonBlockingWrite(txBuffer); // May went wrong if transmitter is busy.
-  //DEBUG_PRINTLN("Flushing");
+  // May went wrong if transmitter is busy.
+  TransmissionTransceiver.nonBlockingWrite(txBuffer); 
 }
 
 void ESAT_COMRadioStreamClass::initializeTXBuffer(uint8_t initValue)
@@ -119,27 +113,21 @@ int ESAT_COMRadioStreamClass::read()
 size_t ESAT_COMRadioStreamClass::read(ESAT_Buffer& inputBuffer)
 {  
   unsigned long readCounter;
-  DEBUG_PRINTLN("Size_t read called");
   // Read and write into the inputBuffer as many received bytes as possible.
   for (readCounter = 0; available() > 0 && inputBuffer.capacity() > inputBuffer.length(); ++readCounter)
   {
     const int receivedData = read();
     if (receivedData < 0)
     {
-      DEBUG_PRINT("ReadCounter: ");
-      DEBUG_PRINTLN(readCounter);
       return (size_t) readCounter;
     }
     inputBuffer.write((uint8_t) receivedData);    
   }
-  DEBUG_PRINT("ReadCounter: ");
-  DEBUG_PRINTLN(readCounter);
   return (size_t) readCounter;
 }
 
 size_t ESAT_COMRadioStreamClass::write (uint8_t datum)
 {  
-  DEBUG_PRINTLN("Single");
   // If a transmission is pending nothing is written.
   if (TransmissionTransceiver.available() <= 0) 
   {
@@ -157,20 +145,16 @@ size_t ESAT_COMRadioStreamClass::write (uint8_t datum)
 }
 
 size_t ESAT_COMRadioStreamClass::write(const uint8_t *buffer, size_t size)
-{
-  DEBUG_PRINT("Array: ");
+{  
   unsigned int index;
-  //DEBUG_PRINTLN("Here I am!!");
   // Copy the data to the transmission buffer.
-  for (index=0; (size_t) index < size && index < (ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH-1); ++index)
+  for (index=0; 
+		(size_t) index < size && index < (ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH-1);
+		++index)
   {
     txBuffer[index + 1] = buffer[index];
   }
-  txBuffer[0] = index; //Set length field.
-  DEBUG_PRINTLNFORMAT(index, DEC);
-  DEBUG_PRINT("Availability: ");
-  DEBUG_PRINTLNFORMAT(TransmissionTransceiver.available(), DEC);
- 
+  txBuffer[0] = index; // Set the length field. 
   if ((TransmissionTransceiver.available() <= 0) || (index == 0))
   {
     return 0;
@@ -185,8 +169,7 @@ size_t ESAT_COMRadioStreamClass::write(const uint8_t *buffer, size_t size)
 
 int8_t ESAT_COMRadioStreamClass::write(ESAT_Buffer& outputBuffer)
 {
-  DEBUG_PRINTLN("ESAT_Buffer");
-  // Store source buffer initial position.
+  // Store the source buffer initial position.
   const unsigned long initialPosition = outputBuffer.position();
   unsigned int index;
   // Copy data to txBuffer.

@@ -23,13 +23,11 @@
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptionConfigurationClass::applyConfiguration(ESAT_COMTransceiverHALClass& transceiver)
 {
-  DEBUG_PRINTLN("entry point reached");
   ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError returnBuff;
   returnBuff = configureGlobalProperties(transceiver);
   if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
-	DEBUG_PRINTLN("Configure global properties error"); 
-    return returnBuff;
+	return returnBuff;
   }
   returnBuff = configureInterrupts(transceiver);
   if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
@@ -333,8 +331,7 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKReceptio
   ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError returnBuff = ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
   if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
   {
-	DEBUG_PRINTLN("Write error"); 
-    return returnBuff;
+	return returnBuff;
   }
   const uint8_t numProperties2 = 1;
   offset = 0x03;

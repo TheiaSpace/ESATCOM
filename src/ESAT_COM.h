@@ -33,12 +33,27 @@
 #include <ESAT_CCSDSTelemetryPacketBuilder.h>
 #include <ESAT_KISSStream.h>
 #include <ESAT_FlagContainer.h>
+#include <ESAT_SubsystemPacketHandler.h>
+#include <ESAT_Task.h>
+#include <ESAT_TaskScheduler.h>
 #include "ESAT_COM-hardware/ESAT_COMBuiltinHardwareClock.h"
 
 class ESAT_COMClass
 {
-  public:   
-  	    
+  public: 
+	// Task for reading and delivering the COM board telemetry periodically.
+  	class OnBoardTelemetryDeliveryTaskClass: public ESAT_Task
+	{
+	  public:
+		// Delivery period (in us).
+		unsigned long period()
+		{
+		  return 1000000;
+		}
+
+		void run();		
+	};
+  
     // Maximum packet data length radio will handle.
     static const word PACKET_DATA_BUFFER_LENGTH = 256;
 
@@ -49,6 +64,9 @@ class ESAT_COMClass
     // Maximum KISS frame length radio will handle.
     static const word WHOLE_KISS_FRAME_MAX_LENGTH = 
     ESAT_KISSStream::frameLength(WHOLE_PACKET_BUFFER_LENGTH);
+		
+	// Instance of OnBoardTelemetryDeliveryTaskClass.
+	OnBoardTelemetryDeliveryTaskClass OnBoardTelemetryDeliveryTask;	
   
     // Set up the COM board.
     // Configures the APID and the version numbers.
@@ -108,7 +126,7 @@ class ESAT_COMClass
     word applicationProcessIdentifier;
     
 	// Allows the board to deliver its telemetry to the radio.
-    boolean isTelemetryRadioDeliveryEnabled = false;
+    boolean isTelemetryRadioDeliveryEnabled = true;
     
     // Version numbers.
     byte majorVersionNumber;
@@ -152,6 +170,9 @@ class ESAT_COMClass
     void beginTelemetry();
 
 };
+
+// Instance of the tasks scheduler (should be global?).
+extern ESAT_TaskScheduler ESAT_COMTaskScheduler;
 
 extern ESAT_COMClass ESAT_COM;
 

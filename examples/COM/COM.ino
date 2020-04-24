@@ -31,38 +31,7 @@ const byte COM_MAJOR_VERSION_NUMBER = 1;
 const byte COM_MINOR_VERSION_NUMBER = 0;
 const byte COM_PATCH_VERSION_NUMBER = 0;
 
-class TelemetryDeliveryTaskClass: public ESAT_Task
-{
-  public:
-    unsigned long period()
-    {
-      return 1000000;
-    }
-
-    void run()
-    {
-      ESAT_CCSDSPacket telemetryPacket(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
-      // Prepare telemetry.   
-      ESAT_SubsystemPacketHandler.prepareSubsystemsOwnTelemetry();
-      // Send own telemetry.
-      if  (ESAT_SubsystemPacketHandler.readSubsystemsOwnTelemetry(telemetryPacket))
-      {
-        // To USB
-        telemetryPacket.rewind();
-        ESAT_SubsystemPacketHandler.writePacketToUSB(telemetryPacket);
-        // To radio if standalone mode is enabled
-        if (1)//(ESAT_COM.isCOMTelemetryRadioDeliveryEnabled())
-        {
-          telemetryPacket.rewind();
-          ESAT_COM.queueTelemetryToRadio(telemetryPacket);        
-        }      
-      }
-    }
-};
-
-ESAT_TaskScheduler scheduler;
 ESAT_CCSDSPacket packet(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
-TelemetryDeliveryTaskClass TelemetryDeliveryTask;
 
 // Start peripherals and do the initial bookkeeping here:
 // - Activate the reception of telecommands from the USB interface.
@@ -76,8 +45,7 @@ TelemetryDeliveryTaskClass TelemetryDeliveryTask;
 void setup()
 {
   Serial.begin(9600);
-  Serial.blockOnOverrun(false); 
-  scheduler.add(TelemetryDeliveryTask);
+  Serial.blockOnOverrun(false);   
   
 //  Serial.println("Press any key to start");
 //  while (Serial.available() <= 0)
@@ -116,7 +84,8 @@ void setup()
   interrupts();  
   ReceptionTransceiver.startReception();  
   delay(1000);
-  scheduler.begin();
+  ESAT_COMTaskScheduler.add(ESAT_COM.OnBoardTelemetryDeliveryTask);
+  ESAT_COMTaskScheduler.begin();
 }
 
 // Body of the main loop of the program:
@@ -176,6 +145,7 @@ void loop()
   //                        dispatching algorithm.
   //  -Manual data stream:  updates the bit-banged transmission testing sequence.
   //  -Heath beat LED update.
+  
   ESAT_COM.update();   
-  scheduler.run();
+  ESAT_COMTaskScheduler.run();
 }

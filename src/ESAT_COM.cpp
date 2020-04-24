@@ -22,7 +22,6 @@
 #include <ESAT_CCSDSPacketFromKISSFrameReader.h>
 #include <ESAT_CCSDSPacketToKISSFrameWriter.h>
 #include <ESAT_I2CSlave.h>
-#include <ESAT_SubsystemPacketHandler.h>
 #include "ESAT_COM.h"
 #include "ESAT_COM-hardware/ESAT_COMHearthBeatLED.h"
 #include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
@@ -82,6 +81,26 @@ void ESAT_COMClass::begin(word subsystemApplicationProcessIdentifier,
   beginRadioSoftware();  
   beginHardware();
 }
+
+void ESAT_COMClass::OnBoardTelemetryDeliveryTaskClass::run()
+{
+		  ESAT_CCSDSPacket telemetryPacket(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
+		  // Prepare telemetry.   
+		  ESAT_SubsystemPacketHandler.prepareSubsystemsOwnTelemetry();
+		  // Send own telemetry.
+		  if  (ESAT_SubsystemPacketHandler.readSubsystemsOwnTelemetry(telemetryPacket))
+		  {
+			// To USB
+			telemetryPacket.rewind();
+			ESAT_SubsystemPacketHandler.writePacketToUSB(telemetryPacket);
+			// To radio if standalone mode is enabled
+			if (1)//(ESAT_COM.isCOMTelemetryRadioDeliveryEnabled())
+			{
+			  telemetryPacket.rewind();
+			  ESAT_COM.queueTelemetryToRadio(telemetryPacket);        
+			}      
+		  }
+		}
 
 void ESAT_COMClass::beginHardware()
 {  
@@ -333,5 +352,7 @@ boolean ESAT_COMClass::writePacketToRadio(ESAT_CCSDSPacket& packet)
   // Returned if the output buffer is full.
   return false;
 }
+
+ESAT_TaskScheduler ESAT_COMTaskScheduler;
 
 ESAT_COMClass ESAT_COM;

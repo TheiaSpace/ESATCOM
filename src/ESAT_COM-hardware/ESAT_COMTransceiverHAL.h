@@ -27,13 +27,15 @@
 
 class ESAT_COMTransceiverHALClass
 {    
-  public:    
+  public:
+  
+  // HAL module error.
   enum TransceiverLowLevelDriverError
   {
-      TRANSCEIVER_SUCCESS,
-      TRANSCEIVER_CTS_TIMEOUT,
-      TRANSCEIVER_CHIP_ERROR,
-      TRANSCEIVER_COMMAND_ERROR
+      TRANSCEIVER_SUCCESS, // No error.
+      TRANSCEIVER_CTS_TIMEOUT, // Transceiver unavailable.
+      TRANSCEIVER_CHIP_ERROR, // Hardware error.
+      TRANSCEIVER_COMMAND_ERROR // Wrong command format.
   };
   
   // Default constructor.
@@ -41,13 +43,21 @@ class ESAT_COMTransceiverHALClass
   
   // Constructor of the class. Configures the interface pins
   // required to communicate to the transceiver.
-  ESAT_COMTransceiverHALClass(SPIClass& spiBus, uint8_t chipSelect, uint8_t interrupt, uint8_t shutdown, uint8_t gpio0, uint8_t gpio1, uint8_t gpio2, uint8_t gpio3);
+  // Requires the SPI module and the pins numbers.
+  ESAT_COMTransceiverHALClass(SPIClass& spiBus, 
+                              uint8_t chipSelect,
+                              uint8_t interrupt,
+                              uint8_t shutdown,
+                              uint8_t gpio0,
+                              uint8_t gpio1,
+                              uint8_t gpio2,
+                              uint8_t gpio3);
   
   // Initializes the transceiver required software and hardware.
-  // This function should be called before anything.
+  // This function should be called before.
   void begin();
   
-  // Clears the transceiver chip select line.  
+  // Clears the transceiver chip select line.
   void clearChipSelect();
   
   // Clears the unsuccessful request to send counter.
@@ -69,12 +79,11 @@ class ESAT_COMTransceiverHALClass
   void powerUpTransceiver();
 
   // Retrieves data from the transceiver. Requires the
-  // command for accessing the data, the number of bytes
-  // to retreive and the pointer for storing the data.
+  // command for accessing to the data, the number of bytes
+  // to retreive and the data storage pointer.
   void readData(uint8_t command, uint8_t dataByteCount, uint8_t* data);
   
   // Checks if transceiver is ready to accept commands.
-  // Also updates ctsWentHigh flag.
   // Return if the transceiver is ready or not.
   uint8_t requestToSend();
   
@@ -93,12 +102,12 @@ class ESAT_COMTransceiverHALClass
   
   // Writes a bunch of bytes via SPI.
   // Requires the number of bytes to write and their
-  // location.
+  // pointer location.
   void SPIBulkWrite(uint8_t numBytes, uint8_t* data);
   
   // Reads a bunch of bytes via SPI.
   // Requires the number of bytes to read and their
-  // storageing buffer.
+  // storaging buffer.
   void SPIBulkRead(uint8_t numBytes, uint8_t* data);
   
   // Writes and reads a byte to the SPI bus simultaneously.
@@ -118,11 +127,11 @@ class ESAT_COMTransceiverHALClass
                                           
   // Writes data to the transceiver. Requires the
   // command for loading the data, the
-  // number of bytes to write and the pointer for 
+  // number of bytes to write and the pointer for
   // reading the data.
   void writeData(uint8_t command, uint8_t dataByteCount, uint8_t* data);
   
-  // Writes a bit from a data stream to the manual transmission GPIO.
+  // Writes a bit from a data stream to the manual transmission GPIO2.
   void writeDataStreamGPIO(uint8_t level);
          
   private:
@@ -131,7 +140,9 @@ class ESAT_COMTransceiverHALClass
   const uint16_t DELAY_BETWEEN_RTS_US = 20;
   
   // SPI clock divider value.
-  const uint8_t SPI_CLOCK_DIVIDER_FOR_STM32L4 = 20;// 10;
+  // TODO
+  // Test with 10
+  const uint8_t SPI_CLOCK_DIVIDER_FOR_STM32L4 = 20;
   
   // Transceiver chip select pin.
   uint8_t chipSelectPin;

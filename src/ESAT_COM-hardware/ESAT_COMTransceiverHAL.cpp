@@ -24,7 +24,14 @@ ESAT_COMTransceiverHALClass::ESAT_COMTransceiverHALClass()
 {  
 }
 
-ESAT_COMTransceiverHALClass::ESAT_COMTransceiverHALClass(SPIClass& spiBus, uint8_t chipSelect, uint8_t interrupt, uint8_t shutdown, uint8_t gpio0, uint8_t gpio1, uint8_t gpio2, uint8_t gpio3)
+ESAT_COMTransceiverHALClass::ESAT_COMTransceiverHALClass(SPIClass& spiBus,
+                                                         const uint8_t chipSelect,
+                                                         const uint8_t interrupt,
+                                                         const uint8_t shutdown,
+                                                         const uint8_t gpio0,
+                                                         const uint8_t gpio1,
+                                                         const uint8_t gpio2,
+                                                         const uint8_t gpio3)
 {
   transceiverSPI = &spiBus;
   chipSelectPin = chipSelect;
@@ -47,16 +54,6 @@ void ESAT_COMTransceiverHALClass::begin()
   transceiverSPI -> setClockDivider(SPI_CLOCK_DIVIDER_FOR_STM32L4);
 }
 
-void ESAT_COMTransceiverHALClass::clearChipSelect()
-{
-  digitalWrite(chipSelectPin, HIGH);
-}
-
-void ESAT_COMTransceiverHALClass::clearRTSCounter()
-{
-  RTSCounter = 0;
-}
-
 uint8_t ESAT_COMTransceiverHALClass::checkClearToSendPin()
 {
   return digitalRead(gpio1Pin);
@@ -67,13 +64,27 @@ uint8_t ESAT_COMTransceiverHALClass::checkInterruptPin()
   return digitalRead(interruptPin);
 }
 
+void ESAT_COMTransceiverHALClass::clearChipSelect()
+{
+  digitalWrite(chipSelectPin, HIGH);
+}
+
+void ESAT_COMTransceiverHALClass::clearRTSCounter()
+{
+  RTSCounter = 0;
+}
+
 void ESAT_COMTransceiverHALClass::disable()
 {
 #if defined(SDN_HAS_HW_PULLUP)
-      pinMode(shutdownPin, INPUT); //Let it be high at least 10 ms
+  // Let it be high at least 10 ms.
+  pinMode(shutdownPin, INPUT);       
 #else
-      digitalWrite(shutdownPin, HIGH); // So we don't get a glitch after setting pinMode OUTPUT
-      pinMode(shutdownPin, OUTPUT); //Drive high 10 ms
+  // We set it high first so we don't get a glitch 
+  // after setting it as output (enables the weak pullup).
+  digitalWrite(shutdownPin, HIGH);
+  // Drive high 10 ms.
+  pinMode(shutdownPin, OUTPUT);
 #endif
 }
 
@@ -85,15 +96,20 @@ uint8_t ESAT_COMTransceiverHALClass::getInterruptPin()
 void ESAT_COMTransceiverHALClass::powerUpTransceiver()
 {  
 #if defined(SDN_HAS_HW_PULLUP)
-  pinMode(shutdownPin, OUTPUT); //Pull it down
-  digitalWrite(shutdownPin, LOW); //Drive low least 10 ms
+  // Enable output driver (disable high impedance input).
+  pinMode(shutdownPin, OUTPUT);
+  // Drive it low at least 10 ms.
+  digitalWrite(shutdownPin, LOW);
 #else
-  digitalWrite(shutdownPin, LOW); // Let it be low at leat 10 ms
+  // Drive it low at least 10 ms.
+  digitalWrite(shutdownPin, LOW);
 #endif
   delay(10);
 }
 
-void ESAT_COMTransceiverHALClass::readData(uint8_t command, uint8_t dataByteCount, uint8_t* data)
+void ESAT_COMTransceiverHALClass::readData(uint8_t command, 
+                                           uint8_t dataByteCount, 
+                                           uint8_t* data)
 {
   if (requestToSend())
   {
@@ -121,9 +137,10 @@ uint8_t ESAT_COMTransceiverHALClass::requestToSend()
 
 void ESAT_COMTransceiverHALClass::reset()
 {
+  // Ensure that reset line is set right before resetting.
   powerUpTransceiver();
   delay(10);
-  // Shutdown the radio, wait and power up.
+  // Shutdown the radio, wait and power it up.
   disable();
   delay(10); 
   powerUpTransceiver();
@@ -184,8 +201,8 @@ void ESAT_COMTransceiverHALClass::writeCommand(uint8_t byteCount, uint8_t* data)
   {
     setChipSelect();
     SPIBulkWrite(byteCount, data);
-    // Required due to a bug in transceiver single 
-    // byte commands. Supposedly fixed in B0. 
+    // Required due to a bug in  the transceiver single
+    // byte commands. Supposedly fixed in B0 revision.
     if (byteCount == 1)
     {
       SPIWriteReadByte(0);
@@ -194,8 +211,10 @@ void ESAT_COMTransceiverHALClass::writeCommand(uint8_t byteCount, uint8_t* data)
   }
 } 
 
-uint8_t ESAT_COMTransceiverHALClass::writeCommandAndRetrieveResponse(uint8_t commandByteCount, uint8_t* commandData,
-                                                                        uint8_t responseByteCount, uint8_t* responseData)
+uint8_t ESAT_COMTransceiverHALClass::writeCommandAndRetrieveResponse(uint8_t commandByteCount,
+                                                                     uint8_t* commandData,
+                                                                     uint8_t responseByteCount,
+                                                                     uint8_t* responseData)
 {
   writeCommand(commandByteCount, commandData);
   return retrieveResponse(responseByteCount, responseData);
@@ -203,13 +222,13 @@ uint8_t ESAT_COMTransceiverHALClass::writeCommandAndRetrieveResponse(uint8_t com
 
 void ESAT_COMTransceiverHALClass::writeData(uint8_t command, uint8_t dataByteCount, uint8_t* data)
 {
- if (requestToSend())
- {
-  setChipSelect();
-  transceiverSPI -> transfer(command);
-  SPIBulkWrite(dataByteCount, data);
-  clearChipSelect();
- }
+  if (requestToSend())
+  {
+    setChipSelect();
+    transceiverSPI -> transfer(command);
+    SPIBulkWrite(dataByteCount, data);
+    clearChipSelect();
+  }
 }
 
 void ESAT_COMTransceiverHALClass::writeDataStreamGPIO(uint8_t level)

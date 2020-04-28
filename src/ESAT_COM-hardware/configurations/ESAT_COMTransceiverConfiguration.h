@@ -28,20 +28,23 @@
 class ESAT_COMTransceiverConfigurationClass
 {
   public:
+    
     virtual ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError applyConfiguration(ESAT_COMTransceiverHALClass& transceiver) = 0;
     
-   ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError setTransmissionPower(ESAT_COMTransceiverHALClass& transceiver, uint8_t power)
+   ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError setTransmissionPower(ESAT_COMTransceiverHALClass& transceiver,
+                                                                                    uint8_t power)
    {
      const uint8_t numProperties = 2;
      const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_POWER_AMPLIFIER;
      const uint8_t offset = ESAT_COMTransceiverPropertiesClass::PARAMETER_POWER_AMPLIFIER_POWER_LEVEL;
-     uint8_t cmdBuff[numProperties];     
+     uint8_t cmdBuff[numProperties];
      cmdBuff[0] = power;
      cmdBuff[1] = 0;
      return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
    }
    
-   ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureClockGenerator(ESAT_COMTransceiverHALClass& transceiver, uint8_t clkGenBand)
+   ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureClockGenerator(ESAT_COMTransceiverHALClass& transceiver,
+                                                                                       uint8_t clkGenBand)
     {
      const uint8_t numProperties = 1;
      const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
@@ -51,12 +54,16 @@ class ESAT_COMTransceiverConfigurationClass
      return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
     }
     
-   ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError setFrequency(ESAT_COMTransceiverHALClass& transceiver, uint8_t PLLInteger, uint8_t PLLFractionalMSB, uint8_t PLLFractionalMiddle, uint8_t PLLFractionalLSB)
+   ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError setFrequency(ESAT_COMTransceiverHALClass& transceiver,
+                                                                            uint8_t PLLInteger,
+                                                                            uint8_t PLLFractionalMSB,
+                                                                            uint8_t PLLFractionalMiddle,
+                                                                            uint8_t PLLFractionalLSB)
    {
      const uint8_t numProperties = 4;
      const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_FREQUENCY_CONTROL;
      const uint8_t offset = ESAT_COMTransceiverPropertiesClass::PARAMETER_FREQUENCY_CONTROL_INTEGER;
-     uint8_t cmdBuff[numProperties];     
+     uint8_t cmdBuff[numProperties];
      cmdBuff[0] = PLLInteger;
      cmdBuff[1] = PLLFractionalMSB;
      cmdBuff[2] = PLLFractionalMiddle;
@@ -64,8 +71,9 @@ class ESAT_COMTransceiverConfigurationClass
      return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
    }
    
-   ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModulationSource(ESAT_COMTransceiverHALClass& transceiver, uint8_t modulationSourceMask)
-   {     
+   ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModulationSource(ESAT_COMTransceiverHALClass& transceiver,
+                                                                                         uint8_t modulationSourceMask)
+   {
      const uint8_t numProperties = 1;
      const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
      const uint8_t offset = ESAT_COMTransceiverPropertiesClass::PARAMETER_MODEM_MODULATION_TYPE;

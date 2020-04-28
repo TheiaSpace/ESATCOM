@@ -20,25 +20,25 @@
 #include <RTC.h>
 
 ESAT_Timestamp ESAT_COMBuiltinHardwareClockClass::read()
-{	
-	ESAT_Timestamp timeToBeRead; // ESAT_Timestamp return object.
+{
+  ESAT_Timestamp timeToBeRead; // ESAT_Timestamp return object.
   timeToBeRead.seconds = (byte) RTC.getSeconds();
   timeToBeRead.minutes = (byte) RTC.getMinutes();
   timeToBeRead.hours = (byte) RTC.getHours();
   timeToBeRead.day = (byte) RTC.getDay();
   timeToBeRead.month = (byte) RTC.getMonth();
   timeToBeRead.year = (word) RTC.getYear();
-  return timeToBeRead;	
+  return timeToBeRead;  
 }
 
 void ESAT_COMBuiltinHardwareClockClass::write(ESAT_Timestamp timeToSet)
 {
-	RTC.setSeconds((uint8_t) timeToSet.seconds);
-	RTC.setMinutes((uint8_t) timeToSet.minutes);
-	RTC.setHours((uint8_t) timeToSet.hours);
-	RTC.setDay((uint8_t) timeToSet.day);
-	RTC.setMonth((uint8_t) timeToSet.month);
-	RTC.setYear((uint8_t) (timeToSet.year % 100));
+  RTC.setSeconds((uint8_t) timeToSet.seconds);
+  RTC.setMinutes((uint8_t) timeToSet.minutes);
+  RTC.setHours((uint8_t) timeToSet.hours);
+  RTC.setDay((uint8_t) timeToSet.day);
+  RTC.setMonth((uint8_t) timeToSet.month);
+  RTC.setYear((uint8_t) (timeToSet.year % 100));
 }
 
 ESAT_COMBuiltinHardwareClockClass ESAT_COMBuiltinHardwareClock;

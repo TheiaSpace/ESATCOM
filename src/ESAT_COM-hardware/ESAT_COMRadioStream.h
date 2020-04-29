@@ -25,59 +25,65 @@
  #include <ESAT_Buffer.h>
  #include "ESAT_COMTransceiverDriver.h"
  
-  // Stream interface for radio communication. 
-  // Provides an abstraction layer from the radio drivers, 
-  // allowing to use any other Stream interface compliant class.  
-  // Transsmision and reception functionalities are grouped together.
+// Stream interface for radio communication. 
+// Provides an abstraction layer from the radio drivers, 
+// allowing to use any other Stream interface compliant class.  
+// Transsmision and reception functionalities are grouped together.
 class ESAT_COMRadioStreamClass: public Stream
- {
+{
   
-  public:  
+  public:
   
-  // Check if there are any bytes available to be read.
+  // Checks if there are any bytes available to be read.
+  // Returns the number of available bytes.
   int available();
   
-  // Check if there is possible to write bytes.
+  // Checks if there is possible to write any byte.
+  // Returns the number of bytes that can be written.
   int availableWrite();
   
-  // Initialize transceivers and transmission buffer.
+  // Initializes the software.
   void begin();
   
-  // Initialize only reception transceiver and buffer.
+  // Initializes only the reception software.
   void beginReading();
   
-  // Initialize only transmission transceiver and buffer.
+  // Initializes only the transmission software.
   void beginWriting();
   
-  // Empty the transmission buffer.
-  void flush();  
+  // Empties the transmission buffer.
+  void flush();
   
-  // Retrieve last received byte without wasting it.
+  // Retrieves the last received byte without inecreasing
+  // the reading position.
   int peek();
   
-  // Read last received byte.
-  int read();   
+  // Reads the last received byte and increases the reading
+  // position.
+  int read();
   
-  // Read as pending received bytes as possible and store 
+  // Reads as many pending received bytes as possible and stores
   // them into an ESAT_Buffer.
-  // Return the number of retreived bytes.
+  // Returns the number of retreived bytes.
   size_t read(ESAT_Buffer& inputBuffer);
   
+  // Required by Stream interface.
   using Print::write;
   
-  // Check if transmitter is ready and then write a
-    // single byte to the radio and starts its transmission.
-  // Return the number of successfully written bytes (0 or 1).
+  // Checks if the transmitter is ready and then writes a
+  // single byte to it to inmediately transmit it.
+  // Returns the number of successfully written bytes (0 or 1).
   size_t write(uint8_t datum);
   
-  // Check if transmitter is ready and then write up 
-  // to size bytes to the radio and starts its transmission.
-  // Return the number of successfully written bytes.
+  // Checks if the transmitter is ready and then writes up 
+  // to size bytes to it to inmediately start their transmission.
+  // Returnd the number of successfully written bytes.
   size_t write(const uint8_t *buffer, size_t size);
 
-    // Check if transmitter is ready and then write up 
-  // to ESAT_Buffer::availableBytes the radio and starts its transmission.
-  // Return the number of successfully written bytes.
+  // Checks if the transmitter is ready and then writes up 
+  // to ESAT_Buffer::availableBytes to it to inmediately start 
+  // their transmission. Returns the number of successfully 
+  // written bytes.
   int8_t write(ESAT_Buffer& outputBuffer);
     
   private:
@@ -92,15 +98,14 @@ class ESAT_COMRadioStreamClass: public Stream
   int rxBufferAvailableBytes;
   
   // Transmission buffer.
-  uint8_t txBuffer[ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH];  
+  uint8_t txBuffer[ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH];
   
   // Fills the transmission buffer with the initialization value.
-  void initializeTXBuffer(uint8_t initValue);  
+  void initializeTXBuffer(uint8_t initValue);
   
  };
  
  //Global instance of ESATRadioStream.
  extern ESAT_COMRadioStreamClass ESAT_COMRadioStream;
  
- #endif /* ESAT_COMRadioStream_h */
- 
+ #endif /* ESAT_COMRadioStream_h */ 

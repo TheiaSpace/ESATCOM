@@ -22,7 +22,7 @@
 #include "ESAT_COMTransceiverCommands.h"
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverCommandsClass::applyPatch(ESAT_COMTransceiverHALClass& transceiver)
-{  
+{
   volatile uint16_t line = 0;
   volatile uint8_t row = 0;
   const byte TRANSCEIVER_PATCH[] = {
@@ -65,7 +65,7 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverC
     94, 8, 5, 112, 218, 132, 132, 221, 202, 144
   };
   uint8_t cmdBuff[8];
-  // Check if patch is needed.
+  // Check if the patch is needed.
   const PartInfoReply partInfoReply = partInfo(transceiver);       
   if ((partInfoReply.ROMID == TRANSCEIVER_PATCH_ROMID) && ((partInfoReply.ID >> 8) <= TRANSCEIVER_PATCH_ID))
   {       
@@ -79,11 +79,11 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverC
       {
         return ESAT_COMTransceiverHALClass::TRANSCEIVER_CTS_TIMEOUT;
       }
-      // Check if error has occured.
+      // Check if an error has occured.
       if (transceiver.checkInterruptPin() == 0)
       {        
         getInterruptStatus(transceiver, 0, 0, 0);
-        //No return values are necessary.
+        // No return values are necessary.
         return ESAT_COMTransceiverHALClass::TRANSCEIVER_CHIP_ERROR;
       }
     }
@@ -91,12 +91,12 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverC
   return ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS;
 }
 
-ESAT_COMTransceiverCommandsClass::GPIOConfigurationReply ESAT_COMTransceiverCommandsClass::configureGPIO(ESAT_COMTransceiverHALClass& transceiver, 
-                                                                                                          ESAT_COMTransceiverCommandsClass::GPIOConfigurationArguments GPIO0Config, 
+ESAT_COMTransceiverCommandsClass::GPIOConfigurationReply ESAT_COMTransceiverCommandsClass::configureGPIO(ESAT_COMTransceiverHALClass& transceiver,
+                                                                                                          ESAT_COMTransceiverCommandsClass::GPIOConfigurationArguments GPIO0Config,
                                                                                                           boolean enableGPIO0PullUp,
-                                                                                                          ESAT_COMTransceiverCommandsClass::GPIOConfigurationArguments GPIO1Config, 
+                                                                                                          ESAT_COMTransceiverCommandsClass::GPIOConfigurationArguments GPIO1Config,
                                                                                                           boolean enableGPIO1PullUp,
-                                                                                                          ESAT_COMTransceiverCommandsClass::GPIOConfigurationArguments GPIO2Config, 
+                                                                                                          ESAT_COMTransceiverCommandsClass::GPIOConfigurationArguments GPIO2Config,
                                                                                                           boolean enableGPIO2PullUp,
                                                                                                           ESAT_COMTransceiverCommandsClass::GPIOConfigurationArguments GPIO3Config,
                                                                                                           boolean enableGPIO3PullUp,
@@ -130,16 +130,17 @@ ESAT_COMTransceiverCommandsClass::GPIOConfigurationReply ESAT_COMTransceiverComm
 {
   return configureGPIO(transceiver, 
                       ESAT_COMTransceiverCommandsClass::DONOTHING, false,
-                      ESAT_COMTransceiverCommandsClass::DONOTHING, false, 
+                      ESAT_COMTransceiverCommandsClass::DONOTHING, false,
                       ESAT_COMTransceiverCommandsClass::DONOTHING, false,
                       ESAT_COMTransceiverCommandsClass::DONOTHING, false,
                       ESAT_COMTransceiverCommandsClass::RADIO_LOW);
 }
 
-ESAT_COMTransceiverCommandsClass::ADCReadingsReply ESAT_COMTransceiverCommandsClass::getADCReading(ESAT_COMTransceiverHALClass& transceiver, uint8_t analogChannels)
+ESAT_COMTransceiverCommandsClass::ADCReadingsReply ESAT_COMTransceiverCommandsClass::getADCReading(ESAT_COMTransceiverHALClass& transceiver,
+                                                                                                   uint8_t analogChannels)
 {
   uint8_t cmdBuff[8];
-  ADCReadingsReply ADCReadingsReply;  
+  ADCReadingsReply ADCReadingsReply;
   cmdBuff[0] = COMMAND_ADC_READ;
   cmdBuff[1] = analogChannels;
   transceiver.writeCommandAndRetrieveResponse(COMMAND_ADC_READ_ARGUMENTS_COUNT,
@@ -155,66 +156,72 @@ ESAT_COMTransceiverCommandsClass::ADCReadingsReply ESAT_COMTransceiverCommandsCl
   return ADCReadingsReply;
 }
 
-ESAT_COMTransceiverCommandsClass::FastResponseRegisterAReply  ESAT_COMTransceiverCommandsClass::getFastResponseRegisterA(ESAT_COMTransceiverHALClass& transceiver, uint8_t responseByteCount)
+ESAT_COMTransceiverCommandsClass::FastResponseRegisterAReply  ESAT_COMTransceiverCommandsClass::getFastResponseRegisterA(ESAT_COMTransceiverHALClass& transceiver,
+                                                                                                                         uint8_t responseByteCount)
 {
   uint8_t cmdBuff[4];
-  FastResponseRegisterAReply fastResponseRegisterAReply;  
+  FastResponseRegisterAReply fastResponseRegisterAReply;
   transceiver.readData(COMMAND_GET_FAST_RESPONSE_REGISTER_A,
             responseByteCount,
             cmdBuff);
   fastResponseRegisterAReply.fastResponseRegisterA = cmdBuff[0];
   fastResponseRegisterAReply.fastResponseRegisterB = cmdBuff[1];
   fastResponseRegisterAReply.fastResponseRegisterC = cmdBuff[2];
-  fastResponseRegisterAReply.fastResponseRegisterD = cmdBuff[3];  
+  fastResponseRegisterAReply.fastResponseRegisterD = cmdBuff[3];
   return fastResponseRegisterAReply;
 }
   
-ESAT_COMTransceiverCommandsClass::FastResponseRegisterBReply  ESAT_COMTransceiverCommandsClass::getFastResponseRegisterB(ESAT_COMTransceiverHALClass& transceiver, uint8_t responseByteCount)
+ESAT_COMTransceiverCommandsClass::FastResponseRegisterBReply  ESAT_COMTransceiverCommandsClass::getFastResponseRegisterB(ESAT_COMTransceiverHALClass& transceiver,
+                                                                                                                         uint8_t responseByteCount)
 {
   uint8_t cmdBuff[4];
-  FastResponseRegisterBReply fastResponseRegisterBReply;  
+  FastResponseRegisterBReply fastResponseRegisterBReply;
   transceiver.readData(COMMAND_GET_FAST_RESPONSE_REGISTER_B,
             responseByteCount,
             cmdBuff);
   fastResponseRegisterBReply.fastResponseRegisterB = cmdBuff[0];
   fastResponseRegisterBReply.fastResponseRegisterC = cmdBuff[1];
   fastResponseRegisterBReply.fastResponseRegisterD = cmdBuff[2];
-  fastResponseRegisterBReply.fastResponseRegisterA = cmdBuff[3];  
+  fastResponseRegisterBReply.fastResponseRegisterA = cmdBuff[3];
   return fastResponseRegisterBReply;
 }
   
-ESAT_COMTransceiverCommandsClass::FastResponseRegisterCReply  ESAT_COMTransceiverCommandsClass::getFastResponseRegisterC(ESAT_COMTransceiverHALClass& transceiver, uint8_t responseByteCount)
+ESAT_COMTransceiverCommandsClass::FastResponseRegisterCReply  ESAT_COMTransceiverCommandsClass::getFastResponseRegisterC(ESAT_COMTransceiverHALClass& transceiver,
+                                                                                                                         uint8_t responseByteCount)
 {
   uint8_t cmdBuff[4];
-  FastResponseRegisterCReply fastResponseRegisterCReply;  
+  FastResponseRegisterCReply fastResponseRegisterCReply;
   transceiver.readData(COMMAND_GET_FAST_RESPONSE_REGISTER_C,
             responseByteCount,
             cmdBuff);
   fastResponseRegisterCReply.fastResponseRegisterC = cmdBuff[0];
   fastResponseRegisterCReply.fastResponseRegisterD = cmdBuff[1];
   fastResponseRegisterCReply.fastResponseRegisterA = cmdBuff[2];
-  fastResponseRegisterCReply.fastResponseRegisterB = cmdBuff[3];  
+  fastResponseRegisterCReply.fastResponseRegisterB = cmdBuff[3];
   return fastResponseRegisterCReply;
 }
   
-ESAT_COMTransceiverCommandsClass::FastResponseRegisterDReply  ESAT_COMTransceiverCommandsClass::getFastResponseRegisterD(ESAT_COMTransceiverHALClass& transceiver, uint8_t responseByteCount)
+ESAT_COMTransceiverCommandsClass::FastResponseRegisterDReply  ESAT_COMTransceiverCommandsClass::getFastResponseRegisterD(ESAT_COMTransceiverHALClass& transceiver,
+                                                                                                                         uint8_t responseByteCount)
 {
   uint8_t cmdBuff[4];
-  FastResponseRegisterDReply fastResponseRegisterDReply;  
+  FastResponseRegisterDReply fastResponseRegisterDReply;
   transceiver.readData(COMMAND_GET_FAST_RESPONSE_REGISTER_D,
             responseByteCount,
             cmdBuff);
   fastResponseRegisterDReply.fastResponseRegisterD = cmdBuff[0];
   fastResponseRegisterDReply.fastResponseRegisterA = cmdBuff[1];
   fastResponseRegisterDReply.fastResponseRegisterB = cmdBuff[2];
-  fastResponseRegisterDReply.fastResponseRegisterC = cmdBuff[3];  
+  fastResponseRegisterDReply.fastResponseRegisterC = cmdBuff[3];
   return fastResponseRegisterDReply;
 }
 
-ESAT_COMTransceiverCommandsClass::FIFOStatusReply ESAT_COMTransceiverCommandsClass::getFIFOStatus(ESAT_COMTransceiverHALClass& transceiver, boolean resetTransmissionFIFO, boolean resetReceptionFIFO)
+ESAT_COMTransceiverCommandsClass::FIFOStatusReply ESAT_COMTransceiverCommandsClass::getFIFOStatus(ESAT_COMTransceiverHALClass& transceiver,
+                                                                                                  boolean resetTransmissionFIFO,
+                                                                                                  boolean resetReceptionFIFO)
 {
   uint8_t cmdBuff[2];
-  FIFOStatusReply fifoStatusReply;  
+  FIFOStatusReply fifoStatusReply;
   cmdBuff[0] = COMMAND_GET_FIFO_STATUS;
   cmdBuff[1] = 0;
   if (resetTransmissionFIFO)
@@ -230,7 +237,7 @@ ESAT_COMTransceiverCommandsClass::FIFOStatusReply ESAT_COMTransceiverCommandsCla
                                   COMMAND_GET_FIFO_STATUS_REPLY_COUNT,
                                   cmdBuff);
   fifoStatusReply.receptionFIFOCount     = cmdBuff[0];
-  fifoStatusReply.transmissionFIFOSpace  = cmdBuff[1];  
+  fifoStatusReply.transmissionFIFOSpace  = cmdBuff[1];
   return fifoStatusReply;
 }
 
@@ -297,14 +304,17 @@ uint8_t ESAT_COMTransceiverCommandsClass::getGPIOPullUpMask(boolean pullUpEnable
   return 0;
 }
 
-ESAT_COMTransceiverCommandsClass::InterruptStatusReply ESAT_COMTransceiverCommandsClass::getInterruptStatus(ESAT_COMTransceiverHALClass& transceiver, uint8_t packetHandlerClearingPendingInterruptsMask, uint8_t modemClearingPendingInterruptsMask, uint8_t chipClearingPendingInterruptsMask)
+ESAT_COMTransceiverCommandsClass::InterruptStatusReply ESAT_COMTransceiverCommandsClass::getInterruptStatus(ESAT_COMTransceiverHALClass& transceiver,
+                                                                                                            uint8_t packetHandlerClearingPendingInterruptsMask,
+                                                                                                            uint8_t modemClearingPendingInterruptsMask,
+                                                                                                            uint8_t chipClearingPendingInterruptsMask)
 {
   uint8_t cmdBuff[8];
   InterruptStatusReply interruptStatusReply;
   cmdBuff[0] = COMMAND_GET_INTERRUPTS_STATUS;
   cmdBuff[1] = packetHandlerClearingPendingInterruptsMask;
   cmdBuff[2] = modemClearingPendingInterruptsMask;
-  cmdBuff[3] = chipClearingPendingInterruptsMask;    
+  cmdBuff[3] = chipClearingPendingInterruptsMask;
   transceiver.writeCommandAndRetrieveResponse(COMMAND_GET_INTERRUPTS_STATUS_ARGUMENTS_COUNT,
                                   cmdBuff,
                                   COMMAND_GET_INTERRUPTS_STATUS_REPLY_COUNT,
@@ -316,14 +326,15 @@ ESAT_COMTransceiverCommandsClass::InterruptStatusReply ESAT_COMTransceiverComman
   interruptStatusReply.modemPending         = cmdBuff[4];
   interruptStatusReply.modemStatus          = cmdBuff[5];
   interruptStatusReply.chipPending          = cmdBuff[6];
-  interruptStatusReply.chipStatus           = cmdBuff[7];  
+  interruptStatusReply.chipStatus           = cmdBuff[7];
   return interruptStatusReply;
 }
 
-ESAT_COMTransceiverCommandsClass::ModemStatusReply ESAT_COMTransceiverCommandsClass::getModemStatus(ESAT_COMTransceiverHALClass& transceiver, uint8_t clearPendingFlagsMask)
+ESAT_COMTransceiverCommandsClass::ModemStatusReply ESAT_COMTransceiverCommandsClass::getModemStatus(ESAT_COMTransceiverHALClass& transceiver,
+                                                                                                    uint8_t clearPendingFlagsMask)
 {
   uint8_t cmdBuff[8];
-  ModemStatusReply modemStatusReply;  
+  ModemStatusReply modemStatusReply;
   cmdBuff[0] = COMMAND_GET_MODEM_STATUS;
   cmdBuff[1] = clearPendingFlagsMask;
   transceiver.writeCommandAndRetrieveResponse(COMMAND_GET_MODEM_STATUS_ARGUMENTS_COUNT,
@@ -337,14 +348,17 @@ ESAT_COMTransceiverCommandsClass::ModemStatusReply ESAT_COMTransceiverCommandsCl
   modemStatusReply.antenna1ReceivedSignalStrengthIndicator    = cmdBuff[4];
   modemStatusReply.antenna2ReceivedSignalStrengthIndicator    = cmdBuff[5];  
   modemStatusReply.automaticFrequencyControlFrequencyOffset   = ((uint16_t)cmdBuff[6] << 8) & 0xFF00;
-  modemStatusReply.automaticFrequencyControlFrequencyOffset  |= (uint16_t)cmdBuff[7] & 0x00FF;    
+  modemStatusReply.automaticFrequencyControlFrequencyOffset  |= (uint16_t)cmdBuff[7] & 0x00FF;
   return modemStatusReply;
 }
 
-ESAT_COMTransceiverCommandsClass::PropertiesReply ESAT_COMTransceiverCommandsClass::getProperty(ESAT_COMTransceiverHALClass& transceiver, uint8_t group, uint8_t numProperties, uint8_t startingProperty)
+ESAT_COMTransceiverCommandsClass::PropertiesReply ESAT_COMTransceiverCommandsClass::getProperty(ESAT_COMTransceiverHALClass& transceiver,
+                                                                                                uint8_t group,
+                                                                                                uint8_t numProperties,
+                                                                                                uint8_t startingProperty)
 {
   uint8_t cmdBuff[16];
-  PropertiesReply propertyReply;  
+  PropertiesReply propertyReply;
   cmdBuff[0] = COMMAND_GET_PROPERTY;
   cmdBuff[1] = group;
   cmdBuff[2] = numProperties;
@@ -368,14 +382,14 @@ ESAT_COMTransceiverCommandsClass::PropertiesReply ESAT_COMTransceiverCommandsCla
   propertyReply.buffer[12]   = cmdBuff[12];
   propertyReply.buffer[13]   = cmdBuff[13];
   propertyReply.buffer[14]   = cmdBuff[14];
-  propertyReply.buffer[15]   = cmdBuff[15];  
+  propertyReply.buffer[15]   = cmdBuff[15];
   return propertyReply;
 }
 
 ESAT_COMTransceiverCommandsClass::PartInfoReply ESAT_COMTransceiverCommandsClass::partInfo(ESAT_COMTransceiverHALClass& transceiver)
 {
     uint8_t cmdBuff[8];
-    ESAT_COMTransceiverCommandsClass::PartInfoReply partInfoReply;  
+    ESAT_COMTransceiverCommandsClass::PartInfoReply partInfoReply;
     cmdBuff[0] = COMMAND_PART_INFO;
     transceiver.writeCommandAndRetrieveResponse(COMMAND_PART_INFO_ARGUMENTS_COUNT,
                                     cmdBuff,
@@ -388,7 +402,7 @@ ESAT_COMTransceiverCommandsClass::PartInfoReply ESAT_COMTransceiverCommandsClass
     partInfoReply.ID            = ((uint16_t)cmdBuff[4] << 8) & 0xFF00;
     partInfoReply.ID           |= (uint16_t)cmdBuff[5] & 0x00FF;
     partInfoReply.customerID    = cmdBuff[6];
-    partInfoReply.ROMID         = cmdBuff[7];  
+    partInfoReply.ROMID         = cmdBuff[7];
   return partInfoReply;
 }
 
@@ -406,12 +420,18 @@ void ESAT_COMTransceiverCommandsClass::powerUp(ESAT_COMTransceiverHALClass& tran
     transceiver.writeCommand( COMMAND_POWER_UP_ARGUMENTS_COUNT, cmdBuff);
 }
 
-void ESAT_COMTransceiverCommandsClass::readReceptionFIFOBuffer(ESAT_COMTransceiverHALClass& transceiver, uint8_t length, uint8_t* dataReadBuffer)
+void ESAT_COMTransceiverCommandsClass::readReceptionFIFOBuffer(ESAT_COMTransceiverHALClass& transceiver,
+                                                               uint8_t length,
+                                                               uint8_t* dataReadBuffer)
 {
   transceiver.readData(COMMAND_READ_RECEPTION_FIFO, length, dataReadBuffer);
 }
 
-ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverCommandsClass::setProperty(ESAT_COMTransceiverHALClass& transceiver, uint8_t group, uint8_t numProperties, uint8_t startingProperty, uint8_t* properties)
+ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverCommandsClass::setProperty(ESAT_COMTransceiverHALClass& transceiver,
+                                                                                                          uint8_t group,
+                                                                                                          uint8_t numProperties,
+                                                                                                          uint8_t startingProperty,
+                                                                                                          uint8_t* properties)
 {
   if (numProperties > 12)
   {
@@ -422,7 +442,7 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverC
   cmdBuff[0] = COMMAND_SET_PROPERTY;
   cmdBuff[1] = group;
   cmdBuff[2] = numProperties;
-  cmdBuff[3] = startingProperty;  
+  cmdBuff[3] = startingProperty;
   for (cmdIndex = 0; cmdIndex < 12 && numProperties > 0; ++cmdIndex, --numProperties)
   {
     cmdBuff[cmdIndex + 4] = properties[cmdIndex];
@@ -435,12 +455,14 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverC
   return ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS;
 }
 
-void ESAT_COMTransceiverCommandsClass::startReception(ESAT_COMTransceiverHALClass& transceiver, uint8_t channel, uint16_t receptionLength)
+void ESAT_COMTransceiverCommandsClass::startReception(ESAT_COMTransceiverHALClass& transceiver,
+                                                      uint8_t channel,
+                                                      uint16_t receptionLength)
 {
   uint8_t cmdBuff[8];  
   cmdBuff[0] = COMMAND_START_RECEPTION;
   cmdBuff[1] = channel;
-  cmdBuff[2] = 0x00; // Condition
+  cmdBuff[2] = 0x00; // Condition.
   cmdBuff[3] = (uint8_t)(receptionLength >> 8);
   cmdBuff[4] = (uint8_t)(receptionLength);
   cmdBuff[5] = START_RECEPTION_ARGUMENT_NEXT_STATE_1_RECEPTION_TIMEOUT_STATE_NO_CHANGE;
@@ -449,7 +471,9 @@ void ESAT_COMTransceiverCommandsClass::startReception(ESAT_COMTransceiverHALClas
   transceiver.writeCommand(COMMAND_START_RECEPTION_ARGUMENTS_COUNT, cmdBuff);
 }
 
-void ESAT_COMTransceiverCommandsClass::startTransmission(ESAT_COMTransceiverHALClass& transceiver, uint8_t channel, uint16_t transmissionLength)
+void ESAT_COMTransceiverCommandsClass::startTransmission(ESAT_COMTransceiverHALClass& transceiver,
+                                                         uint8_t channel,
+                                                         uint16_t transmissionLength)
 {
   uint8_t cmdBuff[7];
   cmdBuff[0] = COMMAND_START_TRANSMISSION;
@@ -458,15 +482,17 @@ void ESAT_COMTransceiverCommandsClass::startTransmission(ESAT_COMTransceiverHALC
   cmdBuff[3] = (uint8_t)(transmissionLength >> 8);
   cmdBuff[4] = (uint8_t)(transmissionLength);
   cmdBuff[5] = 0x00;  
-  // Don't repeat the packet, 
+  // Don't repeat the packet,
   // ie. transmit the packet only once.
   cmdBuff[6] = 0x00;
   transceiver.writeCommand(COMMAND_START_TRANSMISSION_ARGUMENTS_COUNT, cmdBuff);
 }
 
-void ESAT_COMTransceiverCommandsClass::writeTransmissionFIFOBuffer(ESAT_COMTransceiverHALClass& transceiver, uint8_t length, uint8_t* dataToBeWritten)
+void ESAT_COMTransceiverCommandsClass::writeTransmissionFIFOBuffer(ESAT_COMTransceiverHALClass& transceiver,
+                                                                   uint8_t length,
+                                                                   uint8_t* dataToBeWritten)
 {
   transceiver.writeData(COMMAND_WRITE_TRANSMISSION_FIFO, length, dataToBeWritten);
-} 
+}
 
 ESAT_COMTransceiverCommandsClass ESAT_COMTransceiverCommands;

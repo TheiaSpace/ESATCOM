@@ -22,22 +22,49 @@
 
 #include <Arduino.h>
 
+// This class contains the transceiver properties that can be read
+// or written using ESAT_COMTransceiverCommandsClass.
 class ESAT_COMTransceiverPropertiesClass
 {
   public:    
-    // List of Si44463 transceiver properties.
+
+    // Global properties group number.
     static const uint8_t PROPERTY_GLOBAL = 0;
+    
+    // Interrupts control properties group number.
     static const uint8_t PROPERTY_INTERRUPTS_CONTROL = 1;
+    
+    // Fast response registers control properties number.
     static const uint8_t PROPERTY_FAST_RESPONSE_REGISTERS_CONTROL = 2;
+    
+    // Preamble properties group number.
     static const uint8_t PROPERTY_PREAMBLE = 16;
+    
+    // Sync properties group number.
     static const uint8_t PROPERTY_SYNC = 17;
+    
+    // Packet properties group number.
     static const uint8_t PROPERTY_PACKET = 18;
+    
+    // Modem properties group number.
     static const uint8_t PROPERTY_MODEM = 32;
+    
+    // Filter coefficients properties group number.
     static const uint8_t PROPERTY_MODEM_FILTER_COEFFICIENTES = 33;
+    
+    // Power amplifier properties group number.
     static const uint8_t PROPERTY_POWER_AMPLIFIER = 34;
+    
+    // Synthesizer properties group number.
     static const uint8_t PROPERTY_SYNTHESIZER = 35;
+    
+    // Match properties group number.
     static const uint8_t PROPERTY_MATCH = 48;
+    
+    // Frequency control properties group number.
     static const uint8_t PROPERTY_FREQUENCY_CONTROL = 64;
+    
+    // Reception hop properties group number.
     static const uint8_t PROPERTY_RECEPTION_HOP = 80;
 
     // Transceiver properties parameters.
@@ -73,7 +100,7 @@ class ESAT_COMTransceiverPropertiesClass
     static const uint8_t PARAMETER_MODEM_MODULATION_TYPE_GPIO3_ASYNCHRONOUS_MASK = 0xE8;
     static const uint8_t PARAMETER_MODEM_MODULATION_TYPE_RANDOM_GENERATOR_MASK = 0x10;
     // Masks for PARAMETER_MODEM_CLOCK_GENERATOR_BAND (81).
-    static const uint8_t PARAMETER_MODEM_CLOCK_GENERATOR_BAND_HIGH_PERFORMANCE_MASK = 0x8;       
+    static const uint8_t PARAMETER_MODEM_CLOCK_GENERATOR_BAND_HIGH_PERFORMANCE_MASK = 0x8;
 };
 
 #endif /*ESAT_COMTransceiverProperties_h*/

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -38,131 +38,161 @@
 #include <ESAT_TaskScheduler.h>
 #include "ESAT_COM-hardware/ESAT_COMBuiltinHardwareClock.h"
 
+// Communications subsystem main class. It contains the hardware, software,
+// telemetry and telecommands initialization functions, the buffers and the
+// queues for the telemetry and the telecommands and the callbacks for 
+// handling the reading and the writing of the CCSDS packets and the KISS
+// frames. This class software is used by both the ground station and the
+// on-board software versions.
 class ESAT_COMClass
 {
   public: 
-	// Task for reading and delivering the telemetry periodically.
-  	class PeriodicalTelemetryDeliveryTaskClass: public ESAT_Task
-	{
-	  public:
-		// Delivery period (in us).
-		unsigned long period()
-		{
-		  return 1000000;
-		}
-		// Task execution.
-		void run();		
-	};
   
-    // Maximum packet data length radio will handle.
+    // Periodic task for reading and delivering the board's telemetry.
+    // This class is registered to an ESAT_TaskScheduler that will
+    // call the run() function within the set period.
+    class PeriodicalTelemetryDeliveryTaskClass: public ESAT_Task
+    {
+      public:
+      
+        // Delivery period (in us).
+        // Set it here.
+        unsigned long period()
+        {
+          return 1000000;
+        }
+        
+        // Periodic task function. Called by an ESAT_TaskScheduler.
+        // Its implementation is done inside the sketch and it varies
+        // between the ground station and the on-board softwares.    
+        void run();   
+    };
+
+    // Maximum packet data length that the board will handle.
     static const word PACKET_DATA_BUFFER_LENGTH = 256;
 
-    // Maximum whole packet length radio will handle.
+    // Maximum whole packet length that the board will handle.
     static const word WHOLE_PACKET_BUFFER_LENGTH =
     ESAT_CCSDSPrimaryHeader::LENGTH + PACKET_DATA_BUFFER_LENGTH;
 
-    // Maximum KISS frame length radio will handle.
+    // Maximum KISS frame length taht the board will handle.
     static const word WHOLE_KISS_FRAME_MAX_LENGTH = 
     ESAT_KISSStream::frameLength(WHOLE_PACKET_BUFFER_LENGTH);
-		
-	// Instance of TelemetryDeliveryTaskClass.
-	PeriodicalTelemetryDeliveryTaskClass PeriodicalTelemetryDeliveryTask;	
-  
-    // Set up the COM board.
-    // Configures the APID and the version numbers.
+      
+    // Instance of the TelemetryDeliveryTaskClass.
+    PeriodicalTelemetryDeliveryTaskClass PeriodicalTelemetryDeliveryTask; 
+    
+    // Sets up the board.
+    // Configures the APID and the version numbers (they change between
+    // ground segment and on-board softwares).
     void begin(word subsystemApplicationProcessIdentifier, 
                byte subsystemMajorVersionNumber,
                byte subsystemMinorVersionNumber,
                byte subsystemPatchVersionNumber);
-               
-    // Disable COM telemetry delivery over radio without OBC interaction.
+                 
+    // Disables the on-board telemetry delivery over the radio without OBC
+    // interaction.
     void disableCOMTelemetryRadioDelivery();
                
-    // Enable COM telemetry delivery over radio without OBC interaction.
+    // Enables the on-board telemetry delivery over radio without OBC
+    // interaction.
     void enableCOMTelemetryRadioDelivery();
-    
-    // Check if COM telemetry delivery over radio is enabled.
+      
+    // Checks if the on-board telemetry delivery over the radio is enabled.
     boolean isCOMTelemetryRadioDeliveryEnabled();
-                
-    // Check wether a packet is a telecommand for the current subsystem.
+                  
+    // Checks wether a packet is a telecommand for the current subsystem
+    // (on-board or ground station).
     boolean isSubsystemTelecommand(ESAT_CCSDSPacket& packet);
-    
-    // Queues a telecommand to the radio output buffer (for GS).
+      
+    // Queues a telecommand to the radio output buffer (for the ground station).
     boolean queueTelecommandToRadio(ESAT_CCSDSPacket& packet);
-    
-    // Queues a telemetry to the radio output buffer(for on-board module).
+      
+    // Queues a telemetry to the radio output buffer(for the on-board module).
     boolean queueTelemetryToRadio(ESAT_CCSDSPacket& packet);
 
-    // Fill the packet with data read from the radio interface.
-    // Return true if there was a new packet; otherwise return false.
+    // Fills the packet with the data read from the radio interface.
+    // Returns true if a new packet was read, otherwise returns false.
     boolean readPacketFromRadio(ESAT_CCSDSPacket& packet);
-	
-	// Performs the background tasks.
-	void update();
-		
-    // Starts the radio transmission.
+    
+    // Performs the background tasks:
+    //  -I2C written packets: radio telecommands or any subsystem telemetry.
+    //                        Radio telecommands are handled and the subsystem 
+    //                        telemetry is queued to be transmitted by the radio
+    //                        when it were possible.
+    //  -Radio transmissions: broadcasts either any I2C received (and queued) telemetries
+    //                        and the queued own subsystem's telemetry using a sequential 
+    //                        dispatching algorithm.
+    //  -Manual data stream:  updates the bit-banged transmission testing sequence.
+    //  -Heath beat LED update.
+    void update();
+      
+    // Starts the radio transmission of the given packet.
+    // Returns true if a new packet was fully written and transmitted,
+    // otherwise returns false.
     boolean writePacketToRadio(ESAT_CCSDSPacket& packet);
 
-    private:	
-	
-	// Multi-source transmission state machine states.
-	enum RadioTransmissionState
-	{
-		IDLE,
-		TRANSMITTING_EXTERNAL_DATA, // I2C received data
-		EXTERNAL_DATA_TRANSMITTED,
-		TRANSMITTING_OWN_DATA, // User controlled data
-		OWN_DATA_TRANSMITTED
-	};
-	
-	// I2C Address of the COM board.
-	const byte COM_I2C_ADDRESS = 3;
-	
-	// Size of the board external (I2C) data radio transmission buffer.
-	const unsigned long EXTERNAL_DATA_TRANSMISSION_QUEUE_CAPACITY = 17;
-	
-	// Size of the board own data radio transmission buffer.
-	const unsigned long OWN_DATA_TRANSMISSION_QUEUE_CAPACITY = 2;
-	
+  private:  
+  
+    // Multi-source transmission state machine states.
+    enum RadioTransmissionState
+    {
+      IDLE,
+      TRANSMITTING_EXTERNAL_DATA, // I2C received telemetry.
+      EXTERNAL_DATA_TRANSMITTED,
+      TRANSMITTING_OWN_DATA, // Board's telemetry.
+      OWN_DATA_TRANSMITTED
+    };
+  
+    // I2C Address of the board.
+    const byte COM_I2C_ADDRESS = 3;
+  
+    // Size of the board external (I2C) data radio transmission buffer.
+    const unsigned long EXTERNAL_DATA_TRANSMISSION_QUEUE_CAPACITY = 17;
+
+    // Size of the board own data radio transmission buffer.
+    const unsigned long OWN_DATA_TRANSMISSION_QUEUE_CAPACITY = 2;
+
     // Unique identifier of the COM board for telemetry and
     // telecommand purposes.
     word applicationProcessIdentifier;
-    
-	// Allows the board to deliver its telemetry to the radio.
+
+    // Allows the board to deliver its telemetry to the radio without
+    // OBC interaction.
     boolean isTelemetryRadioDeliveryEnabled = true;
-    
+
     // Version numbers.
     byte majorVersionNumber;
     byte minorVersionNumber;
     byte patchVersionNumber;
-    
-    // KISS frame transmission buffer.
-    ESAT_Buffer radioOutputBuffer;
+
+    // Use this to store the packet while it is sent.
+    ESAT_CCSDSPacket ongoingTransmissionPacket;
+
+    // Current state of the multi-source transmission state machine.
+    RadioTransmissionState ongoingTransmissionState;
+
+    // Use this queue to store the user controlled data.
+    ESAT_CCSDSPacketQueue ownDataQueue;
     
     // Backend array for the radioOutputBuffer.
     byte radioInputBufferBackendArray[WHOLE_PACKET_BUFFER_LENGTH];
     
+    // KISS frame transmission buffer.
+    ESAT_Buffer radioOutputBuffer;
+
     // Backend array for the radioInputBuffer.
     byte radioOutputBufferBackendArray[WHOLE_KISS_FRAME_MAX_LENGTH];
-    
-    // Use this to write packets to the radio interface.
-    ESAT_KISSStream radioWriter;    
 
     // Use this to read CCSDS packets from the radio interface.
     ESAT_CCSDSPacketFromKISSFrameReader radioReader;
-	
-	// Use this to store the packet while it is sent.
-	ESAT_CCSDSPacket ongoingTransmissionPacket;
-	
-	// Current state of the multi-source transmission state machine.
-	RadioTransmissionState ongoingTransmissionState;
-	
-	// Use this queue to store the user controlled data.
-	ESAT_CCSDSPacketQueue ownDataQueue;
+    
+    // Use this to write packets to the radio interface.
+    ESAT_KISSStream radioWriter;
 
     // Configures the board hardware.
     void beginHardware();
-  
+
     // Configures the radio stream middleware.
     void beginRadioSoftware();
 
@@ -170,13 +200,13 @@ class ESAT_COMClass
     void beginTelecommands();
 
     // Configures the telemetry packets.
-    void beginTelemetry();
-
+    void beginTelemetry();    
 };
 
 // Instance of the tasks scheduler (should be global?).
 extern ESAT_TaskScheduler ESAT_COMTaskScheduler;
 
+// Global instance of the ESAT_COMClass.
 extern ESAT_COMClass ESAT_COM;
 
 #endif /* ESAT_COM_h */

@@ -33,12 +33,12 @@ ESAT_Timestamp ESAT_COMBuiltinHardwareClockClass::read()
 
 void ESAT_COMBuiltinHardwareClockClass::write(ESAT_Timestamp timeToSet)
 {
-  RTC.setSeconds((uint8_t) timeToSet.seconds);
-  RTC.setMinutes((uint8_t) timeToSet.minutes);
-  RTC.setHours((uint8_t) timeToSet.hours);
-  RTC.setDay((uint8_t) timeToSet.day);
-  RTC.setMonth((uint8_t) timeToSet.month);
-  RTC.setYear((uint8_t) (timeToSet.year % 100));
+  RTC.setSeconds((byte) timeToSet.seconds);
+  RTC.setMinutes((byte) timeToSet.minutes);
+  RTC.setHours((byte) timeToSet.hours);
+  RTC.setDay((byte) timeToSet.day);
+  RTC.setMonth((byte) timeToSet.month);
+  RTC.setYear((byte) (timeToSet.year % 100));
 }
 
 ESAT_COMBuiltinHardwareClockClass ESAT_COMBuiltinHardwareClock;

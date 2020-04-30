@@ -63,400 +63,400 @@ class ESAT_COMTransceiverCommandsClass
     // reading command.
     struct ADCReadingsReply 
     {
-      uint16_t  GPIOAnalogRawValue;
-      uint16_t  voltageRawValue;
-      uint16_t  temperatureRawValue;
+      word  GPIOAnalogRawValue;
+      word  voltageRawValue;
+      word  temperatureRawValue;
     };
     
     // Data structure for handling the reply of the chip
     // status command.
     struct ChipStatusReply 
     {
-      uint8_t  chipPending;
-      uint8_t  chipStatus;
-      uint8_t  lastCommandErrorStatus;
-      uint8_t  lastCommandErrorCommand;
+      byte  chipPending;
+      byte  chipStatus;
+      byte  lastCommandErrorStatus;
+      byte  lastCommandErrorCommand;
     };
     
     // Generic command reply handler.
     // Can hold up to 16 bytes.
     struct CommandReply
     {
-      uint8_t buffer[16];
+      byte buffer[16];
     };
     
     // Data structure for handling the reply of the device
     // state command.
     struct DeviceStateReply
     {
-      uint8_t   currentState;
-      uint8_t   currentChannel;
+      byte   currentState;
+      byte   currentChannel;
     };
     
     // Data structure for handling the reply of the fast
     // response register A reading command.
     struct FastResponseRegisterAReply
     {
-      uint8_t   fastResponseRegisterA;
-      uint8_t   fastResponseRegisterB;
-      uint8_t   fastResponseRegisterC;
-      uint8_t   fastResponseRegisterD;
+      byte   fastResponseRegisterA;
+      byte   fastResponseRegisterB;
+      byte   fastResponseRegisterC;
+      byte   fastResponseRegisterD;
     };
 
     // Data structure for handling the reply of the fast
     // response register B reading command.
     struct FastResponseRegisterBReply
     {
-      uint8_t   fastResponseRegisterB;
-      uint8_t   fastResponseRegisterC;
-      uint8_t   fastResponseRegisterD;
-      uint8_t   fastResponseRegisterA;
+      byte   fastResponseRegisterB;
+      byte   fastResponseRegisterC;
+      byte   fastResponseRegisterD;
+      byte   fastResponseRegisterA;
     };
 
     // Data structure for handling the reply of the fast
     // response register C reading command.
     struct FastResponseRegisterCReply
     {
-      uint8_t   fastResponseRegisterC;
-      uint8_t   fastResponseRegisterD;
-      uint8_t   fastResponseRegisterA;
-      uint8_t   fastResponseRegisterB;
+      byte   fastResponseRegisterC;
+      byte   fastResponseRegisterD;
+      byte   fastResponseRegisterA;
+      byte   fastResponseRegisterB;
     };
 
     // Data structure for handling the reply of the fast
     // response register D reading command.
     struct FastResponseRegisterDReply
     {
-      uint8_t   fastResponseRegisterD;
-      uint8_t   fastResponseRegisterA;
-      uint8_t   fastResponseRegisterB;
-      uint8_t   fastResponseRegisterC;
+      byte   fastResponseRegisterD;
+      byte   fastResponseRegisterA;
+      byte   fastResponseRegisterB;
+      byte   fastResponseRegisterC;
     };
     
     // Data structure for handling the reply of the FIFO
     // status command.
     struct FIFOStatusReply
     {
-      uint8_t   receptionFIFOCount;
-      uint8_t   transmissionFIFOSpace;
+      byte   receptionFIFOCount;
+      byte   transmissionFIFOSpace;
     };
     
     // Data structure for handling the reply of the function
     // info command.
     struct FunctionInfoReply 
     {
-      uint8_t   externalRevision;
-      uint8_t   branchRevision;
-      uint8_t   internalRevision;
+      byte   externalRevision;
+      byte   branchRevision;
+      byte   internalRevision;
       // Added patch support.
-      uint16_t  appliedPatchID;
-      uint8_t   currentFunctionalMode;
+      word  appliedPatchID;
+      byte   currentFunctionalMode;
     };
 
     // Generic reply handler.
     // Can hold up to 16 bytes.
     struct GenericReply 
     {
-      uint8_t reply[16];
+      byte reply[16];
     };
     
     // Data structure for handling the reply of the GPIO
     // configuration command.
     struct GPIOConfigurationReply
     {
-      uint8_t   GPIO[4];
-      uint8_t   NIRQ;
-      uint8_t   SDO;
-      uint8_t   generalConfiguration;
+      byte   GPIO[4];
+      byte   NIRQ;
+      byte   SDO;
+      byte   generalConfiguration;
     };
 
     // Data structure for handling the reply of the
     // interrupt status command.
     struct InterruptStatusReply
     {
-      uint8_t   interruptPending;
-      uint8_t   interruptStatus;
-      uint8_t   packetHandlerPending;
-      uint8_t   packetHandlerStatus;
-      uint8_t   modemPending;
-      uint8_t   modemStatus;
-      uint8_t   chipPending;
-      uint8_t   chipStatus;
+      byte   interruptPending;
+      byte   interruptStatus;
+      byte   packetHandlerPending;
+      byte   packetHandlerStatus;
+      byte   modemPending;
+      byte   modemStatus;
+      byte   chipPending;
+      byte   chipStatus;
     };
     
     // Data structure for handling the reply of the
     // manual image rejection calibation command.
     struct ManualImageRejectionCalibrationReply
     {
-      uint8_t   imageRejectionCalibrationAppliedAmplitude;
-      uint8_t   imageRejectionCalibrationAppliedPhase;
+      byte   imageRejectionCalibrationAppliedAmplitude;
+      byte   imageRejectionCalibrationAppliedPhase;
     };    
     
     // Data structure for handling the reply of the modem
     // status reading command.
     struct ModemStatusReply 
     {
-      uint8_t  modemPending;
-      uint8_t  modemStatus;
-      uint8_t  currentReceivedSignalStregnthIndicator;
-      uint8_t  latchedReceivedSignalStrengthIndicator;
-      uint8_t  antenna1ReceivedSignalStrengthIndicator;
-      uint8_t  antenna2ReceivedSignalStrengthIndicator;
-      uint16_t automaticFrequencyControlFrequencyOffset;
+      byte  modemPending;
+      byte  modemStatus;
+      byte  currentReceivedSignalStregnthIndicator;
+      byte  latchedReceivedSignalStrengthIndicator;
+      byte  antenna1ReceivedSignalStrengthIndicator;
+      byte  antenna2ReceivedSignalStrengthIndicator;
+      word automaticFrequencyControlFrequencyOffset;
     };
     
     // Data structure for handling the reply of the packet
     // handler status reading command.
     struct PacketHandlerStatusReply 
     {
-      uint8_t  packetHandlerPending;
-      uint8_t  packetHandlerStatus;
+      byte  packetHandlerPending;
+      byte  packetHandlerStatus;
     };
 
     // Data structure for handling the reply of the packet
     // info command.
     struct PacketInfoReply 
     {
-      uint16_t  length;
+      word  length;
     };
     
     // Data structure for handling the reply of the part
     // info command.
     struct PartInfoReply 
     {
-      uint8_t   chipRevision;
-      uint16_t  partNumber;
-      uint8_t   partBuild;
-      uint16_t  ID;
-      uint8_t   customerID;
-      uint8_t   ROMID;
+      byte   chipRevision;
+      word  partNumber;
+      byte   partBuild;
+      word  ID;
+      byte   customerID;
+      byte   ROMID;
     };
     
     // Generic properties reply handler.
     // Can hold up to 16 bytes.
     struct PropertiesReply
     {
-      uint8_t   buffer[16];   
+      byte   buffer[16];   
     };
     
   
   // Command for issuing a NOP to the transceiver.
-  static const uint8_t COMMAND_NOP = 0x0;
+  static const byte COMMAND_NOP = 0x0;
   
   // Command arguments count for issuing a NOP to 
   // the transceiver.
-  static const uint8_t COMMAND_NOP_ARGUMENTS_COUNT = 1;
+  static const byte COMMAND_NOP_ARGUMENTS_COUNT = 1;
 
   // Command for checking the transceiver part number.
-  static const uint8_t COMMAND_PART_INFO = 0x1;
+  static const byte COMMAND_PART_INFO = 0x1;
   
   // Command arguments count for checking the transceiver 
   // part number.
-  static const uint8_t COMMAND_PART_INFO_ARGUMENTS_COUNT = 1;
+  static const byte COMMAND_PART_INFO_ARGUMENTS_COUNT = 1;
   
   // Command reply count for checking the transceiver 
   // part number.
-  static const uint8_t COMMAND_PART_INFO_REPLY_COUNT = 8;
+  static const byte COMMAND_PART_INFO_REPLY_COUNT = 8;
 
   // Command for initializing the transceiver.
-  static const uint8_t COMMAND_POWER_UP = 0x2;
+  static const byte COMMAND_POWER_UP = 0x2;
   
   // Command arguments count for initializing the transceiver.
-  static const uint8_t COMMAND_POWER_UP_ARGUMENTS_COUNT = 7;
+  static const byte COMMAND_POWER_UP_ARGUMENTS_COUNT = 7;
 
   // Command for configuring an specific property to the transceiver.
-  static const uint8_t COMMAND_SET_PROPERTY = 0x11;
+  static const byte COMMAND_SET_PROPERTY = 0x11;
   
   // Command arguments count for configuring an specific property 
   // to the transceiver.
-  static const uint8_t COMMAND_SET_PROPERTY_ARGUMENTS_COUNT = 16;
+  static const byte COMMAND_SET_PROPERTY_ARGUMENTS_COUNT = 16;
 
   // Command for retrieving an specific property from the transceiver.
-  static const uint8_t COMMAND_GET_PROPERTY = 0x12;
+  static const byte COMMAND_GET_PROPERTY = 0x12;
   
   // Command arguments count for retrieving an specific property 
   // from the transceiver.
-  static const uint8_t COMMAND_GET_PROPERTY_ARGUMENTS_COUNT = 4;
+  static const byte COMMAND_GET_PROPERTY_ARGUMENTS_COUNT = 4;
   
   // Command reply count for retrieving an specific property 
   // from the transceiver.
-  static const uint8_t COMMAND_GET_PROPERTY_REPLY_COUNT = 16;
+  static const byte COMMAND_GET_PROPERTY_REPLY_COUNT = 16;
 
   // Command for configuring the transciver GPIOs.
-  static const uint8_t COMMAND_CONFIGURE_GPIO = 0x13;
+  static const byte COMMAND_CONFIGURE_GPIO = 0x13;
   
   // Command arguments count for configuring the transciver GPIOs.
-  static const uint8_t COMMAND_CONFIGURE_GPIO_ARGUMENTS_COUNT = 8;
+  static const byte COMMAND_CONFIGURE_GPIO_ARGUMENTS_COUNT = 8;
   
   // Command reply count for configuring the transciver GPIOs.
-  static const uint8_t COMMAND_CONFIGURE_GPIO_REPLY_COUNT = 7;
+  static const byte COMMAND_CONFIGURE_GPIO_REPLY_COUNT = 7;
 
   // Command for reading the transceiver analog lines.
-  static const uint8_t COMMAND_ADC_READ = 0x14;
+  static const byte COMMAND_ADC_READ = 0x14;
   
   // Command arguments count for reading the transceiver analog
   // lines.
-  static const uint8_t COMMAND_ADC_READ_ARGUMENTS_COUNT = 3;
+  static const byte COMMAND_ADC_READ_ARGUMENTS_COUNT = 3;
   
   // Command reply count for  reading the transceiver analog
   // lines.
-  static const uint8_t COMMAND_ADC_READ_REPLY_COUNT = 6;
+  static const byte COMMAND_ADC_READ_REPLY_COUNT = 6;
 
   // Command for checking the transceiver FIFOs statuses.
-  static const uint8_t COMMAND_GET_FIFO_STATUS = 0x15;
+  static const byte COMMAND_GET_FIFO_STATUS = 0x15;
   
   // Command arguments count for checking the transceiver FIFOs
   // statuses.
-  static const uint8_t COMMAND_GET_FIFO_STATUS_ARGUMENTS_COUNT = 2;
+  static const byte COMMAND_GET_FIFO_STATUS_ARGUMENTS_COUNT = 2;
   
   // Command reply count for checking the transceiver FIFOs
   // statuses.
-  static const uint8_t COMMAND_GET_FIFO_STATUS_REPLY_COUNT = 2;
+  static const byte COMMAND_GET_FIFO_STATUS_REPLY_COUNT = 2;
 
   // Command for getting information about the packet settings.
-  static const uint8_t COMMAND_GET_PACKET_INFO = 0x16;
+  static const byte COMMAND_GET_PACKET_INFO = 0x16;
   
   // Command arguments count for getting information about the
   // packet settings.
-  static const uint8_t COMMAND_GET_PACKET_INFO_ARGUMENTS_COUNT = 6;
+  static const byte COMMAND_GET_PACKET_INFO_ARGUMENTS_COUNT = 6;
   
   // Command reply count for getting information about the packet
   // settings.
-  static const uint8_t COMMAND_GET_PACKET_INFO_REPLY_COUNT = 2;
+  static const byte COMMAND_GET_PACKET_INFO_REPLY_COUNT = 2;
 
   // Command for checking the transceiver interrupt flags.
-  static const uint8_t COMMAND_GET_INTERRUPTS_STATUS = 0x20;
+  static const byte COMMAND_GET_INTERRUPTS_STATUS = 0x20;
   
   // Command arguments count for checking the transceiver interrupt
   // flags.
-  static const uint8_t COMMAND_GET_INTERRUPTS_STATUS_ARGUMENTS_COUNT = 4;
+  static const byte COMMAND_GET_INTERRUPTS_STATUS_ARGUMENTS_COUNT = 4;
   
   // Command reply count for checking the transceiver interrupt flags.
-  static const uint8_t COMMAND_GET_INTERRUPTS_STATUS_REPLY_COUNT = 8;
+  static const byte COMMAND_GET_INTERRUPTS_STATUS_REPLY_COUNT = 8;
 
   // Command for checking the packet handler status.
-  static const uint8_t COMMAND_GET_PACKET_HANDLER_STATUS = 0x21;
+  static const byte COMMAND_GET_PACKET_HANDLER_STATUS = 0x21;
   
   // Command arguments count for checking the packet handler status.
-  static const uint8_t COMMAND_GET_PACKET_HANDLER_STATUS_ARGUMENTS_COUNT = 2;
+  static const byte COMMAND_GET_PACKET_HANDLER_STATUS_ARGUMENTS_COUNT = 2;
   
   // Command reply count for checking the packet handler status.
-  static const uint8_t COMMAND_GET_PACKET_HANDLER_STATUS_REPLY_COUNT = 2;
+  static const byte COMMAND_GET_PACKET_HANDLER_STATUS_REPLY_COUNT = 2;
 
   // Command for checking the modem status.
-  static const uint8_t COMMAND_GET_MODEM_STATUS = 0x22;
+  static const byte COMMAND_GET_MODEM_STATUS = 0x22;
   
   // Command arguments count forchecking the modem status.
-  static const uint8_t COMMAND_GET_MODEM_STATUS_ARGUMENTS_COUNT = 2;
+  static const byte COMMAND_GET_MODEM_STATUS_ARGUMENTS_COUNT = 2;
   
   // Command reply count for checking the modem status.
-  static const uint8_t COMMAND_GET_MODEM_STATUS_REPLY_COUNT = 8;
+  static const byte COMMAND_GET_MODEM_STATUS_REPLY_COUNT = 8;
 
   // Command for checking the chip global status.
-  static const uint8_t COMMAND_GET_CHIP_STATUS = 0x23;
+  static const byte COMMAND_GET_CHIP_STATUS = 0x23;
   
   // Command arguments count for checking the chip global status.
-  static const uint8_t COMMAND_GET_CHIP_STATUS_ARGUMENTS_COUNT = 2;
+  static const byte COMMAND_GET_CHIP_STATUS_ARGUMENTS_COUNT = 2;
   
   // Command reply count for checking the chip global status.
-  static const uint8_t COMMAND_GET_CHIP_STATUS_REPLY_COUNT = 4;
+  static const byte COMMAND_GET_CHIP_STATUS_REPLY_COUNT = 4;
 
   // Command for starting the transmission of the stored data.
-  static const uint8_t COMMAND_START_TRANSMISSION = 0x31;
+  static const byte COMMAND_START_TRANSMISSION = 0x31;
   
   // Command arguments count for starting the transmission of 
   // the stored data.
-  static const uint8_t COMMAND_START_TRANSMISSION_ARGUMENTS_COUNT = 7;
+  static const byte COMMAND_START_TRANSMISSION_ARGUMENTS_COUNT = 7;
 
   // Command for starting the reception mode.
-  static const uint8_t COMMAND_START_RECEPTION = 0x32;
+  static const byte COMMAND_START_RECEPTION = 0x32;
   
   // Command arguments count for starting the reception mode.
-  static const uint8_t COMMAND_START_RECEPTION_ARGUMENTS_COUNT = 8;
+  static const byte COMMAND_START_RECEPTION_ARGUMENTS_COUNT = 8;
 
   // Command for changing the state machine state.
-  static const uint8_t COMMAND_CHANGE_STATE = 0x34;
+  static const byte COMMAND_CHANGE_STATE = 0x34;
   
   // Command arguments count for changing the state machine state.
-  static const uint8_t COMMAND_CHANGE_STATE_ARGUMENTS_COUNT = 2;
+  static const byte COMMAND_CHANGE_STATE_ARGUMENTS_COUNT = 2;
 
   // Command for reading the fast response register A.
-  static const uint8_t COMMAND_GET_FAST_RESPONSE_REGISTER_A = 0x50;
+  static const byte COMMAND_GET_FAST_RESPONSE_REGISTER_A = 0x50;
   
   // Command arguments count for reading the fast response register A.
-  static const uint8_t COMMAND_GET_FAST_RESPONSE_REGISTER_A_ARGUMENTS_COUNT = 1;
+  static const byte COMMAND_GET_FAST_RESPONSE_REGISTER_A_ARGUMENTS_COUNT = 1;
   
   // Command reply count for reading the fast response register A.
-  static const uint8_t COMMAND_GET_FAST_RESPONSE_REGISTER_A_REPLY_COUNT = 4;
+  static const byte COMMAND_GET_FAST_RESPONSE_REGISTER_A_REPLY_COUNT = 4;
 
   // Command for reading the fast response register B.
-  static const uint8_t COMMAND_GET_FAST_RESPONSE_REGISTER_B = 0x51;
+  static const byte COMMAND_GET_FAST_RESPONSE_REGISTER_B = 0x51;
   
   // Command arguments count for reading the fast response register B.
-  static const uint8_t COMMAND_GET_FAST_RESPONSE_REGISTER_B_ARGUMENTS_COUNT = 1;
+  static const byte COMMAND_GET_FAST_RESPONSE_REGISTER_B_ARGUMENTS_COUNT = 1;
   
   // Command reply count for reading the fast response register B.
-  static const uint8_t COMMAND_GET_FAST_RESPONSE_REGISTER_B_REPLY_COUNT = 4;
+  static const byte COMMAND_GET_FAST_RESPONSE_REGISTER_B_REPLY_COUNT = 4;
 
   // Command for reading the fast response register C.
-  static const uint8_t COMMAND_GET_FAST_RESPONSE_REGISTER_C = 0x53;
+  static const byte COMMAND_GET_FAST_RESPONSE_REGISTER_C = 0x53;
   
   // Command arguments count for reading the fast response register C.
-  static const uint8_t COMMAND_GET_FAST_RESPONSE_REGISTER_C_ARGUMENTS_COUNT = 1;
+  static const byte COMMAND_GET_FAST_RESPONSE_REGISTER_C_ARGUMENTS_COUNT = 1;
   
   // Command reply count for reading the fast response register C.
-  static const uint8_t COMMAND_GET_FAST_RESPONSE_REGISTER_C_REPLY_COUNT = 4;
+  static const byte COMMAND_GET_FAST_RESPONSE_REGISTER_C_REPLY_COUNT = 4;
 
   // Command for reading the fast response register D.
-  static const uint8_t COMMAND_GET_FAST_RESPONSE_REGISTER_D = 0x57;
+  static const byte COMMAND_GET_FAST_RESPONSE_REGISTER_D = 0x57;
   
   // Command arguments count for reading the fast response register D.
-  static const uint8_t COMMAND_GET_FAST_RESPONSE_REGISTER_D_ARGUMENTS_COUNT = 1;
+  static const byte COMMAND_GET_FAST_RESPONSE_REGISTER_D_ARGUMENTS_COUNT = 1;
   
   // Command reply count for reading the fast response register D.
-  static const uint8_t COMMAND_GET_FAST_RESPONSE_REGISTER_D_REPLY_COUNT = 4;
+  static const byte COMMAND_GET_FAST_RESPONSE_REGISTER_D_REPLY_COUNT = 4;
 
   // Command for loading data into the transmission FIFO.
-  static const uint8_t COMMAND_WRITE_TRANSMISSION_FIFO = 0x66;
+  static const byte COMMAND_WRITE_TRANSMISSION_FIFO = 0x66;
   
   // Command arguments count for loading data into the transmission
   // FIFO.
-  static const uint8_t COMMAND_WRITE_TRANSMISSION_FIFO_ARGUMENTS_COUNT = 3;
+  static const byte COMMAND_WRITE_TRANSMISSION_FIFO_ARGUMENTS_COUNT = 3;
 
   // Command for reading data from the reception FIFO.
-  static const uint8_t COMMAND_READ_RECEPTION_FIFO = 0x77;
+  static const byte COMMAND_READ_RECEPTION_FIFO = 0x77;
   
   // Command arguments count for reading data from the reception
   // FIFO.
-  static const uint8_t COMMAND_READ_RECEPTION_FIFO_ARGUMENTS_COUNT = 1;
+  static const byte COMMAND_READ_RECEPTION_FIFO_ARGUMENTS_COUNT = 1;
   
   // Command reply count for reading data from the reception FIFO.
-  static const uint8_t COMMAND_READ_RECEPTION_FIFO_REPLY_COUNT = 2;
+  static const byte COMMAND_READ_RECEPTION_FIFO_REPLY_COUNT = 2;
 
   // Transceiver commands argument fields.
   // Format: [COMMAND]_ARGUMENT_[BYTE]_[VALUE].
   // Arguments for COMMAND_START_RECEPTION (0x32).
-  static const uint8_t START_RECEPTION_ARGUMENT_NEXT_STATE_1_RECEPTION_TIMEOUT_STATE_NO_CHANGE = 0;
-  static const uint8_t START_RECEPTION_ARGUMENT_NEXT_STATE_2_RECEPTION_VALID_STATE_READY = 3;
-  static const uint8_t START_RECEPTION_ARGUMENT_NEXT_STATE_3_RECEPTION_INVALID_STATE_RECEPTION = 8;
+  static const byte START_RECEPTION_ARGUMENT_NEXT_STATE_1_RECEPTION_TIMEOUT_STATE_NO_CHANGE = 0;
+  static const byte START_RECEPTION_ARGUMENT_NEXT_STATE_2_RECEPTION_VALID_STATE_READY = 3;
+  static const byte START_RECEPTION_ARGUMENT_NEXT_STATE_3_RECEPTION_INVALID_STATE_RECEPTION = 8;
 
   // Transceiver commands replies masks.
   // Format: [COMMAND]_REPLY_[BYTE]_[BITFIELD]_BITMASK.
   // Masks for COMMAND_GET_INTERRUPTS_STATUS (0x20) reply.
-  static const uint8_t INTERRUPT_STATUS_REPLY_PACKET_HANDLER_PENDING_PACKET_RECEIVED_BITMASK = 0x10;
-  static const uint8_t INTERRUPT_STATUS_REPLY_PACKET_HANDLER_PENDING_PACKET_SENT_BITMASK = 0x20;
-  static const uint8_t INTERRUPT_STATUS_REPLY_CHIP_PENDING_COMMAND_ERROR_BITMASK = 0x8;
-  static const uint8_t INTERRUPT_STATUS_REPLY_CHIP_PENDING_CHIP_READY_BITMASK = 0x4;
-  static const uint8_t INTERRUPT_STATUS_REPLY_CHIP_STATUS_CHIP_READY_BITMASK = 0x4;
+  static const byte INTERRUPT_STATUS_REPLY_PACKET_HANDLER_PENDING_PACKET_RECEIVED_BITMASK = 0x10;
+  static const byte INTERRUPT_STATUS_REPLY_PACKET_HANDLER_PENDING_PACKET_SENT_BITMASK = 0x20;
+  static const byte INTERRUPT_STATUS_REPLY_CHIP_PENDING_COMMAND_ERROR_BITMASK = 0x8;
+  static const byte INTERRUPT_STATUS_REPLY_CHIP_PENDING_CHIP_READY_BITMASK = 0x4;
+  static const byte INTERRUPT_STATUS_REPLY_CHIP_STATUS_CHIP_READY_BITMASK = 0x4;
 
   // Transceiver commands arguments masks
   // Format: [COMMAND]_ARGUMENT_[BYTE]_[BITFIELD]_BITMASK.
   // Masks for COMMAND_ADC_READ (0x14) arguments.
-  static const uint8_t ADC_READ_ARGUMENT_READ_VOLTAGE_BITMASK = 0x8;
-  static const uint8_t ADC_READ_ARGUMENT_READ_TEMPERATURE_BITMASK = 0x10;
+  static const byte ADC_READ_ARGUMENT_READ_VOLTAGE_BITMASK = 0x8;
+  static const byte ADC_READ_ARGUMENT_READ_TEMPERATURE_BITMASK = 0x10;
   // Masks for COMMAND_GET_FIFO_STATUS (0x15) arguments.
-  static const uint8_t FIFO_STATUS_ARGUMENT_TRANSMISSION_FIFO_BITMASK = 0x1;
-  static const uint8_t FIFO_STATUS_ARGUMENT_RECEPTION_FIFO_BITMASK = 0x2;
+  static const byte FIFO_STATUS_ARGUMENT_TRANSMISSION_FIFO_BITMASK = 0x1;
+  static const byte FIFO_STATUS_ARGUMENT_RECEPTION_FIFO_BITMASK = 0x2;
    
   // Loads the patch image into the transceiver.
   // Requires the HAL reference of the transceiver to be issued
@@ -484,27 +484,27 @@ class ESAT_COMTransceiverCommandsClass
   // voltage and/or temperature). Also requires the HAL 
   // reference of the transceiver to be issued and returns the
   // ADC read value reply.
-  ADCReadingsReply getADCReading(ESAT_COMTransceiverHALClass& transceiver, uint8_t analogChannels);
+  ADCReadingsReply getADCReading(ESAT_COMTransceiverHALClass& transceiver, byte analogChannels);
   
   // Reads the Fast Response Registers starting with A register.
   // Requires the HAL reference of the transceiver to be issued
   // and returns the register content as a reply struct.
-  FastResponseRegisterAReply getFastResponseRegisterA(ESAT_COMTransceiverHALClass& transceiver, uint8_t responseByteCount);
+  FastResponseRegisterAReply getFastResponseRegisterA(ESAT_COMTransceiverHALClass& transceiver, byte responseByteCount);
   
   // Reads the Fast Response Registers starting with B register.
   // Requires the HAL reference of the transceiver to be issued
   // and returns the register content as a reply struct.
-  FastResponseRegisterBReply getFastResponseRegisterB(ESAT_COMTransceiverHALClass& transceiver, uint8_t responseByteCount);
+  FastResponseRegisterBReply getFastResponseRegisterB(ESAT_COMTransceiverHALClass& transceiver, byte responseByteCount);
   
   // Reads the Fast Response Registers starting with C register.
   // Requires the HAL reference of the transceiver to be issued
   // and returns the register content as a reply struct.
-  FastResponseRegisterCReply getFastResponseRegisterC(ESAT_COMTransceiverHALClass& transceiver, uint8_t responseByteCount);
+  FastResponseRegisterCReply getFastResponseRegisterC(ESAT_COMTransceiverHALClass& transceiver, byte responseByteCount);
   
   // Reads the Fast Response Registers starting with D register.
   // Requires the HAL reference of the transceiver to be issued
   // and returns the register content as a reply struct.
-  FastResponseRegisterDReply getFastResponseRegisterD(ESAT_COMTransceiverHALClass& transceiver, uint8_t responseByteCount);
+  FastResponseRegisterDReply getFastResponseRegisterD(ESAT_COMTransceiverHALClass& transceiver, byte responseByteCount);
   
   // Retrieves the current byte counts in the transmission and
   // reception FIFOs and resets them if desired.  Requires the
@@ -517,21 +517,21 @@ class ESAT_COMTransceiverCommandsClass
   // Also requires the HAL reference of the transceiver to be issued
   // and returns the interrupt status reply.
   InterruptStatusReply getInterruptStatus(ESAT_COMTransceiverHALClass&, 
-                                          uint8_t packetHandlerClearingPendingInterruptsMask, 
-                                          uint8_t modemClearingPendingInterruptsMask, 
-                                          uint8_t chipClearingPendingInterruptsMask);
+                                          byte packetHandlerClearingPendingInterruptsMask, 
+                                          byte modemClearingPendingInterruptsMask, 
+                                          byte chipClearingPendingInterruptsMask);
  
   // Retrieves the modem status and clears its pending
   // interrupts. Requires the HAL reference of the transceiver 
   // to be issued and returns the modem status reply.
-  ModemStatusReply getModemStatus(ESAT_COMTransceiverHALClass&, uint8_t clearPendingFlagsMask);
+  ModemStatusReply getModemStatus(ESAT_COMTransceiverHALClass&, byte clearPendingFlagsMask);
   
   // Reads a transceiver property. Requires the transceiver where to
   // reas, the property group number to be retrieved, the number of 
   // the property fields to be read (max. 12) and the initial field offset.
   // Requires the HAL reference of the transceiver to be issued
   // and returns the properties reply.
-  PropertiesReply getProperty(ESAT_COMTransceiverHALClass& transceiver, uint8_t group, uint8_t numProperties, uint8_t startingProperty);  
+  PropertiesReply getProperty(ESAT_COMTransceiverHALClass& transceiver, byte group, byte numProperties, byte startingProperty);  
   
   // Retrieves the basic information about the transceiver.
   // Requires the HAL reference of the transceiver to be issued
@@ -544,47 +544,47 @@ class ESAT_COMTransceiverCommandsClass
   
   // Reads data from the reception buffer. Requires the data length and
   // its storing buffer and the HAL reference of the transceiver to be issued.
-  void readReceptionFIFOBuffer(ESAT_COMTransceiverHALClass& transceiver, uint8_t length, uint8_t* dataReadBuffer);
+  void readReceptionFIFOBuffer(ESAT_COMTransceiverHALClass& transceiver, byte length, byte* dataReadBuffer);
   
   // Configures a transceiver property. Requires the transceiver HAL to be
   // configured, the property group number, the number of the property 
   // fields to update (max. 12), the initial field offset and the field's
   // contents buffer.    
-  ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError setProperty(ESAT_COMTransceiverHALClass& transceiver, uint8_t group, uint8_t numProperties, uint8_t startingProperty, uint8_t* properties);
+  ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError setProperty(ESAT_COMTransceiverHALClass& transceiver, byte group, byte numProperties, byte startingProperty, byte* properties);
   
   // Switches the transceiver to the reception state, thus being
   // able to receive packets. It needs the reception
   // channel on which to listen, the expected packet length,
   // and the HAL reference of the transceiver to be issued.
-  void startReception(ESAT_COMTransceiverHALClass& transceiver, uint8_t channel, uint16_t receptionLength);
+  void startReception(ESAT_COMTransceiverHALClass& transceiver, byte channel, word receptionLength);
   
   // Switches the transceiver to the transmission state and 
   // starts transmitting a packet. It needs the transmission
   // channel on which to transmit, the packet length and the 
   // HAL reference of the transceiver to be issued.
-  void startTransmission(ESAT_COMTransceiverHALClass& transceiver, uint8_t channel, uint16_t transmissionLength);
+  void startTransmission(ESAT_COMTransceiverHALClass& transceiver, byte channel, word transmissionLength);
   
   // Loads data into the trasmission FIFO buffer.
   // Requires the transmission hardware transceiver,
   // the data length and the data buffer.
-  void writeTransmissionFIFOBuffer(ESAT_COMTransceiverHALClass& transceiver, uint8_t length, uint8_t* dataToBeWritten);
+  void writeTransmissionFIFOBuffer(ESAT_COMTransceiverHALClass& transceiver, byte length, byte* dataToBeWritten);
    
   private:
   
   // ID of the patch image.
-  const uint16_t TRANSCEIVER_PATCH_ID = 0xCA90;
+  const word TRANSCEIVER_PATCH_ID = 0xCA90;
 
   // ID of the ROM to be patched.
-  const uint8_t TRANSCEIVER_PATCH_ROMID = 0x06;
+  const byte TRANSCEIVER_PATCH_ROMID = 0x06;
 
   // Sets the GPIO mode mask for the selected configuration.
-  uint8_t getGPIOConfigurationMask(ESAT_COMTransceiverCommandsClass::GPIOConfigurationArguments arguments);
+  byte getGPIOConfigurationMask(ESAT_COMTransceiverCommandsClass::GPIOConfigurationArguments arguments);
 
   // Sets the GPIO drive strength mask for the selected configuration.
-  uint8_t getGPIODriveStrengthMask(GPIODriveStrength strength);
+  byte getGPIODriveStrengthMask(GPIODriveStrength strength);
 
   // Sets the GPIO pull-up mask for the selected configuration.
-  uint8_t getGPIOPullUpMask(boolean pullUpEnabled);  
+  byte getGPIOPullUpMask(boolean pullUpEnabled);  
 };
 
 // Global instance of the ESAT_COMTransceiverCommandsClass.

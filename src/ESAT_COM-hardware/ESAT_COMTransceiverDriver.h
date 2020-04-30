@@ -109,7 +109,7 @@ class ESAT_COMTransceiverDriverClass
     const float MINIMUM_TRANSMISSION_POWER_RATE = 0.0;
     
     // Maximum packet length supported by radio transceiver.
-    static const uint8_t RADIO_MAX_PACKET_LENGTH = 129;
+    static const byte RADIO_MAX_PACKET_LENGTH = 129;
     
     // Constructor. Initializes the transceiver API software
     // and attaches it to a physical interface.    
@@ -118,7 +118,7 @@ class ESAT_COMTransceiverDriverClass
     // Processes the transmission (keeps filling the FIFO 
     // until packet is over); and the reception (if a 
     // packet has been received, retrieves it from the FIFO).
-    int8_t available();
+    signed char available();
     
     // Initializes the transceiver according to the selected 
     // mode (transmission or reception).
@@ -138,16 +138,16 @@ class ESAT_COMTransceiverDriverClass
     TransceiverErrorCode disableInterrupts();
        
     // Returns the configured channel.
-    uint8_t getChannel();
+    byte getChannel();
       
     // Returns the configured center frequency.
     float getFrequency();
     
     // Returns the current set modulation.
-    uint8_t getModulation();
+    byte getModulation();
     
     // Returns the transmission data source.
-    int8_t getModulationSource();
+    signed char getModulationSource();
     
     // Reads the last received signal strength indicator value.
     float getReceivedSignalStrengthIndicator();
@@ -164,20 +164,20 @@ class ESAT_COMTransceiverDriverClass
     // Retrieves the reception buffer pointer without
     // polling before wheter a packet has been received
     // or not, thus not holding the process.    
-    uint8_t* nonBlockingRead();  
+    byte* nonBlockingRead();  
     
     // Sends a packets without waiting for it to be sent, 
     // thus not holding the execution.
     // Returns if the process goes wrong.
-    TransceiverErrorCode nonBlockingWrite(uint8_t* msgBuf);     
+    TransceiverErrorCode nonBlockingWrite(byte* msgBuf);     
     
     // Polls for a packet to be received holding the
     // execution.
     // Return the reception buffer.
-    uint8_t* read();
+    byte* read();
        
     // Changes the radio channel.
-    TransceiverErrorCode setChannel(uint8_t channel);
+    TransceiverErrorCode setChannel(byte channel);
     
     // Changes the center frequency.
     // This function doesn't write the value to the transceiver.
@@ -187,10 +187,10 @@ class ESAT_COMTransceiverDriverClass
     TransceiverErrorCode setFrequency(float frequency);
     
     // Configures the transceiver lowest channel.
-    void setHighestChannel(uint8_t channel);
+    void setHighestChannel(byte channel);
     
     // Configures the transceiver highest channel.
-    void setLowestChannel(uint8_t channel);    
+    void setLowestChannel(byte channel);    
     
     // Changes modulation source.
     // Returns if the process goes wrong.
@@ -225,12 +225,12 @@ class ESAT_COMTransceiverDriverClass
     // Writes a packet and wait for it to be sent, 
     // either by ISR or by polling checking methods.
     // Returns if the process goes wrong.
-    TransceiverErrorCode write(uint8_t* msgBuf);
+    TransceiverErrorCode write(byte* msgBuf);
   
   private:
   
     // Clock frequency for computing the radio frequency.
-    const uint32_t CRYSTAL_FOR_FREQUENCY_COMPUTING = 30000000;
+    const unsigned long CRYSTAL_FOR_FREQUENCY_COMPUTING = 30000000;
     
     // Default radio frequency.
     const float DEFAULT_FREQUENCY = 433.0; // In MHz.
@@ -245,7 +245,7 @@ class ESAT_COMTransceiverDriverClass
     const float DEFAULT_TRANSMISSION_POWER_RATE = 100.0;
     
     // Maximum failed initialization sequences allowed.
-    const uint8_t MAXIMUM_FAILED_INITIALIZATIONS = 25;
+    const byte MAXIMUM_FAILED_INITIALIZATIONS = 25;
     
     // Maximum value for mapping the power rate to the transceiver values.
     const float MAXIMUM_POWER_VALUE = 127.0;
@@ -260,25 +260,25 @@ class ESAT_COMTransceiverDriverClass
     const float RECEPTION_LOSSES_dB = 130.0;
     
     // Highest channel allowed for the transceiver band.
-    uint8_t highestChannel = 31;
+    byte highestChannel = 31;
     
     // Lowest channel allowed for the transceiver band.
-    uint8_t lowestChannel = 0;
+    byte lowestChannel = 0;
     
     // Next bit of the manual bit stream.
-    uint8_t outputDataStreamNextBit;
+    byte outputDataStreamNextBit;
     
     // Indicates if there is received and unread data.
     boolean receptionAvailable;
     
     // Fifo reception buffer.
-    uint8_t receptionBuffer[RADIO_MAX_PACKET_LENGTH];
+    byte receptionBuffer[RADIO_MAX_PACKET_LENGTH];
     
     // Reception configuration object pointer.
     ESAT_COMTransceiverConfigurationClass* receptionConfigurationData;    
     
     // Interrupt flag for the reception transceiver.
-    static volatile uint8_t receptionInterruptFlag;
+    static volatile byte receptionInterruptFlag;
     
     // Radio hardware abstranction layer entity.
     ESAT_COMTransceiverHALClass* transceiver;
@@ -295,7 +295,7 @@ class ESAT_COMTransceiverDriverClass
     TransceiverMode transceiverOperationMode = notInitializedMode;
     
     // Transceiver radio channel.
-    uint8_t transceiverRadioChannel;
+    byte transceiverRadioChannel;
     
     // Transceiver radio central frequency.
     float transceiverFrequency = DEFAULT_FREQUENCY;
@@ -304,7 +304,7 @@ class ESAT_COMTransceiverDriverClass
     ESAT_COMTransceiverConfigurationClass* transmissionConfigurationData;    
     
     // Interrupt flag for the transmission transceiver.
-    static volatile uint8_t transmissionInterruptFlag;
+    static volatile byte transmissionInterruptFlag;
     
     // Indicates if a transmission is going on.
     boolean transmissionInProgress;
@@ -313,10 +313,10 @@ class ESAT_COMTransceiverDriverClass
     float transmissionPowerRate = DEFAULT_TRANSMISSION_POWER_RATE;     
      
     // Checks if there is a packet ready to be read.
-    int8_t checkReceptionAvailability();
+    signed char checkReceptionAvailability();
     
     // Checks if the last packet is already transmitted.
-    int8_t checkTransmissionAvailability();
+    signed char checkTransmissionAvailability();
                
     // Configures the transceiver using the pointed configuration.
     ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError initializeTransceiver(ESAT_COMTransceiverConfigurationClass* transceiverConfiguration);
@@ -337,14 +337,14 @@ class ESAT_COMTransceiverDriverClass
     // Selects the modulation source configuration
     // command according to the chosen modulation source.
     // Returns the modulation source command.
-    uint8_t switchModulationSource(ModulationSource source);
+    byte switchModulationSource(ModulationSource source);
     
     // Selects the modulation source configuration type 
     // according to the modulation type chosen. However
     // this function doesn't change the modulation at all. 
     // Only set the command bits according to the modulation.
     // Returns the modulation source command.
-    uint8_t switchModulationType(ModulationType type);  
+    byte switchModulationType(ModulationType type);  
     
     // Selects the configuration class acording to the
     // modulation chosen for the transmission channel.

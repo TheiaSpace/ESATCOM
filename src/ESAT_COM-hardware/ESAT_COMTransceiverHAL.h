@@ -45,13 +45,13 @@ class ESAT_COMTransceiverHALClass
   // required to communicate to the transceiver.
   // Requires the SPI module and the pins numbers.
   ESAT_COMTransceiverHALClass(SPIClass& spiBus, 
-                              uint8_t chipSelect,
-                              uint8_t interrupt,
-                              uint8_t shutdown,
-                              uint8_t gpio0,
-                              uint8_t gpio1,
-                              uint8_t gpio2,
-                              uint8_t gpio3);
+                              byte chipSelect,
+                              byte interrupt,
+                              byte shutdown,
+                              byte gpio0,
+                              byte gpio1,
+                              byte gpio2,
+                              byte gpio3);
   
   // Initializes the transceiver required software and hardware.
   // This function should be called before.
@@ -64,16 +64,16 @@ class ESAT_COMTransceiverHALClass
   void clearRTSCounter();
   
    // Tests if the clear to send line is high (1) or low (0).
-  uint8_t checkClearToSendPin(); 
+  byte checkClearToSendPin(); 
     
   // Tests if the interrupt line is high (1) or low (0).
-  uint8_t checkInterruptPin(); 
+  byte checkInterruptPin(); 
   
   // Turns the radio chip off by holding the SDN pin high.
   void disable();
   
   // Gets the interrupt pin number.
-  uint8_t getInterruptPin(); 
+  byte getInterruptPin(); 
   
   // Dessaserts the transceiver shutdown line.
   void powerUpTransceiver();
@@ -81,95 +81,95 @@ class ESAT_COMTransceiverHALClass
   // Retrieves data from the transceiver. Requires the
   // command for accessing to the data, the number of bytes
   // to retreive and the data storage pointer.
-  void readData(uint8_t command, uint8_t dataByteCount, uint8_t* data);
+  void readData(byte command, byte dataByteCount, byte* data);
   
   // Checks if transceiver is ready to accept commands.
   // Return if the transceiver is ready or not.
-  uint8_t requestToSend();
+  byte requestToSend();
   
   // Resets the transceiver by asserting and desasserting shutdown.
   void reset();
   
   // Polls for CTS and reads the last command response.
   // Requires the response expecte length and the storage pointer.
-  uint8_t retrieveResponse(uint8_t byteCount, uint8_t* data);  
+  byte retrieveResponse(byte byteCount, byte* data);  
   
   // Sets the transceiver chip select line.
   void setChipSelect();  
   
   // Sets the maximum failed RTS threshold.
-  void setRTSMaximumThreshold(uint32_t threshold);
+  void setRTSMaximumThreshold(unsigned long threshold);
   
   // Writes a bunch of bytes via SPI.
   // Requires the number of bytes to write and their
   // pointer location.
-  void SPIBulkWrite(uint8_t numBytes, uint8_t* data);
+  void SPIBulkWrite(byte numBytes, byte* data);
   
   // Reads a bunch of bytes via SPI.
   // Requires the number of bytes to read and their
   // storaging buffer.
-  void SPIBulkRead(uint8_t numBytes, uint8_t* data);
+  void SPIBulkRead(byte numBytes, byte* data);
   
   // Writes and reads a byte to the SPI bus simultaneously.
   // Requires the byte to write and returns the read one.
-  uint8_t SPIWriteReadByte(uint8_t toWrite);
+  byte SPIWriteReadByte(byte toWrite);
   
   // Polls for CTS and issues a command if the transceiver
   // is ready. Requires the command length and a pointer to it.
   // WARNING, IF NO CTS EXECUTION IS HOLD IN AN INFINITE LOOP.
-  void writeCommand(uint8_t byteCount, uint8_t* data);  
+  void writeCommand(byte byteCount, byte* data);  
    
   // Polls for CTS, issues a command if the transceiver
   // is ready and polls for its response. Requires both the command
   // and the response expected lengths and a pointer to them.
-  uint8_t writeCommandAndRetrieveResponse(uint8_t commandByteCount, uint8_t* commandData,
-                                          uint8_t responseByteCount, uint8_t* responseData);  
+  byte writeCommandAndRetrieveResponse(byte commandByteCount, byte* commandData,
+                                          byte responseByteCount, byte* responseData);  
                                           
   // Writes data to the transceiver. Requires the
   // command for loading the data, the
   // number of bytes to write and the pointer for
   // reading the data.
-  void writeData(uint8_t command, uint8_t dataByteCount, uint8_t* data);
+  void writeData(byte command, byte dataByteCount, byte* data);
   
   // Writes a bit from a data stream to the manual transmission GPIO2.
-  void writeDataStreamGPIO(uint8_t level);
+  void writeDataStreamGPIO(byte level);
          
   private:
   
   // Delay (in us) between requests to send chekings.
-  const uint16_t DELAY_BETWEEN_RTS_US = 20;
+  const word DELAY_BETWEEN_RTS_US = 20;
   
   // SPI clock divider value.
   // TODO
   // Test with 10
-  const uint8_t SPI_CLOCK_DIVIDER_FOR_STM32L4 = 20;
+  const byte SPI_CLOCK_DIVIDER_FOR_STM32L4 = 20;
   
   // Transceiver chip select pin.
-  uint8_t chipSelectPin;
+  byte chipSelectPin;
  
   // Transceiver interrupt pin.
-  uint8_t interruptPin;
+  byte interruptPin;
   
   // Transceiver shutdown pin.
-  uint8_t shutdownPin;      
+  byte shutdownPin;      
   
   // Transceiver GPIO 0 pin.
-  uint8_t gpio0Pin;
+  byte gpio0Pin;
   
   // Transceiver GPIO 1 pin.
-  uint8_t gpio1Pin;
+  byte gpio1Pin;
   
   // Transceiver GPIO 2 pin.
-  uint8_t gpio2Pin;
+  byte gpio2Pin;
   
   // Transceiver GPIO 3 pin.
-  uint8_t gpio3Pin;
+  byte gpio3Pin;
   
   // Number of requests to send before aborting communications.
-  uint32_t maximumRTS = 500;
+  unsigned long maximumRTS = 500;
   
   // Number of RTS performed.
-  uint32_t RTSCounter;
+  unsigned long RTSCounter;
 
   // Pointer to the hardware SPI instance.
   SPIClass* transceiverSPI;

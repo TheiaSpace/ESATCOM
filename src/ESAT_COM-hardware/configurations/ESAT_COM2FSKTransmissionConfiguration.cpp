@@ -324,10 +324,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureGlobalProperties(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 2;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_GLOBAL;
-  uint8_t offset = 0x00;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 2;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_GLOBAL;
+  byte offset = 0x00;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x52;
   cmdBuff[1] = 0x00;  
   ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError returnBuff = ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
@@ -335,7 +335,7 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
   {
     return returnBuff;
   }
-  const uint8_t numProperties2 = 1;
+  const byte numProperties2 = 1;
   offset = 0x03;
   cmdBuff[0] = 0x31;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties2, offset, cmdBuff);
@@ -343,10 +343,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureInterrupts(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 2;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_INTERRUPTS_CONTROL;
-  uint8_t offset = 0x00;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 2;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_INTERRUPTS_CONTROL;
+  byte offset = 0x00;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x01;
   cmdBuff[1] = 0x20;  
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
@@ -354,60 +354,60 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureFastResponseRegisterA(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 1;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_FAST_RESPONSE_REGISTERS_CONTROL;
-  uint8_t offset = 0x00;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 1;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_FAST_RESPONSE_REGISTERS_CONTROL;
+  byte offset = 0x00;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureFastResponseRegisterB(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 1;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_FAST_RESPONSE_REGISTERS_CONTROL;
-  uint8_t offset = 0x01;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 1;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_FAST_RESPONSE_REGISTERS_CONTROL;
+  byte offset = 0x01;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureFastResponseRegisterC(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 1;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_FAST_RESPONSE_REGISTERS_CONTROL;
-  uint8_t offset = 0x02;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 1;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_FAST_RESPONSE_REGISTERS_CONTROL;
+  byte offset = 0x02;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureFastResponseRegisterD(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 1;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_FAST_RESPONSE_REGISTERS_CONTROL;
-  uint8_t offset = 0x03;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 1;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_FAST_RESPONSE_REGISTERS_CONTROL;
+  byte offset = 0x03;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configurePreambleLength(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 1;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PREAMBLE;
-  uint8_t offset = 0x00;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 1;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PREAMBLE;
+  byte offset = 0x00;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x08;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configurePreamble(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 4;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PREAMBLE;
-  uint8_t offset = 0x01;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 4;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PREAMBLE;
+  byte offset = 0x01;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x14;
   cmdBuff[1] = 0x00;
   cmdBuff[2] = 0x0F;
@@ -417,10 +417,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configurePreamblePattern(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 4;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PREAMBLE;
-  uint8_t offset = 0x05;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 4;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PREAMBLE;
+  byte offset = 0x05;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   cmdBuff[1] = 0x00;
   cmdBuff[2] = 0x00;
@@ -430,10 +430,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureSyncWord(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 6;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_SYNC;
-  uint8_t offset = 0x00;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 6;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_SYNC;
+  byte offset = 0x00;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x13;
   cmdBuff[1] = 0xD6;
   cmdBuff[2] = 0xD6;
@@ -445,11 +445,11 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configurePacketCRC(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 1;
-  const uint8_t numProperties2 = 4;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
-  uint8_t offset = 0x00;
-  uint8_t cmdBuff[numProperties2];  
+  const byte numProperties = 1;
+  const byte numProperties2 = 4;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
+  byte offset = 0x00;
+  byte cmdBuff[numProperties2];  
   cmdBuff[0] = 0x00; 
   ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError returnBuff = ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
   if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
@@ -466,10 +466,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configurePacketWhitening(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 5;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
-  uint8_t offset = 0x01;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 5;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
+  byte offset = 0x01;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x01;
   cmdBuff[1] = 0x08;
   cmdBuff[2] = 0xFF;
@@ -480,10 +480,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configurePacket(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 2;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
-  uint8_t offset = 0x06;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 2;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
+  byte offset = 0x06;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x02;
   cmdBuff[1] = 0x00;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);  
@@ -492,10 +492,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configurePacketLength(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 3;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
-  uint8_t offset = 0x08;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 3;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
+  byte offset = 0x08;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   cmdBuff[1] = 0x00;
   cmdBuff[2] = 0x00;
@@ -504,10 +504,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configurePacketFIFOThresholds(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 2;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
-  uint8_t offset = 0x0B;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 2;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
+  byte offset = 0x0B;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x81;
   cmdBuff[1] = 0x30;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);    
@@ -515,10 +515,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configurePacketField1(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 4;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
-  uint8_t offset = 0x0D;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 4;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
+  byte offset = 0x0D;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   cmdBuff[1] = 0x81;
   cmdBuff[2] = 0x04;
@@ -528,10 +528,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configurePacketField2(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 4;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
-  uint8_t offset = 0x11;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 4;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
+  byte offset = 0x11;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   cmdBuff[1] = 0x00;
   cmdBuff[2] = 0x00;
@@ -541,10 +541,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configurePacketField3(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 4;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
-  uint8_t offset = 0x15;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 4;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
+  byte offset = 0x15;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   cmdBuff[1] = 0x00;
   cmdBuff[2] = 0x00;
@@ -554,10 +554,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configurePacketField4(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 4;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
-  uint8_t offset = 0x19;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 4;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
+  byte offset = 0x19;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   cmdBuff[1] = 0x00;
   cmdBuff[2] = 0x00;
@@ -567,10 +567,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configurePacketField5(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 4;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
-  uint8_t offset = 0x1D;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 4;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
+  byte offset = 0x1D;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   cmdBuff[1] = 0x00;
   cmdBuff[2] = 0x00;
@@ -580,10 +580,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configurePacketReceptionField1(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 4;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
-  uint8_t offset = 0x21;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 4;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
+  byte offset = 0x21;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   cmdBuff[1] = 0x00;
   cmdBuff[2] = 0x00;
@@ -593,10 +593,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configurePacketReceptionField2(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 4;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
-  uint8_t offset = 0x25;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 4;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
+  byte offset = 0x25;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   cmdBuff[1] = 0x00;
   cmdBuff[2] = 0x00;
@@ -606,10 +606,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configurePacketReceptionField3(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 4;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
-  uint8_t offset = 0x29;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 4;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
+  byte offset = 0x29;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   cmdBuff[1] = 0x00;
   cmdBuff[2] = 0x00;
@@ -619,10 +619,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configurePacketReceptionField4(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 4;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
-  uint8_t offset = 0x2D;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 4;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
+  byte offset = 0x2D;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   cmdBuff[1] = 0x00;
   cmdBuff[2] = 0x00;
@@ -632,10 +632,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configurePacketReceptionField5(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 4;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
-  uint8_t offset = 0x31;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 4;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_PACKET;
+  byte offset = 0x31;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   cmdBuff[1] = 0x00;
   cmdBuff[2] = 0x00;
@@ -645,40 +645,40 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemModulationType(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 1;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x00;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 1;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x00;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x02;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);  
 }
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemMappingControl(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 1;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x01;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 1;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x01;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);  
 }
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemDSMControl(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 1;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x02;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 1;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x02;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x07;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);  
 }
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemDataRate(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 3;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x03;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 3;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x03;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x01;
   cmdBuff[1] = 0x77;
   cmdBuff[2] = 0x00;
@@ -686,10 +686,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 }
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemTransmissionNCO(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 4;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x06;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 4;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x06;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x01;
   cmdBuff[1] = 0xC9;
   cmdBuff[2] = 0xC3;
@@ -698,10 +698,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 }
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemFrequencyDeviation(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 3;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x0A;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 3;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x0A;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   cmdBuff[1] = 0x00;
   cmdBuff[2] = 0xD2;
@@ -710,30 +710,30 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemTransmissionRampDown(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 1;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x18;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 1;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x18;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x01;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemMDMControl(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 1;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x19;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 1;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x19;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemIFControl(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 4;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x1A;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 4;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x1A;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x08;
   cmdBuff[1] = 0x03;
   cmdBuff[2] = 0x80;
@@ -742,10 +742,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 }
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemDecimationControl(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 3;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x1E;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 3;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x1E;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x30;
   cmdBuff[1] = 0x10;
   cmdBuff[2] = 0x00;
@@ -753,19 +753,19 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 }
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemIFPKDThresholds(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 1;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x21;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 1;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x21;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0xE8;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
 }
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemBCR(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 10;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x22;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 10;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x22;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   cmdBuff[1] = 0x82;
   cmdBuff[2] = 0x03;
@@ -781,10 +781,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemAFC(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 7;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x2C;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 7;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x2C;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   cmdBuff[1] = 0x12;
   cmdBuff[2] = 0x80;
@@ -797,11 +797,11 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemAGC(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 1;
-  const uint8_t numProperties2 = 3;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x35;
-  uint8_t cmdBuff[numProperties2];  
+  const byte numProperties = 1;
+  const byte numProperties2 = 3;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x35;
+  byte cmdBuff[numProperties2];  
   cmdBuff[0] = 0xE0; 
   ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError returnBuff = ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
   if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
@@ -817,10 +817,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemFSK4(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 5;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x3B;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 5;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x3B;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x80;
   cmdBuff[1] = 0x02;
   cmdBuff[2] = 0x28;
@@ -831,10 +831,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemOOK(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 4;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x40;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 4;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x40;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x29;
   cmdBuff[1] = 0x0C;
   cmdBuff[2] = 0xA4;
@@ -844,10 +844,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemRawEyeControl(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 3;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x45;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 3;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x45;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x03;
   cmdBuff[1] = 0x00;
   cmdBuff[2] = 0x99;
@@ -855,10 +855,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 }
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemAntennaDiversity(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 2;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x48;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 2;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x48;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x01;
   cmdBuff[1] = 0x00;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
@@ -866,12 +866,12 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemRSSI(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 1;
-  const uint8_t numProperties2 = 2;
-  const uint8_t numProperties3 = 1;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x4B;
-  uint8_t cmdBuff[numProperties2];  
+  const byte numProperties = 1;
+  const byte numProperties2 = 2;
+  const byte numProperties3 = 1;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x4B;
+  byte cmdBuff[numProperties2];  
   cmdBuff[0] = 0x06; 
   ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError returnBuff = ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
   if (returnBuff != ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS)
@@ -893,50 +893,50 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemRawSearch2(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 1;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x50;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 1;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x50;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x84;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff); 
 }
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemClockGeneratorBand(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 1;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x51;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 1;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x51;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x0A;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff); 
 }
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemSpikeDetector(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 1;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x54;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 1;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x54;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x03;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff); 
 }
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemOneShotAFC(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 1;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x55;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 1;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x55;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x07;
   return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff); 
 }
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureModemDSA(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 5;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-  uint8_t offset = 0x5B;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 5;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+  byte offset = 0x5B;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x40;
   cmdBuff[1] = 0x04;
   cmdBuff[2] = 0x06;
@@ -947,11 +947,11 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureReceptionFilter1Coefficients(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 12;
-  const uint8_t numProperties2 = 6;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM_FILTER_COEFFICIENTES;
-  uint8_t offset = 0x00;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 12;
+  const byte numProperties2 = 6;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM_FILTER_COEFFICIENTES;
+  byte offset = 0x00;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0xFF;
   cmdBuff[1] = 0xC4;
   cmdBuff[2] = 0x30;
@@ -981,11 +981,11 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureReceptionFilter2Coefficients(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 12;
-  const uint8_t numProperties2 = 6;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM_FILTER_COEFFICIENTES;
-  uint8_t offset = 0x12;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 12;
+  const byte numProperties2 = 6;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM_FILTER_COEFFICIENTES;
+  byte offset = 0x12;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0xFF;
   cmdBuff[1] = 0xC4;
   cmdBuff[2] = 0x30;
@@ -1015,10 +1015,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configurePowerAmplifier(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 4;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_POWER_AMPLIFIER;
-  uint8_t offset = 0x00;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 4;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_POWER_AMPLIFIER;
+  byte offset = 0x00;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x08;
   cmdBuff[1] = 0x7F;
   cmdBuff[2] = 0x00;
@@ -1028,10 +1028,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureSynthesizer(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 7;;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_SYNTHESIZER;
-  uint8_t offset = 0x00;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 7;;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_SYNTHESIZER;
+  byte offset = 0x00;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x2C;
   cmdBuff[1] = 0x0E;
   cmdBuff[2] = 0x0B;
@@ -1044,10 +1044,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureMatch1(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 3;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MATCH;
-  uint8_t offset = 0x00;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 3;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MATCH;
+  byte offset = 0x00;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   cmdBuff[1] = 0x00;
   cmdBuff[2] = 0x00;
@@ -1056,10 +1056,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureMatch2(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 3;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MATCH;
-  uint8_t offset = 0x03;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 3;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MATCH;
+  byte offset = 0x03;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   cmdBuff[1] = 0x00;
   cmdBuff[2] = 0x00;
@@ -1068,10 +1068,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureMatch3(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 3;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MATCH;
-  uint8_t offset = 0x06;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 3;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MATCH;
+  byte offset = 0x06;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   cmdBuff[1] = 0x00;
   cmdBuff[2] = 0x00;
@@ -1080,10 +1080,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureMatch4(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 3;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MATCH;
-  uint8_t offset = 0x09;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 3;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MATCH;
+  byte offset = 0x09;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x00;
   cmdBuff[1] = 0x00;
   cmdBuff[2] = 0x00;
@@ -1092,10 +1092,10 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmis
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COM2FSKTransmissionConfigurationClass::configureFrequencyControl(ESAT_COMTransceiverHALClass& transceiver)
 {
-  const uint8_t numProperties = 8;
-  const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_FREQUENCY_CONTROL;
-  uint8_t offset = 0x00;
-  uint8_t cmdBuff[numProperties];  
+  const byte numProperties = 8;
+  const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_FREQUENCY_CONTROL;
+  byte offset = 0x00;
+  byte cmdBuff[numProperties];  
   cmdBuff[0] = 0x39;
   cmdBuff[1] = 0x09;
   cmdBuff[2] = 0xEE;

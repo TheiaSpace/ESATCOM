@@ -25,13 +25,13 @@ ESAT_COMTransceiverHALClass::ESAT_COMTransceiverHALClass()
 }
 
 ESAT_COMTransceiverHALClass::ESAT_COMTransceiverHALClass(SPIClass& spiBus,
-                                                         const uint8_t chipSelect,
-                                                         const uint8_t interrupt,
-                                                         const uint8_t shutdown,
-                                                         const uint8_t gpio0,
-                                                         const uint8_t gpio1,
-                                                         const uint8_t gpio2,
-                                                         const uint8_t gpio3)
+                                                         const byte chipSelect,
+                                                         const byte interrupt,
+                                                         const byte shutdown,
+                                                         const byte gpio0,
+                                                         const byte gpio1,
+                                                         const byte gpio2,
+                                                         const byte gpio3)
 {
   transceiverSPI = &spiBus;
   chipSelectPin = chipSelect;
@@ -54,12 +54,12 @@ void ESAT_COMTransceiverHALClass::begin()
   transceiverSPI -> setClockDivider(SPI_CLOCK_DIVIDER_FOR_STM32L4);
 }
 
-uint8_t ESAT_COMTransceiverHALClass::checkClearToSendPin()
+byte ESAT_COMTransceiverHALClass::checkClearToSendPin()
 {
   return digitalRead(gpio1Pin);
 }
 
-uint8_t ESAT_COMTransceiverHALClass::checkInterruptPin()
+byte ESAT_COMTransceiverHALClass::checkInterruptPin()
 {
   return digitalRead(interruptPin);
 }
@@ -88,7 +88,7 @@ void ESAT_COMTransceiverHALClass::disable()
 #endif
 }
 
-uint8_t ESAT_COMTransceiverHALClass::getInterruptPin()
+byte ESAT_COMTransceiverHALClass::getInterruptPin()
 {
   return interruptPin;
 }
@@ -107,9 +107,9 @@ void ESAT_COMTransceiverHALClass::powerUpTransceiver()
   delay(10);
 }
 
-void ESAT_COMTransceiverHALClass::readData(uint8_t command, 
-                                           uint8_t dataByteCount, 
-                                           uint8_t* data)
+void ESAT_COMTransceiverHALClass::readData(byte command, 
+                                           byte dataByteCount, 
+                                           byte* data)
 {
   if (requestToSend())
   {
@@ -120,7 +120,7 @@ void ESAT_COMTransceiverHALClass::readData(uint8_t command,
   }
 }
 
-uint8_t ESAT_COMTransceiverHALClass::requestToSend()
+byte ESAT_COMTransceiverHALClass::requestToSend()
 {  
   do
   {    
@@ -147,7 +147,7 @@ void ESAT_COMTransceiverHALClass::reset()
   delay(10);
 }
 
-uint8_t ESAT_COMTransceiverHALClass::retrieveResponse(uint8_t byteCount, uint8_t* data)
+byte ESAT_COMTransceiverHALClass::retrieveResponse(byte byteCount, byte* data)
 {
   if (requestToSend())
   {
@@ -169,12 +169,12 @@ void ESAT_COMTransceiverHALClass::setChipSelect()
   digitalWrite(chipSelectPin, LOW);
 }
 
-void ESAT_COMTransceiverHALClass::setRTSMaximumThreshold(uint32_t threshold)
+void ESAT_COMTransceiverHALClass::setRTSMaximumThreshold(unsigned long threshold)
 {
   maximumRTS = threshold;
 }
 
-void ESAT_COMTransceiverHALClass::SPIBulkRead(uint8_t numBytes, uint8_t* data)
+void ESAT_COMTransceiverHALClass::SPIBulkRead(byte numBytes, byte* data)
 {
   while (numBytes--)
   {
@@ -182,7 +182,7 @@ void ESAT_COMTransceiverHALClass::SPIBulkRead(uint8_t numBytes, uint8_t* data)
   }
 }
 
-void ESAT_COMTransceiverHALClass::SPIBulkWrite(uint8_t numBytes, uint8_t* data)
+void ESAT_COMTransceiverHALClass::SPIBulkWrite(byte numBytes, byte* data)
 {
   while(numBytes--)
   {
@@ -190,12 +190,12 @@ void ESAT_COMTransceiverHALClass::SPIBulkWrite(uint8_t numBytes, uint8_t* data)
   }
 }
 
-uint8_t ESAT_COMTransceiverHALClass::SPIWriteReadByte(uint8_t toWrite)
+byte ESAT_COMTransceiverHALClass::SPIWriteReadByte(byte toWrite)
 {
   return transceiverSPI -> transfer(toWrite);
 }
 
-void ESAT_COMTransceiverHALClass::writeCommand(uint8_t byteCount, uint8_t* data)
+void ESAT_COMTransceiverHALClass::writeCommand(byte byteCount, byte* data)
 {
   if (requestToSend())
   {
@@ -211,16 +211,16 @@ void ESAT_COMTransceiverHALClass::writeCommand(uint8_t byteCount, uint8_t* data)
   }
 } 
 
-uint8_t ESAT_COMTransceiverHALClass::writeCommandAndRetrieveResponse(uint8_t commandByteCount,
-                                                                     uint8_t* commandData,
-                                                                     uint8_t responseByteCount,
-                                                                     uint8_t* responseData)
+byte ESAT_COMTransceiverHALClass::writeCommandAndRetrieveResponse(byte commandByteCount,
+                                                                     byte* commandData,
+                                                                     byte responseByteCount,
+                                                                     byte* responseData)
 {
   writeCommand(commandByteCount, commandData);
   return retrieveResponse(responseByteCount, responseData);
 }
 
-void ESAT_COMTransceiverHALClass::writeData(uint8_t command, uint8_t dataByteCount, uint8_t* data)
+void ESAT_COMTransceiverHALClass::writeData(byte command, byte dataByteCount, byte* data)
 {
   if (requestToSend())
   {
@@ -231,7 +231,7 @@ void ESAT_COMTransceiverHALClass::writeData(uint8_t command, uint8_t dataByteCou
   }
 }
 
-void ESAT_COMTransceiverHALClass::writeDataStreamGPIO(uint8_t level)
+void ESAT_COMTransceiverHALClass::writeDataStreamGPIO(byte level)
 {
   digitalWrite(gpio2Pin, level);
 }

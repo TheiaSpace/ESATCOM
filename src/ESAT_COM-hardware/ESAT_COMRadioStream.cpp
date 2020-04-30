@@ -74,7 +74,7 @@ void ESAT_COMRadioStreamClass::flush()
   TransmissionTransceiver.nonBlockingWrite(txBuffer); 
 }
 
-void ESAT_COMRadioStreamClass::initializeTXBuffer(uint8_t initValue)
+void ESAT_COMRadioStreamClass::initializeTXBuffer(byte initValue)
 {
   for (unsigned int index=1; 
       index < ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH; 
@@ -123,12 +123,12 @@ size_t ESAT_COMRadioStreamClass::read(ESAT_Buffer& inputBuffer)
     {
       return (size_t) readCounter;
     }
-    inputBuffer.write((uint8_t) receivedData);
+    inputBuffer.write((byte) receivedData);
   }
   return (size_t) readCounter;
 }
 
-size_t ESAT_COMRadioStreamClass::write (uint8_t datum)
+size_t ESAT_COMRadioStreamClass::write (byte datum)
 {  
   // If a transmission is pending nothing is written.
   if (TransmissionTransceiver.available() <= 0) 
@@ -146,7 +146,7 @@ size_t ESAT_COMRadioStreamClass::write (uint8_t datum)
   return 1;
 }
 
-size_t ESAT_COMRadioStreamClass::write(const uint8_t *buffer, size_t size)
+size_t ESAT_COMRadioStreamClass::write(const byte *buffer, size_t size)
 {  
   unsigned int index;
   // Copy the data to the transmission buffer.
@@ -169,7 +169,7 @@ size_t ESAT_COMRadioStreamClass::write(const uint8_t *buffer, size_t size)
   return index;
 }
 
-int8_t ESAT_COMRadioStreamClass::write(ESAT_Buffer& outputBuffer)
+signed char ESAT_COMRadioStreamClass::write(ESAT_Buffer& outputBuffer)
 {
   // Store the source buffer initial position.
   const unsigned long initialPosition = outputBuffer.position();
@@ -181,7 +181,7 @@ int8_t ESAT_COMRadioStreamClass::write(ESAT_Buffer& outputBuffer)
   }
   // Set length field.
   txBuffer[0] = index;
-  int8_t availableBuffer = TransmissionTransceiver.available();
+  signed char availableBuffer = TransmissionTransceiver.available();
   // If a transmission is pending or no bytes were written abort transmission.
   if (availableBuffer <= 0 || index == 0)
   {

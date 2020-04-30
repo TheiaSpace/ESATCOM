@@ -44,12 +44,12 @@ class ESAT_COMTransceiverConfigurationClass
     // Configures the transmission power property to the selected transceiver.
     // Requires the transceiver HAL and the power value. Returns any possible error.
     ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError setTransmissionPower(ESAT_COMTransceiverHALClass& transceiver,
-                                                                                    uint8_t power)
+                                                                                    byte power)
     {
-      const uint8_t numProperties = 2;
-      const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_POWER_AMPLIFIER;
-      const uint8_t offset = ESAT_COMTransceiverPropertiesClass::PARAMETER_POWER_AMPLIFIER_POWER_LEVEL;
-      uint8_t cmdBuff[numProperties];
+      const byte numProperties = 2;
+      const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_POWER_AMPLIFIER;
+      const byte offset = ESAT_COMTransceiverPropertiesClass::PARAMETER_POWER_AMPLIFIER_POWER_LEVEL;
+      byte cmdBuff[numProperties];
       cmdBuff[0] = power;
       cmdBuff[1] = 0;
       return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
@@ -60,12 +60,12 @@ class ESAT_COMTransceiverConfigurationClass
     // Requires the transceiver HAL and the clock generator band. Returns 
     // any possible error.
     ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureClockGenerator(ESAT_COMTransceiverHALClass& transceiver,
-                                                                                        uint8_t clkGenBand)
+                                                                                        byte clkGenBand)
     {
-      const uint8_t numProperties = 1;
-      const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-      const uint8_t offset = ESAT_COMTransceiverPropertiesClass::PARAMETER_MODEM_CLOCK_GENERATOR_BAND;
-      uint8_t cmdBuff[numProperties];     
+      const byte numProperties = 1;
+      const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+      const byte offset = ESAT_COMTransceiverPropertiesClass::PARAMETER_MODEM_CLOCK_GENERATOR_BAND;
+      byte cmdBuff[numProperties];     
       cmdBuff[0] = clkGenBand | ESAT_COMTransceiverPropertiesClass::PARAMETER_MODEM_CLOCK_GENERATOR_BAND_HIGH_PERFORMANCE_MASK;
       return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
     }
@@ -74,15 +74,15 @@ class ESAT_COMTransceiverConfigurationClass
     // Requires the transceiver HAL and the central frequency. Returns 
     // any possible error.
     ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError setFrequency(ESAT_COMTransceiverHALClass& transceiver,
-                                                                             uint8_t PLLInteger,
-                                                                             uint8_t PLLFractionalMSB,
-                                                                             uint8_t PLLFractionalMiddle,
-                                                                             uint8_t PLLFractionalLSB)
+                                                                             byte PLLInteger,
+                                                                             byte PLLFractionalMSB,
+                                                                             byte PLLFractionalMiddle,
+                                                                             byte PLLFractionalLSB)
     {
-      const uint8_t numProperties = 4;
-      const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_FREQUENCY_CONTROL;
-      const uint8_t offset = ESAT_COMTransceiverPropertiesClass::PARAMETER_FREQUENCY_CONTROL_INTEGER;
-      uint8_t cmdBuff[numProperties];
+      const byte numProperties = 4;
+      const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_FREQUENCY_CONTROL;
+      const byte offset = ESAT_COMTransceiverPropertiesClass::PARAMETER_FREQUENCY_CONTROL_INTEGER;
+      byte cmdBuff[numProperties];
       cmdBuff[0] = PLLInteger;
       cmdBuff[1] = PLLFractionalMSB;
       cmdBuff[2] = PLLFractionalMiddle;
@@ -94,12 +94,12 @@ class ESAT_COMTransceiverConfigurationClass
     // Requires the transceiver HAL and the modulation source value. Returns 
     // any possible error.
     ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModulationSource(ESAT_COMTransceiverHALClass& transceiver,
-                                                                                          uint8_t modulationSourceMask)
+                                                                                          byte modulationSourceMask)
     {
-      const uint8_t numProperties = 1;
-      const uint8_t group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
-      const uint8_t offset = ESAT_COMTransceiverPropertiesClass::PARAMETER_MODEM_MODULATION_TYPE;
-      uint8_t cmdBuff[numProperties];
+      const byte numProperties = 1;
+      const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
+      const byte offset = ESAT_COMTransceiverPropertiesClass::PARAMETER_MODEM_MODULATION_TYPE;
+      byte cmdBuff[numProperties];
       cmdBuff[0] = modulationSourceMask;
       return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
     }

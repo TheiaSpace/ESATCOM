@@ -73,35 +73,35 @@ class ESAT_COMRadioStreamClass: public Stream
   // Checks if the transmitter is ready and then writes a
   // single byte to it to inmediately transmit it.
   // Returns the number of successfully written bytes (0 or 1).
-  size_t write(uint8_t datum);
+  size_t write(byte datum);
   
   // Checks if the transmitter is ready and then writes up 
   // to size bytes to it to inmediately start their transmission.
   // Returnd the number of successfully written bytes.
-  size_t write(const uint8_t *buffer, size_t size);
+  size_t write(const byte *buffer, size_t size);
 
   // Checks if the transmitter is ready and then writes up 
   // to ESAT_Buffer::availableBytes to it to inmediately start 
   // their transmission. Returns the number of successfully 
   // written bytes.
-  int8_t write(ESAT_Buffer& outputBuffer);
+  signed char write(ESAT_Buffer& outputBuffer);
     
   private:
   
   // Transmission buffer initialization value.
-  const uint8_t DEFAULT_TX_BUFFER_VALUE = 0xFF;
+  const byte DEFAULT_TX_BUFFER_VALUE = 0xFF;
 
   // Pointer to the last read byte.
-  uint8_t* lastReadByte;
+  byte* lastReadByte;
   
   // Number of bytes ready to be read.
   int rxBufferAvailableBytes;
   
   // Transmission buffer.
-  uint8_t txBuffer[ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH];
+  byte txBuffer[ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH];
   
   // Fills the transmission buffer with the initialization value.
-  void initializeTXBuffer(uint8_t initValue);
+  void initializeTXBuffer(byte initValue);
   
  };
  

@@ -43,7 +43,7 @@ ESAT_COMTransceiverDriverClass::ESAT_COMTransceiverDriverClass(ESAT_COMTransceiv
   outputDataStreamNextBit = 0;
 }
 
-int8_t ESAT_COMTransceiverDriverClass::available(void)
+signed char ESAT_COMTransceiverDriverClass::available(void)
 {
   switch (transceiverOperationMode)
   {
@@ -155,7 +155,7 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   return noError;
 }
 
-int8_t ESAT_COMTransceiverDriverClass::checkReceptionAvailability()
+signed char ESAT_COMTransceiverDriverClass::checkReceptionAvailability()
 {
   ESAT_COMTransceiverCommandsClass::InterruptStatusReply intStatusReply = ESAT_COMTransceiverCommands.getInterruptStatus(*transceiver, 0, 0, 0);
   // Check if the packet is fully received.
@@ -173,7 +173,7 @@ int8_t ESAT_COMTransceiverDriverClass::checkReceptionAvailability()
   
 }
 
-int8_t ESAT_COMTransceiverDriverClass::checkTransmissionAvailability()
+signed char ESAT_COMTransceiverDriverClass::checkTransmissionAvailability()
 {
   ESAT_COMTransceiverCommandsClass::InterruptStatusReply intStatusReply =  ESAT_COMTransceiverCommands.getInterruptStatus(*transceiver, 0, 0, 0);
   // Check if the packet is fully sent.
@@ -219,7 +219,7 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   }
 }
 
-uint8_t ESAT_COMTransceiverDriverClass::getChannel()
+byte ESAT_COMTransceiverDriverClass::getChannel()
 {
   return transceiverRadioChannel;
 }
@@ -229,7 +229,7 @@ float ESAT_COMTransceiverDriverClass::getFrequency()
   return transceiverFrequency;    
 }
 
-uint8_t ESAT_COMTransceiverDriverClass::getModulation()
+byte ESAT_COMTransceiverDriverClass::getModulation()
 {
   switch(transceiverModulationType)    
   {
@@ -264,7 +264,7 @@ uint8_t ESAT_COMTransceiverDriverClass::getModulation()
   }
 }
 
-int8_t ESAT_COMTransceiverDriverClass::getModulationSource()
+signed char ESAT_COMTransceiverDriverClass::getModulationSource()
 {
   if (transceiverOperationMode != ESAT_COMTransceiverDriverClass::TXMode)
   {
@@ -349,7 +349,7 @@ float ESAT_COMTransceiverDriverClass::getTransmissionPowerRate()
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverDriverClass::initializeTransceiver(ESAT_COMTransceiverConfigurationClass* transceiverConfiguration)
 { 
   ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError error;
-  uint8_t failedInitializationCounter = 0;
+  byte failedInitializationCounter = 0;
   do
   {
     transceiver -> reset();  
@@ -390,14 +390,14 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverD
   return error;   
 }
 
-uint8_t* ESAT_COMTransceiverDriverClass::nonBlockingRead(void)
+byte* ESAT_COMTransceiverDriverClass::nonBlockingRead(void)
 {
     receptionAvailable = false;
     startReception();
     return receptionBuffer;  
 }
 
-ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::nonBlockingWrite(uint8_t* msgBuf)
+ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::nonBlockingWrite(byte* msgBuf)
 {
   if (transceiverOperationMode != ESAT_COMTransceiverDriverClass::TXMode)
   {
@@ -417,7 +417,7 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   return ESAT_COMTransceiverDriverClass::noError;
 }
 
-uint8_t* ESAT_COMTransceiverDriverClass::read(void)
+byte* ESAT_COMTransceiverDriverClass::read(void)
 {
   while(!available());
   receptionAvailable = false;
@@ -425,7 +425,7 @@ uint8_t* ESAT_COMTransceiverDriverClass::read(void)
   return receptionBuffer;  
 }
 
-ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::setChannel(uint8_t channel)
+ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::setChannel(byte channel)
 {
   if (channel < lowestChannel || channel > highestChannel)
   {
@@ -442,12 +442,12 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   return noError;
 }
 
-void ESAT_COMTransceiverDriverClass::setHighestChannel(uint8_t channel)
+void ESAT_COMTransceiverDriverClass::setHighestChannel(byte channel)
 {
   highestChannel = channel;
 }
     
-void ESAT_COMTransceiverDriverClass::setLowestChannel(uint8_t channel)
+void ESAT_COMTransceiverDriverClass::setLowestChannel(byte channel)
 {
   lowestChannel = channel;
 }
@@ -473,8 +473,8 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
       return wrongModeError;
     }    
   }  
-  uint8_t modulationSourceMask = 0;  
-  uint8_t modulationTypeMask = 0;    
+  byte modulationSourceMask = 0;  
+  byte modulationTypeMask = 0;    
   // Four level modulations aren't supported if GPIOs are used as modulation source.
   if ((modulationSource != fifo && modulationSource != randomGenerator) && (transceiverModulationType == fourFSK || transceiverModulationType == fourGaussianFSK)) 
   {
@@ -498,7 +498,7 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   {
     return wrongModeError;
   }  
-  return translateLowLevelDriverError(transceiverConfiguration -> configureModulationSource(*transceiver, (uint8_t)(modulationSourceMask | modulationTypeMask)));
+  return translateLowLevelDriverError(transceiverConfiguration -> configureModulationSource(*transceiver, (byte)(modulationSourceMask | modulationTypeMask)));
 }
 
 ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::setModulationType(ESAT_COMTransceiverDriverClass::ModulationType modulationType)
@@ -554,7 +554,7 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   return noError;
 }
 
-uint8_t  ESAT_COMTransceiverDriverClass::switchModulationSource(ESAT_COMTransceiverDriverClass::ModulationSource source)
+byte  ESAT_COMTransceiverDriverClass::switchModulationSource(ESAT_COMTransceiverDriverClass::ModulationSource source)
 {    
   switch(source)
   {
@@ -605,7 +605,7 @@ uint8_t  ESAT_COMTransceiverDriverClass::switchModulationSource(ESAT_COMTranscei
   }
 }
 
-uint8_t  ESAT_COMTransceiverDriverClass::switchModulationType(ESAT_COMTransceiverDriverClass::ModulationType type)
+byte  ESAT_COMTransceiverDriverClass::switchModulationType(ESAT_COMTransceiverDriverClass::ModulationType type)
 {
   switch(type)    
   {
@@ -740,8 +740,8 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   }   
   // See Si446x Data Sheet section 5.3.1.
   // Also the Si446x PLL Synthesizer / VCO_CNT Calculator Rev 0.4.
-  uint8_t band;
-  uint8_t outdiv;
+  byte band;
+  byte outdiv;
   // Non-continuous frequency bands.
    if (frequency <= 1050.0 && frequency >= 850.0)
   {
@@ -783,7 +783,7 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   unsigned int pll_fractional_msb = pll_fractional / 0x10000; // And is assigned "properly" to the registers.
   unsigned int pll_fractional_middle = (pll_fractional - pll_fractional_msb * 0x10000) / 0x100;
   unsigned int pll_fractional_lsb = (pll_fractional - pll_fractional_msb * 0x10000 - pll_fractional_middle * 0x100);  
-  return translateLowLevelDriverError(transceiverConfiguration -> setFrequency(*transceiver, (uint8_t)pll_integer, (uint8_t)pll_fractional_msb, (uint8_t)pll_fractional_middle, (uint8_t)pll_fractional_lsb));
+  return translateLowLevelDriverError(transceiverConfiguration -> setFrequency(*transceiver, (byte)pll_integer, (byte)pll_fractional_msb, (byte)pll_fractional_middle, (byte)pll_fractional_lsb));
 } 
 
 void ESAT_COMTransceiverDriverClass::updateManualDataStream()
@@ -813,10 +813,10 @@ void ESAT_COMTransceiverDriverClass::updateManualDataStream()
 ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::updateTransmissionPower()
 {
   const float mappedPowerValue = (transmissionPowerRate / MAXIMUM_TRANSMISSION_POWER_RATE) * MAXIMUM_POWER_VALUE; 
-  return translateLowLevelDriverError(transmissionConfigurationData -> setTransmissionPower(*transceiver, (uint8_t) mappedPowerValue)); 
+  return translateLowLevelDriverError(transmissionConfigurationData -> setTransmissionPower(*transceiver, (byte) mappedPowerValue)); 
 }
 
-ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::write(uint8_t* msgBuf)
+ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::write(byte* msgBuf)
 {
   if (transceiverOperationMode != TXMode)
   {
@@ -829,10 +829,10 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   return noError;
 }
 
-volatile uint8_t ESAT_COMTransceiverDriverClass::receptionInterruptFlag;
+volatile byte ESAT_COMTransceiverDriverClass::receptionInterruptFlag;
 
 ESAT_COMTransceiverDriverClass ReceptionTransceiver(ReceptionTransceiverLowLevelDriver);
 
-volatile uint8_t ESAT_COMTransceiverDriverClass::transmissionInterruptFlag;
+volatile byte ESAT_COMTransceiverDriverClass::transmissionInterruptFlag;
 
 ESAT_COMTransceiverDriverClass TransmissionTransceiver(TransmissionTransceiverLowLevelDriver);

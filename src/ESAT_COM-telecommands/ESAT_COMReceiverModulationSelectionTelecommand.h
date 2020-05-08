@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -18,16 +18,16 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ESAT_COMReceiver2GFSKModulationSelectionTelecommand_h
-#define ESAT_COMReceiver2GFSKModulationSelectionTelecommand_h
+#ifndef ESAT_COMReceiverModulationSelectionTelecommand_h
+#define ESAT_COMReceiverModulationSelectionTelecommand_h
 
 #include <Arduino.h>
 #include <ESAT_CCSDSTelecommandPacketHandler.h>
 #include <ESAT_SemanticVersionNumber.h>
 
-// Telecommand handler for COM_RECEIVER_2GFSK_MODULATION_SELECTION.
+// Telecommand handler for COM_RECEIVER__MODULATION_SELECTION.
 // Used by ESAT_COM.
-class ESAT_COMReceiver2GFSKModulationSelectionTelecommandClass: public ESAT_CCSDSTelecommandPacketHandler
+class ESAT_COMReceiverModulationSelectionTelecommandClass: public ESAT_CCSDSTelecommandPacketHandler
 {
   public:
     // Handle a telecommand packet.
@@ -42,7 +42,7 @@ class ESAT_COMReceiver2GFSKModulationSelectionTelecommandClass: public ESAT_CCSD
     // match.
     byte packetIdentifier()
     {
-      return 0x32;
+      return 0x30;
     }
 
     // Return the version number of this telecommand handler.
@@ -55,8 +55,8 @@ class ESAT_COMReceiver2GFSKModulationSelectionTelecommandClass: public ESAT_CCSD
     }
 };
 
-// Global instance of ESAT_COMReceiver2GFSKModulationSelectionTelecommandClass.
+// Global instance of ESAT_COMReceiverModulationSelectionTelecommandClass.
 // Used by ESAT_COM.
-extern ESAT_COMReceiver2GFSKModulationSelectionTelecommandClass ESAT_COMReceiver2GFSKModulationSelectionTelecommand;
+extern ESAT_COMReceiverModulationSelectionTelecommandClass ESAT_COMReceiverModulationSelectionTelecommand;
 
-#endif /* ESAT_COMReceiver2GFSKModulationSelectionTelecommand_h */
+#endif /* ESAT_COMReceiverModulationSelectionTelecommand_h */

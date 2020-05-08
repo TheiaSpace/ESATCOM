@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -18,16 +18,16 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ESAT_COMTransmitter4FSKModulationSelectionTelecommand_h
-#define ESAT_COMTransmitter4FSKModulationSelectionTelecommand_h
+#ifndef ESAT_COMTransmitterModulationSelectionTelecommand_h
+#define ESAT_COMTransmitterModulationSelectionTelecommand_h
 
 #include <Arduino.h>
 #include <ESAT_CCSDSTelecommandPacketHandler.h>
 #include <ESAT_SemanticVersionNumber.h>
 
-// Telecommand handler for COM_TRANSMITTER_4FSK_MODULATION_SELECTION.
+// Telecommand handler for COM_TRANSMITTER_MODULATION_SELECTION.
 // Used by ESAT_COM.
-class ESAT_COMTransmitter4FSKModulationSelectionTelecommandClass: public ESAT_CCSDSTelecommandPacketHandler
+class ESAT_COMTransmitterModulationSelectionTelecommandClass: public ESAT_CCSDSTelecommandPacketHandler
 {
   public:
     // Handle a telecommand packet.
@@ -42,7 +42,7 @@ class ESAT_COMTransmitter4FSKModulationSelectionTelecommandClass: public ESAT_CC
     // match.
     byte packetIdentifier()
     {
-      return 0x13;
+      return 0x10;
     }
 
     // Return the version number of this telecommand handler.
@@ -55,8 +55,8 @@ class ESAT_COMTransmitter4FSKModulationSelectionTelecommandClass: public ESAT_CC
     }
 };
 
-// Global instance of ESAT_COMTransmitter4FSKModulationSelectionTelecommand.
+// Global instance of ESAT_COMTransmitterModulationSelectionTelecommandClass.
 // Used by ESAT_COM.
-extern ESAT_COMTransmitter4FSKModulationSelectionTelecommandClass ESAT_COMTransmitter4FSKModulationSelectionTelecommand;
+extern ESAT_COMTransmitterModulationSelectionTelecommandClass ESAT_COMTransmitterModulationSelectionTelecommand;
 
-#endif /* ESAT_COMTransmitter4FSKModulationSelectionTelecommand_h */
+#endif /* ESAT_COMTransmitterModulationSelectionTelecommand_h */

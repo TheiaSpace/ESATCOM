@@ -18,16 +18,16 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ESAT_COMTransmitterDisableRandomGeneratorTelecommand_h
-#define ESAT_COMTransmitterDisableRandomGeneratorTelecommand_h
+#ifndef ESAT_COMTransmitterDataSourceSelectionTelecommand_h
+#define ESAT_COMTransmitterDataSourceSelectionTelecommand_h
 
 #include <Arduino.h>
 #include <ESAT_CCSDSTelecommandPacketHandler.h>
 #include <ESAT_SemanticVersionNumber.h>
 
-// Telecommand handler for COM_TRANSMITTER_DISABLE.
+// Telecommand handler for COM_TRANSMITTER_DATA_SOURCE_SELECTION.
 // Used by ESAT_COM.
-class ESAT_COMTransmitterDisableRandomGeneratorTelecommandClass: public ESAT_CCSDSTelecommandPacketHandler
+class ESAT_COMTransmitterDataSourceSelectionTelecommandClass: public ESAT_CCSDSTelecommandPacketHandler
 {
   public:
     // Handle a telecommand packet.
@@ -55,8 +55,8 @@ class ESAT_COMTransmitterDisableRandomGeneratorTelecommandClass: public ESAT_CCS
     }
 };
 
-// Global instance of ESAT_COMTransmitterDisableRandomGeneratorTelecommandClass.
+// Global instance of ESAT_COMTransmitterDataSourceSelectionTelecommandClass.
 // Used by ESAT_COM.
-extern ESAT_COMTransmitterDisableRandomGeneratorTelecommandClass ESAT_COMTransmitterDisableRandomGeneratorTelecommand;
+extern ESAT_COMTransmitterDataSourceSelectionTelecommandClass ESAT_COMTransmitterDataSourceSelectionTelecommand;
 
-#endif /* ESAT_COMTransmitterDisableRandomGeneratorTelecommand_h */
+#endif /* ESAT_COMTransmitterDataSourceSelectionTelecommand_h */

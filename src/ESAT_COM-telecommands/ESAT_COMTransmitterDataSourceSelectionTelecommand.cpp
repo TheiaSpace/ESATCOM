@@ -19,6 +19,7 @@
  */
 
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterDataSourceSelectionTelecommand.h"
+#include "../ESAT_COM-hardware/ESAT_COMRadioStream.h"
 #include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 
 boolean ESAT_COMTransmitterDataSourceSelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)

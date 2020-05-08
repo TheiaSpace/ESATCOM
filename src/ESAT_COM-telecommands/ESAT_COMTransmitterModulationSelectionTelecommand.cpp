@@ -34,7 +34,7 @@ boolean ESAT_COMTransmitterModulationSelectionTelecommandClass::handleUserData(E
     case 1:  
       TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode,ESAT_COMTransceiverDriverClass::twoFSK);
       ESAT_COMRadioStream.beginWriting();
-      break:
+      break;
     case 2:
       TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::twoGaussianFSK);
       ESAT_COMRadioStream.beginWriting();

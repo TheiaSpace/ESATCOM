@@ -30,30 +30,18 @@
 #include "ESAT_COM-telecommands/ESAT_COMEnableTelemetryTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMSetTimeTelecommand.h"
 // Receiver telecommands.
-#include "ESAT_COM-telecommands/ESAT_COMReceiver2FSKModulationSelectionTelecommand.h"
-#include "ESAT_COM-telecommands/ESAT_COMReceiver2GFSKModulationSelectionTelecommand.h"
-#include "ESAT_COM-telecommands/ESAT_COMReceiver4FSKModulationSelectionTelecommand.h"
-#include "ESAT_COM-telecommands/ESAT_COMReceiver4GFSKModulationSelectionTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMReceiverChannelSelectionTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMReceiverEnableTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMReceiverDisableTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMReceiverFrequencySelectionTelecommand.h"
-#include "ESAT_COM-telecommands/ESAT_COMReceiverOOKModulationSelectionTelecommand.h"
+#include "ESAT_COM-telecommands/ESAT_COMReceiverModulationSelectionTelecommand.h"
 // Transmitter telecommands.
-#include "ESAT_COM-telecommands/ESAT_COMTransmitter2FSKModulationSelectionTelecommand.h"
-#include "ESAT_COM-telecommands/ESAT_COMTransmitter2GFSKModulationSelectionTelecommand.h"
-#include "ESAT_COM-telecommands/ESAT_COMTransmitter4FSKModulationSelectionTelecommand.h"
-#include "ESAT_COM-telecommands/ESAT_COMTransmitter4GFSKModulationSelectionTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterChannelSelectionTelecommand.h"
-#include "ESAT_COM-telecommands/ESAT_COMTransmitterContinuousWaveSelectionTelecommand.h"
-#include "ESAT_COM-telecommands/ESAT_COMTransmitterDisableRandomGeneratorTelecommand.h"
-#include "ESAT_COM-telecommands/ESAT_COMTransmitterEnableRandomGeneratorTelecommand.h"
-#include "ESAT_COM-telecommands/ESAT_COMTransmitterDisableModulationTestModeTelecommand.h"
-#include "ESAT_COM-telecommands/ESAT_COMTransmitterEnableModulationTestModeTelecommand.h"
+#include "ESAT_COM-telecommands/ESAT_COMTransmitterDataSourceSelectionTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterDisableTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterEnableTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterFrequencySelectionTelecommand.h"
-#include "ESAT_COM-telecommands/ESAT_COMTransmitterOOKModulationSelectionTelecommand.h"
+#include "ESAT_COM-telecommands/ESAT_COMTransmitterModulationSelectionTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterTransmissionPowerAdjustmentTelecommand.h"
 // Telemetries.
 #include "ESAT_COM-telemetry/ESAT_COMHousekeepingTelemetry.h"
@@ -111,31 +99,19 @@ void ESAT_COMClass::beginTelecommands()
   ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMEnableTelemetryTelecommand);
   ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMSetTimeTelecommand);
   // Reception telecommands.
-  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMReceiverOOKModulationSelectionTelecommand);
-  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMReceiver2FSKModulationSelectionTelecommand);
-  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMReceiver2GFSKModulationSelectionTelecommand);
-  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMReceiver4FSKModulationSelectionTelecommand);
-  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMReceiver4GFSKModulationSelectionTelecommand);
   ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMReceiverChannelSelectionTelecommand);
   ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMReceiverDisableTelecommand);
   ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMReceiverEnableTelecommand);
   ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMReceiverFrequencySelectionTelecommand); 
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMReceiverModulationSelectionTelecommand);
   // Transmission telecommands.
-  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterOOKModulationSelectionTelecommand);
-  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitter2FSKModulationSelectionTelecommand);
-  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitter2GFSKModulationSelectionTelecommand);
-  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitter4FSKModulationSelectionTelecommand);
-  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitter4GFSKModulationSelectionTelecommand);
   ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterChannelSelectionTelecommand);
-  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterDisableRandomGeneratorTelecommand);
-  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterEnableRandomGeneratorTelecommand);  
-  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterDisableModulationTestModeTelecommand);
-  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterEnableModulationTestModeTelecommand);  
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterDataSourceSelectionTelecommand);
   ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterDisableTelecommand);
   ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterEnableTelecommand); 
   ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterFrequencySelectionTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterModulationSelectionTelecommand);
   ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterTransmissionPowerAdjustmentTelecommand);
-  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMTransmitterContinuousWaveSelectionTelecommand); 
 }
 
 void ESAT_COMClass::beginTelemetry()

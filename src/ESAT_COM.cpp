@@ -66,8 +66,8 @@ void ESAT_COMClass::begin(word subsystemApplicationProcessIdentifier,
                                     EXTERNAL_DATA_TRANSMISSION_QUEUE_CAPACITY);
   beginTelemetry();
   beginTelecommands();
-  beginRadioSoftware();
-  beginHardware();
+  beginRadioSoftware(); 
+  beginHardware();   
 }
 
 void ESAT_COMClass::beginHardware()
@@ -75,7 +75,11 @@ void ESAT_COMClass::beginHardware()
   ESAT_COMHearthBeatLED.begin();
   WireCOM.begin(byte(COM_I2C_ADDRESS));
   TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
-  ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode); 
+  ESAT_COMRadioStream.beginWriting();
+  ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode);
+  // A bug requires performing this twice.
+  ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode);
+  ESAT_COMRadioStream.beginReading();    
 }
 
 void ESAT_COMClass::beginRadioSoftware()
@@ -83,13 +87,11 @@ void ESAT_COMClass::beginRadioSoftware()
   radioReader = ESAT_CCSDSPacketFromKISSFrameReader(ESAT_COMRadioStream,
                                                     radioInputBufferBackendArray,
                                                     WHOLE_PACKET_BUFFER_LENGTH);
-                                                    radioOutputBuffer = ESAT_Buffer(radioOutputBufferBackendArray, WHOLE_KISS_FRAME_MAX_LENGTH);
-                                                    radioWriter = ESAT_KISSStream(radioOutputBuffer);
-                                                    ownDataQueue = ESAT_CCSDSPacketQueue(OWN_DATA_TRANSMISSION_QUEUE_CAPACITY,
-                                                    WHOLE_PACKET_BUFFER_LENGTH);
+  radioOutputBuffer = ESAT_Buffer(radioOutputBufferBackendArray, WHOLE_KISS_FRAME_MAX_LENGTH);
+  radioWriter = ESAT_KISSStream(radioOutputBuffer);
+  ownDataQueue = ESAT_CCSDSPacketQueue(OWN_DATA_TRANSMISSION_QUEUE_CAPACITY, WHOLE_PACKET_BUFFER_LENGTH);
   ongoingTransmissionPacket = ESAT_CCSDSPacket(WHOLE_PACKET_BUFFER_LENGTH);
-  ongoingTransmissionState = IDLE;
-  ESAT_COMRadioStream.begin();
+  ongoingTransmissionState = IDLE;  
 }
 
 void ESAT_COMClass::beginTelecommands()

@@ -86,8 +86,7 @@ void setup()
 //    Serial.read();
 //  }
 //  Serial.println("Go on!");
-  
-  delay(3000);     
+
   ReceptionTransceiver.setLowestChannel(0);
   ReceptionTransceiver.setHighestChannel(15);  
   TransmissionTransceiver.setLowestChannel(16);
@@ -102,8 +101,7 @@ void setup()
   ESAT_COM.begin(COM_APPLICATION_PROCESS_IDENTIFIER,
                COM_MAJOR_VERSION_NUMBER,
                COM_MINOR_VERSION_NUMBER,
-               COM_PATCH_VERSION_NUMBER);
-  interrupts();  
+               COM_PATCH_VERSION_NUMBER);  
   ESAT_COMTaskScheduler.begin();
   ReceptionTransceiver.startReception();  
   delay(1000);    

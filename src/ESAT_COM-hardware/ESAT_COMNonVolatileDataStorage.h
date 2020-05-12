@@ -26,29 +26,9 @@
 
 // COM non volatile data storage controller.
 // Handles and stores all configuration parameters into
-// non volatile memory to have persistency between reboots.
-// The configuration parameters are simple atributes that can
-// be read and written freely:
-
-// - networkSSID: the SSID of the wireless network.  Used
-//   as an argument to WiFi.begin().
-// - networkPassphrase: the passphrase of the wireless network.
-//   Used as an argument to WiFi.begin().
-// - serverAddress: the address of the ground segment server.
-//   Used as an argument to WiFiClient.connect().
-// - serverPort: the port of the ground segment server.
-//   Used as an argument to WiFiClient.connect().
-// - hostIPAddress: the address of the ESAT.
-//   Used as an argument to WiFi.config (only if DHCP mode is enabled).
-// - subnetMask: the current subnetwork mask.
-//   Used as an argument to WiFi.config (only if DHCP mode is enabled).
-// - gatewayIPAddress: the address of the network default router.
-//   Used as an argument to WiFi.config (only if DHCP mode is enabled).
-// - hostConfigurationMode: the host IP configuration mode (static or DHCP).
-//   Used by ESAT_WifiRadio.connectToNetwork to configure or not static IP.
-// - hostname: the name provided to identify the connected ESAT.
-//   Used as an argument to wiFi.hostname()
-
+// non volatile memory to have persistence between reboots.
+// The configuration parameters are simple attributes that are
+// loaded during power up and stored under request.
 // To load the stored values, call
 // ESAT_COMNonVolatileDataStorage.readConfiguration().
 // To store the values, call
@@ -88,14 +68,7 @@ class ESAT_COMNonVolatileDataStorageClass
     void writeConfigurations();
     
   private:
-    // Data type for controlling the validity of the values
-    // stored in the memory. 
-    enum MemoryContentsStatusType
-    {
-      CONTENTS_ERASED = 0,
-      CONTENTS_VALID = 1
-    };
-    
+  
     // Length of the memory valid flag.
     static const word MEMORY_CONTENTS_STATUS_LENGHT = 1;
     
@@ -168,10 +141,16 @@ class ESAT_COMNonVolatileDataStorageClass
       + RECEPTION_CHANNEL_PARAMETER_LENGTH
       + RECEPTION_FREQUENCY_PARAMETER_LENGTH
       + RECEPTION_MODULTATION_TYPE_PARAMETER_LENGTH;
+      
+    // Value to store in memory if the data was erased.
+    const byte MEMORY_CONTENTS_ERASED = 0;    
     
-    // Use this to store the validity of the stored data.
-    MemoryContentsStatusType memoryContentsStatus;
+    // Value to store in memory if the data was updated.
+    const byte MEMORY_CONTENTS_VALID = 0b01010101;
     
+    // Check if the stored data is valid or not.
+    boolean checkMemoryStatus();    
+        
     // Stores the transmission channel into non volatile memory.
     void writeTransmissionChannel();
    

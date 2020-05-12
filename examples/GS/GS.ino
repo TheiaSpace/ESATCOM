@@ -22,6 +22,7 @@
 #include <ESAT_SubsystemPacketHandler.h>
 #include <ESAT_Task.h>
 #include <ESAT_TaskScheduler.h>
+#include "ESAT_COM-hardware/ESAT_COMNonVolatileDataStorage.h"
 #include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 #include "ESAT_COM-hardware/ESAT_COMHearthBeatLED.h"
 #include "ESAT_COM-hardware/ESAT_COMTransceiverHAL.h"
@@ -84,13 +85,13 @@ void setup()
   ReceptionTransceiver.setHighestChannel(31);  
   TransmissionTransceiver.setLowestChannel(0);
   TransmissionTransceiver.setHighestChannel(15);  
-  ReceptionTransceiver.setModulationType(ESAT_COMTransceiverDriverClass::OOK);
-  ReceptionTransceiver.setFrequency(433.0);
-  ReceptionTransceiver.setChannel(30);
-  TransmissionTransceiver.setModulationType(ESAT_COMTransceiverDriverClass::OOK);
-  TransmissionTransceiver.setFrequency(433.0);
-  TransmissionTransceiver.setChannel(5);
-  TransmissionTransceiver.setTransmissionPower(100.0);
+  ReceptionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readReceptionModulationType());  
+  ReceptionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readReceptionFrequency());
+  ReceptionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readReceptionChannel());
+  TransmissionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readTransmissionModulationType());
+  TransmissionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readTransmissionFrequency());
+  TransmissionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readTransmissionChannel());
+  TransmissionTransceiver.setTransmissionPower(ESAT_COMNonVolatileDataStorage.readTransmissionPower());
   ESAT_COM.begin(GS_APPLICATION_PROCESS_IDENTIFIER,
                GS_MAJOR_VERSION_NUMBER,
                GS_MINOR_VERSION_NUMBER,

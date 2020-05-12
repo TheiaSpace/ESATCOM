@@ -22,6 +22,15 @@
 #include "ESAT_Util.h"
 #include "ESAT_COMNonVolatileDataStorage.h"
 
+boolean ESAT_COMNonVolatileDataStorageClass::checkMemoryStatus()
+{
+  if (EEPROM.read(MEMORY_CONTENTS_STATUS_OFFSET) == MEMORY_CONTENTS_VALID)
+  {
+    return true;
+  }
+  return false;
+}
+
 void ESAT_COMNonVolatileDataStorageClass::eraseAll()
 {
   for (word index = TRANSMISSION_CHANNEL_PARAMETER_OFFSET;
@@ -31,12 +40,12 @@ void ESAT_COMNonVolatileDataStorageClass::eraseAll()
     (void) EEPROM.write(index, 0);
   }
   // Set erased flag.
-  (void) EEPROM.write(MEMORY_CONTENTS_STATUS_OFFSET, 0);
+  (void) EEPROM.write(MEMORY_CONTENTS_STATUS_OFFSET, MEMORY_CONTENTS_ERASED);
 }
 
 byte ESAT_COMNonVolatileDataStorageClass::readTransmissionChannel()
 {
-  if (memoryContentsStatus == CONTENTS_VALID)
+  if (checkMemoryStatus())
   {
     return (byte) EEPROM.read(TRANSMISSION_CHANNEL_PARAMETER_OFFSET);
   }
@@ -45,7 +54,7 @@ byte ESAT_COMNonVolatileDataStorageClass::readTransmissionChannel()
 
 float ESAT_COMNonVolatileDataStorageClass::readTransmissionFrequency()
 {
-  if (memoryContentsStatus == CONTENTS_VALID)
+if (checkMemoryStatus())
   {
     const unsigned long frequencyUL = ESAT_Util.unsignedLong(EEPROM.read(TRANSMISSION_FREQUENCY_PARAMETER_OFFSET + 3),
                                                              EEPROM.read(TRANSMISSION_FREQUENCY_PARAMETER_OFFSET + 2),
@@ -58,7 +67,7 @@ float ESAT_COMNonVolatileDataStorageClass::readTransmissionFrequency()
 
 float ESAT_COMNonVolatileDataStorageClass::readTransmissionPower()
 {
-  if (memoryContentsStatus == CONTENTS_VALID)
+  if (checkMemoryStatus())
   {
     const unsigned long powerUL = ESAT_Util.unsignedLong(EEPROM.read(TRANSMISSION_POWER_PARAMETER_OFFSET + 3),
                                                          EEPROM.read(TRANSMISSION_POWER_PARAMETER_OFFSET + 2),
@@ -71,7 +80,7 @@ float ESAT_COMNonVolatileDataStorageClass::readTransmissionPower()
 
 ESAT_COMTransceiverDriverClass::ModulationType ESAT_COMNonVolatileDataStorageClass::readTransmissionModulationType()
 {
-  if (memoryContentsStatus == CONTENTS_VALID)
+  if (checkMemoryStatus())
   {
     switch(EEPROM.read(TRANSMISSION_MODULTATION_TYPE_PARAMETER_OFFSET))
     {
@@ -95,7 +104,7 @@ ESAT_COMTransceiverDriverClass::ModulationType ESAT_COMNonVolatileDataStorageCla
 
 byte ESAT_COMNonVolatileDataStorageClass::readReceptionChannel()
 {
-  if (memoryContentsStatus == CONTENTS_VALID)
+  if (checkMemoryStatus())
   {
     return (byte) EEPROM.read(RECEPTION_CHANNEL_PARAMETER_OFFSET);
   }
@@ -104,7 +113,7 @@ byte ESAT_COMNonVolatileDataStorageClass::readReceptionChannel()
 
 float ESAT_COMNonVolatileDataStorageClass::readReceptionFrequency()
 {
-  if (memoryContentsStatus == CONTENTS_VALID)
+  if (checkMemoryStatus())
   {
     const unsigned long frequencyUL = ESAT_Util.unsignedLong(EEPROM.read(RECEPTION_FREQUENCY_PARAMETER_OFFSET + 3),
                                                              EEPROM.read(RECEPTION_FREQUENCY_PARAMETER_OFFSET + 2),
@@ -117,7 +126,7 @@ float ESAT_COMNonVolatileDataStorageClass::readReceptionFrequency()
 
 ESAT_COMTransceiverDriverClass::ModulationType ESAT_COMNonVolatileDataStorageClass::readReceptionModulationType()
 {
-  if (memoryContentsStatus == CONTENTS_VALID)
+  if (checkMemoryStatus())
   {
     switch(EEPROM.read(RECEPTION_MODULTATION_TYPE_PARAMETER_OFFSET))
     {
@@ -149,7 +158,7 @@ void ESAT_COMNonVolatileDataStorageClass::writeConfigurations()
   writeReceptionFrequency();
   writeReceptionModulationType();
   // Clear erase flag.
-  (void) EEPROM.write(MEMORY_CONTENTS_STATUS_OFFSET, 1);
+  (void) EEPROM.write(MEMORY_CONTENTS_STATUS_OFFSET, MEMORY_CONTENTS_VALID);
 }
 
 void ESAT_COMNonVolatileDataStorageClass::writeTransmissionChannel()

@@ -90,6 +90,24 @@ class ESAT_COMTransceiverDriverClass
       RXMode = 2, // Transceiver configured as a receiver.
     };
     
+    // Default radio frequency.
+    const float DEFAULT_FREQUENCY = 433.0; // In MHz.    
+    
+    // Default data source.
+    const enum ModulationSource DEFAULT_MODULATION_SOURCE = fifo;
+    
+    // Default modulation schema.
+    const enum ModulationType DEFAULT_MODULATION_TYPE = OOK;
+    
+    // Default reception channel.
+    const byte DEFAULT_RECEPTION_CHANNEL = 16;    
+    
+    // Default transmission channel.
+    const byte DEFAULT_TRANSMISSION_CHANNEL = 0;    
+    
+    // Default transmission power rate.
+    const float DEFAULT_TRANSMISSION_POWER_RATE = 100.0;
+    
     // Highest allowed frequency (in MHz) for reception.
     const float HIGHEST_RECEPTION_FREQUENCY = 1050.0;
     
@@ -230,19 +248,7 @@ class ESAT_COMTransceiverDriverClass
   private:
   
     // Clock frequency for computing the radio frequency.
-    const unsigned long CRYSTAL_FOR_FREQUENCY_COMPUTING = 30000000;
-    
-    // Default radio frequency.
-    const float DEFAULT_FREQUENCY = 433.0; // In MHz.
-    
-    // Default data source.
-    const enum ModulationSource DEFAULT_MODULATION_SOURCE = fifo;
-    
-    // Default modulation schema.
-    const enum ModulationType DEFAULT_MODULATION_TYPE = OOK;
-    
-    // Default transmission power rate.
-    const float DEFAULT_TRANSMISSION_POWER_RATE = 100.0;
+    const unsigned long CRYSTAL_FOR_FREQUENCY_COMPUTING = 30000000;    
     
     // Maximum failed initialization sequences allowed.
     const byte MAXIMUM_FAILED_INITIALIZATIONS = 25;

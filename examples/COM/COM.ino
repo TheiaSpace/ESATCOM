@@ -69,25 +69,7 @@ void ESAT_COMClass::PeriodicalTelemetryDeliveryTaskClass::run()
 void setup()
 {
   Serial.begin(9600);
-  Serial.blockOnOverrun(false);   
-  
-//  Serial.println("Press any key to start");
-//  while (Serial.available() <= 0)
-//  {
-//    if (iterationCounter >= 3*PERIOD)
-//    {
-//      Serial.println("Press any key to start");
-//      iterationCounter = 0;
-//    }
-//    ++iterationCounter;
-//    delay(1);
-//  }
-//  while (Serial.available() > 0)
-//  {
-//    Serial.read();
-//  }
-//  Serial.println("Go on!");
-
+  Serial.blockOnOverrun(false);
   ReceptionTransceiver.setLowestChannel(0);
   ReceptionTransceiver.setHighestChannel(15);  
   TransmissionTransceiver.setLowestChannel(16);
@@ -97,12 +79,12 @@ void setup()
   ReceptionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readReceptionChannel());
   TransmissionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readTransmissionModulationType());
   TransmissionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readTransmissionFrequency());
-  TransmissionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readTransmissionChannel());
-  TransmissionTransceiver.setTransmissionPower(ESAT_COMNonVolatileDataStorage.readTransmissionPower());
+  TransmissionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readTransmissionChannel());  
   ESAT_COM.begin(COM_APPLICATION_PROCESS_IDENTIFIER,
                COM_MAJOR_VERSION_NUMBER,
                COM_MINOR_VERSION_NUMBER,
-               COM_PATCH_VERSION_NUMBER);  
+               COM_PATCH_VERSION_NUMBER);
+  TransmissionTransceiver.setTransmissionPower(ESAT_COMNonVolatileDataStorage.readTransmissionPower());  
   ESAT_COMTaskScheduler.begin();
   ReceptionTransceiver.startReception();  
   delay(1000);    

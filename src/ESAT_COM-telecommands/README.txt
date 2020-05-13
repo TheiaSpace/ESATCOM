@@ -76,6 +76,18 @@ Telecommand handler for COM_DISABLE_STANDALONE_MODE (0x08): disable the
 COM telecommands self handling without OBC.
 
 
+# ESAT_COMStoreSettingsTelecommand
+
+Telecommand handler for COM_STORE_SETTINGS (0x09): store the current
+radio settings into non-volatile memory.
+
+
+# ESAT_COMEraseStoredSettingsTelecommand
+
+Telecommand handler for COM_ERASE_STORED_SETTINGS (0x0A): erase all
+the settings stored in non-volatile memory.
+
+
 # ESAT_COMTransmitterModulationSelectionTelecommand
 
 Telecommand handler for COM_TRANSMITTER_MODULATION_SELECTION (0x10): configure

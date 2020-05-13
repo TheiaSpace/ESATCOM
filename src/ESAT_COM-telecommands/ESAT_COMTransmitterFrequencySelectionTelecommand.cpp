@@ -19,7 +19,7 @@
  */
 
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterFrequencySelectionTelecommand.h"
-#include ".//ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
+#include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 
 boolean ESAT_COMTransmitterFrequencySelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {

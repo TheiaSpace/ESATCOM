@@ -24,12 +24,12 @@
 boolean ESAT_COMReceiverFrequencySelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   const float frequency = packet.readFloat();
-  const float constrainedFrequency = constrain(frequency, TransmissionTransceiver.LOWEST_TRANSMISSION_FREQUENCY, TransmissionTransceiver.HIGHEST_TRANSMISSION_FREQUENCY);   
-  if (TransmissionTransceiver.setFrequency(constrainedFrequency)== ESAT_COMTransceiverDriverClass::wrongFrequencyError)
+  const float constrainedFrequency = constrain(frequency, ReceptionTransceiver.LOWEST_TRANSMISSION_FREQUENCY, ReceptionTransceiver.HIGHEST_TRANSMISSION_FREQUENCY);   
+  if (ReceptionTransceiver.setFrequency(constrainedFrequency)== ESAT_COMTransceiverDriverClass::wrongFrequencyError)
   {    
     return false;
   }
-  if (TransmissionTransceiver.updateFrequency() == ESAT_COMTransceiverDriverClass::wrongFrequencyError)
+  if (ReceptionTransceiver.updateFrequency() == ESAT_COMTransceiverDriverClass::wrongFrequencyError)
   {    
     return false;
   }

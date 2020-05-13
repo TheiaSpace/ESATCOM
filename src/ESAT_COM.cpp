@@ -77,7 +77,10 @@ void ESAT_COMClass::beginHardware()
   ESAT_COMHearthBeatLED.begin();
   WireCOM.begin(byte(COM_I2C_ADDRESS));
   TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
+  // A bug requires performing this twice.
+  TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
   ESAT_COMRadioStream.beginWriting();
+  delay(1000);
   ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode);
   // A bug requires performing this twice.
   ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode);

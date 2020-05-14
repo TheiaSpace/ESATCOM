@@ -151,7 +151,7 @@ class ESAT_COMClass
     const byte COM_I2C_ADDRESS = 3;
   
     // Size of the board external (I2C) data radio transmission buffer.
-    const unsigned long EXTERNAL_DATA_TRANSMISSION_QUEUE_CAPACITY = 17;
+    const unsigned long EXTERNAL_DATA_TRANSMISSION_QUEUE_CAPACITY = 10;
 
     // Size of the board own data radio transmission buffer.
     const unsigned long OWN_DATA_TRANSMISSION_QUEUE_CAPACITY = 2;

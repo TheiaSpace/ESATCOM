@@ -97,6 +97,9 @@ class ESAT_COMClass
     // Enables the on-board telemetry delivery over radio without OBC
     // interaction.
     void enableCOMTelemetryRadioDelivery();
+    
+    // Empties the board's transmission pending telemetry queue.
+    void clearRadioTelemetryQueue();
       
     // Checks if the on-board telemetry delivery over the radio is enabled.
     boolean isCOMTelemetryRadioDeliveryEnabled();

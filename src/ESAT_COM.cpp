@@ -140,6 +140,11 @@ void ESAT_COMClass::enableCOMTelemetryRadioDelivery()
   isTelemetryRadioDeliveryEnabled = true;
 }
 
+void ESAT_COMClass::clearRadioTelemetryQueue()
+{
+  ownDataQueue.flush();
+}
+
 boolean ESAT_COMClass::isCOMTelemetryRadioDeliveryEnabled()
 {
   return isTelemetryRadioDeliveryEnabled;
@@ -211,7 +216,7 @@ void ESAT_COMClass::update()
         ongoingTransmissionState = TRANSMITTING_EXTERNAL_DATA;
         // Packet transmission will begin on the next cycle.
         break;
-      }       
+      } 
       if (ownDataQueue.read(ongoingTransmissionPacket))
       {       
         ongoingTransmissionPacket.rewind();       
@@ -227,7 +232,7 @@ void ESAT_COMClass::update()
         ongoingTransmissionState = EXTERNAL_DATA_TRANSMITTED;
       }
       else
-      {
+      {        
         // Part of the packet could not be transmitted. It will be
         // resumed on the next cycle.
         ongoingTransmissionState = TRANSMITTING_EXTERNAL_DATA; 

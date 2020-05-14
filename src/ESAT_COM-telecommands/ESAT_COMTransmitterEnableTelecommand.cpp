@@ -18,6 +18,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+#include <ESAT_I2CSlave.h>
+#include "../ESAT_COM.h"
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterEnableTelecommand.h"
 #include "../ESAT_COM-hardware/ESAT_COMRadioStream.h"
 #include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
@@ -25,6 +27,9 @@
 boolean ESAT_COMTransmitterEnableTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   (void) packet.readByte();
+  // Drop all the pending temetry stored in the transmission queues.
+  ESAT_COM.clearRadioTelemetryQueue();
+  ESAT_I2CSlave.clearMasterWrittenPacketsQueue();
   TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
   ESAT_COMRadioStream.beginWriting();
   return true;

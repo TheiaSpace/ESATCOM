@@ -35,27 +35,27 @@ Telecommand handler for COM_DISABLE_TELEMETRY (0x01): disable the
 generation of a COM telemetry packet.
 
 
-# ESAT_COMTransmitterEnableTelecommand
+# ESAT_COMEnableTransmitterTelecommand
 
-Telecommand handler for COM_TRANSMITTER_ENABLE (0x02): turn on the transmission
+Telecommand handler for COM_ENABLE_TRANSMITTER (0x02): turn on the transmission
 transceiver and start the transmission.
 
 
-# ESAT_COMTransmitterDisableTelecommand
+# ESAT_COMDisableTransmitterTelecommand
 
-Telecommand handler for COM_TRANSMITTER_DISABLE (0x03): turn off the transmission
+Telecommand handler for COM_DISABLE_TRANSMITTER (0x03): turn off the transmission
 transceiver and disable the transmission.
 
 
-# ESAT_COMReceiverEnableTelecommand
+# ESAT_COMEnableReceiverTelecommand
 
-Telecommand handler for COM_RECEIVER_ENABLE (0x04): turn on the reception
+Telecommand handler for COM_ENABLE_RECEIVER (0x04): turn on the reception
 transceiver and start the reception.
 
 
-# ESAT_COMReceiverDisableTelecommand
+# ESAT_COMDisableReceiverTelecommand
 
-Telecommand handler for COM_RECEIVER_DISABLE (0x05): turn off the reception
+Telecommand handler for COM_DISABLE_RECEIVER (0x05): turn off the reception
 transceiver and disable the reception.
 
 

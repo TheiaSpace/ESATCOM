@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -18,21 +18,17 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include <ESAT_I2CSlave.h>
-#include "../ESAT_COM.h"
-#include "ESAT_COM-telecommands/ESAT_COMTransmitterEnableTelecommand.h"
+#include "ESAT_COM-telecommands/ESAT_COMEnableReceiverTelecommand.h"
 #include "../ESAT_COM-hardware/ESAT_COMRadioStream.h"
 #include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 
-boolean ESAT_COMTransmitterEnableTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
+boolean ESAT_COMEnableReceiverTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   (void) packet.readByte();
-  // Drop all the pending temetry stored in the transmission queues.
-  ESAT_COM.clearRadioTelemetryQueue();
-  ESAT_I2CSlave.clearMasterWrittenPacketsQueue();
-  TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
-  ESAT_COMRadioStream.beginWriting();
+  ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode);
+  ESAT_COMRadioStream.beginReading();
+  ReceptionTransceiver.startReception();
   return true;
 }
 
-ESAT_COMTransmitterEnableTelecommandClass ESAT_COMTransmitterEnableTelecommand;
+ESAT_COMEnableReceiverTelecommandClass ESAT_COMEnableReceiverTelecommand;

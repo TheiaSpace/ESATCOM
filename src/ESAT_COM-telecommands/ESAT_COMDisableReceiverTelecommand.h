@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -18,16 +18,16 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ESAT_COMTransmitterDisableTelecommand_h
-#define ESAT_COMTransmitterDisableTelecommand_h
+#ifndef ESAT_COMDisableReceiverTelecommand_h
+#define ESAT_COMDisableReceiverTelecommand_h
 
 #include <Arduino.h>
 #include <ESAT_CCSDSTelecommandPacketHandler.h>
 #include <ESAT_SemanticVersionNumber.h>
 
-// Telecommand handler for COM_TRANSMITTER_DISABLE.
+// Telecommand handler for COM_DISABLE_RECEIVER
 // Used by ESAT_COM.
-class ESAT_COMTransmitterDisableTelecommandClass: public ESAT_CCSDSTelecommandPacketHandler
+class ESAT_COMDisableReceiverTelecommandClass: public ESAT_CCSDSTelecommandPacketHandler
 {
   public:
     // Handle a telecommand packet.
@@ -42,7 +42,7 @@ class ESAT_COMTransmitterDisableTelecommandClass: public ESAT_CCSDSTelecommandPa
     // match.
     byte packetIdentifier()
     {
-      return 0x03;
+      return 0x05;
     }
 
     // Return the version number of this telecommand handler.
@@ -55,8 +55,8 @@ class ESAT_COMTransmitterDisableTelecommandClass: public ESAT_CCSDSTelecommandPa
     }
 };
 
-// Global instance of ESAT_COMTransmitterDisableTelecommandClass.
+// Global instance of ESAT_COMDisableReceiverTelecommandClass.
 // Used by ESAT_COM.
-extern ESAT_COMTransmitterDisableTelecommandClass ESAT_COMTransmitterDisableTelecommand;
+extern ESAT_COMDisableReceiverTelecommandClass ESAT_COMDisableReceiverTelecommand;
 
-#endif /* ESAT_COMTransmitterDisableTelecommand_h */
+#endif /* ESAT_COMDisableReceiverTelecommand_h */

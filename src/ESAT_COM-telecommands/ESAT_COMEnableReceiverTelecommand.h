@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -18,16 +18,16 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ESAT_COMTransmitterEnableTelecommand_h
-#define ESAT_COMTransmitterEnableTelecommand_h
+#ifndef ESAT_COMEnableReceiverTelecommand_h
+#define ESAT_COMEnableReceiverTelecommand_h
 
 #include <Arduino.h>
 #include <ESAT_CCSDSTelecommandPacketHandler.h>
 #include <ESAT_SemanticVersionNumber.h>
 
-// Telecommand handler for COM_TRANSMITTER_ENABLE.
+// Telecommand handler for COM_ENABLE_RECEIVER.
 // Used by ESAT_COM.
-class ESAT_COMTransmitterEnableTelecommandClass: public ESAT_CCSDSTelecommandPacketHandler
+class ESAT_COMEnableReceiverTelecommandClass: public ESAT_CCSDSTelecommandPacketHandler
 {
   public:
     // Handle a telecommand packet.
@@ -42,7 +42,7 @@ class ESAT_COMTransmitterEnableTelecommandClass: public ESAT_CCSDSTelecommandPac
     // match.
     byte packetIdentifier()
     {
-      return 0x02;
+      return 0x04;
     }
 
     // Return the version number of this telecommand handler.
@@ -55,8 +55,8 @@ class ESAT_COMTransmitterEnableTelecommandClass: public ESAT_CCSDSTelecommandPac
     }
 };
 
-// Global instance of ESAT_COMTransmitterEnableTelecommandClass.
+// Global instance of ESAT_COMEnableReceiverTelecommandClass.
 // Used by ESAT_COM.
-extern ESAT_COMTransmitterEnableTelecommandClass ESAT_COMTransmitterEnableTelecommand;
+extern ESAT_COMEnableReceiverTelecommandClass ESAT_COMEnableReceiverTelecommand;
 
-#endif /* ESAT_COMTransmitterEnableTelecommand_h */
+#endif /* ESAT_COMEnableReceiverTelecommand_h */

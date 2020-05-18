@@ -78,14 +78,20 @@ void ESAT_COMClass::beginHardware()
 {  
   ESAT_COMHearthBeatLED.begin();
   WireCOM.begin(byte(COM_I2C_ADDRESS));
-  TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
-  // A bug requires performing this twice.
-  TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
+  // Keep reconfiguring the transmitter until everything went right.
+  while(TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode)
+          != ESAT_COMTransceiverDriverClass::noError)
+  {
+    delay(1000);
+  }
   ESAT_COMRadioStream.beginWriting();
   delay(1000);
-  ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode);
-  // A bug requires performing this twice.
-  ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode);
+  // Keep reconfiguring the receiver until everything went right.
+  while (ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode)
+          != ESAT_COMTransceiverDriverClass::noError);
+  {
+    delay(1000);
+  }        
   ESAT_COMRadioStream.beginReading();    
 }
 

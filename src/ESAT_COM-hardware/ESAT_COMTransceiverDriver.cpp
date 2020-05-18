@@ -163,9 +163,9 @@ signed char ESAT_COMTransceiverDriverClass::checkReceptionAvailability()
   {
     // Retrieve the packet from the FIFO.
     receptionAvailable = true;
-    ESAT_COMReceptionLED.write(100.0);
+    switchLED(RXMode, true);
     ESAT_COMTransceiverCommands.readReceptionFIFOBuffer(*transceiver, RADIO_MAX_PACKET_LENGTH, receptionBuffer);
-    ESAT_COMReceptionLED.write(0.0);
+    switchLED(RXMode, false);
     // Reception must be reenabled (ideally after reading).
     return 1;
   }
@@ -348,6 +348,7 @@ float ESAT_COMTransceiverDriverClass::getTransmissionPowerRate()
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverDriverClass::initializeTransceiver(ESAT_COMTransceiverConfigurationClass* transceiverConfiguration)
 { 
+  switchLED(transceiverOperationMode, true);
   ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError error;
   byte failedInitializationCounter = 0;
   do
@@ -374,19 +375,22 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverD
           if ((intStatusReply.chipStatus & ESAT_COMTransceiverCommandsClass::INTERRUPT_STATUS_REPLY_CHIP_STATUS_CHIP_READY_BITMASK) 
         && !(intStatusReply.chipPending & ESAT_COMTransceiverCommandsClass::INTERRUPT_STATUS_REPLY_CHIP_PENDING_CHIP_READY_BITMASK)) 
           {
-            return ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS;
+            switchLED(transceiverOperationMode, false);
+            return ESAT_COMTransceiverHALClass::TRANSCEIVER_SUCCESS;            
           }
           return ESAT_COMTransceiverHALClass::TRANSCEIVER_CHIP_ERROR;
       }      
     }
     if (MAXIMUM_FAILED_INITIALIZATIONS <= failedInitializationCounter)
     {
+      switchLED(transceiverOperationMode, false);
       return error;
     }
     ++failedInitializationCounter;
     delay(10);
   }
   while (MAXIMUM_FAILED_INITIALIZATIONS <= failedInitializationCounter);
+  switchLED(transceiverOperationMode, false);
   return error;   
 }
 
@@ -408,9 +412,9 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   // Read interrupts and clear pending ones.
   ESAT_COMTransceiverCommands.getInterruptStatus(*transceiver, 0, 0, 0);
   // Load 129 bytes into fifo.
-  ESAT_COMTransmissionLED.write(100.0);
+  switchLED(TXMode, true);
   ESAT_COMTransceiverCommands.writeTransmissionFIFOBuffer(*transceiver, RADIO_MAX_PACKET_LENGTH, msgBuf);
-  ESAT_COMTransmissionLED.write(0.0);
+  switchLED(TXMode, false);
   // Start transmission.
   ESAT_COMTransceiverCommands.startTransmission(*transceiver, transceiverRadioChannel, RADIO_MAX_PACKET_LENGTH); 
   transmissionInProgress = true;  
@@ -552,6 +556,38 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   // Length field is zero beacause is controlled from the packet handler.
   ESAT_COMTransceiverCommands.startReception(*transceiver, transceiverRadioChannel, 0x00);
   return noError;
+}
+
+void ESAT_COMTransceiverDriverClass::switchLED(ESAT_COMTransceiverDriverClass::TransceiverMode modeLED, boolean level)
+{
+  switch(modeLED)
+  {
+    case TXMode:
+      if (level)
+      {
+        ESAT_COMTransmissionLED.write(100.0);
+        return;
+      }
+      else
+      {
+        ESAT_COMTransmissionLED.write(0.0);
+        return;
+      }
+    case RXMode:
+      if (level)
+      {
+        ESAT_COMReceptionLED.write(100.0);
+        return;
+      }
+      else
+      {
+        ESAT_COMReceptionLED.write(0.0);
+        return;
+      }
+    default:
+      return;
+  }
+  
 }
 
 byte  ESAT_COMTransceiverDriverClass::switchModulationSource(ESAT_COMTransceiverDriverClass::ModulationSource source)

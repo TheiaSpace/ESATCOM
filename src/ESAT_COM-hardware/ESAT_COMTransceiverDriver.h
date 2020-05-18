@@ -333,7 +333,12 @@ class ESAT_COMTransceiverDriverClass
     
     // Interrupt service routine for the transmission transceiver.
     // Sets the transmission interrupt flag when it is called.
-    static void setTransmissionTransceiverInterruptFlag (void);    
+    static void setTransmissionTransceiverInterruptFlag (void); 
+
+    // Turns the selected LED on or off. Requires the switched mode led
+    // (transmission or reception) and the level (true for high and
+    // false for low).
+    void switchLED(TransceiverMode modeLED, boolean level);    
     
     // Selects the configuration file acording to the
     // chose modulation for the reception mode.

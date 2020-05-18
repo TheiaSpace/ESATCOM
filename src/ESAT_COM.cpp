@@ -29,6 +29,8 @@
 #include "ESAT_COM-telecommands/ESAT_COMDisableTelemetryTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMEnableTelemetryTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMSetTimeTelecommand.h"
+#include "ESAT_COM-telecommands/ESAT_COMEnableStandaloneModeTelecommand.h"
+#include "ESAT_COM-telecommands/ESAT_COMDisableStandaloneModeTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMStoreSettingsTelecommand.h"
 #include "ESAT_COM-telecommands/ESAT_COMEraseStoredSettingsTelecommand.h"
 // Receiver telecommands.
@@ -105,6 +107,8 @@ void ESAT_COMClass::beginTelecommands()
   ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMDisableTelemetryTelecommand);
   ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMEnableTelemetryTelecommand);
   ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMSetTimeTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMEnableStandaloneModeTelecommand);
+  ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMDisableStandaloneModeTelecommand);
   ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMStoreSettingsTelecommand);
   ESAT_SubsystemPacketHandler.addTelecommand(ESAT_COMEraseStoredSettingsTelecommand);
   // Reception telecommands.

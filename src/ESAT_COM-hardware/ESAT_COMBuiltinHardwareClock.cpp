@@ -27,7 +27,9 @@ ESAT_Timestamp ESAT_COMBuiltinHardwareClockClass::read()
   timeToBeRead.hours = (byte) RTC.getHours();
   timeToBeRead.day = (byte) RTC.getDay();
   timeToBeRead.month = (byte) RTC.getMonth();
-  timeToBeRead.year = (word) RTC.getYear();
+  // Yikes! Year 2000 problem strikes again!
+  timeToBeRead.year = (word) (RTC.getYear() 
+    + RTC.read(YEAR_BACKUP_REGISTER) * 100);
   return timeToBeRead;  
 }
 
@@ -38,7 +40,10 @@ void ESAT_COMBuiltinHardwareClockClass::write(ESAT_Timestamp timeToSet)
   RTC.setHours((byte) timeToSet.hours);
   RTC.setDay((byte) timeToSet.day);
   RTC.setMonth((byte) timeToSet.month);
+  // RTC doesn't handle century and millenium digits, so we store them 
+  // in a backup register.
   RTC.setYear((byte) (timeToSet.year % 100));
+  RTC.write(YEAR_BACKUP_REGISTER, timeToSet.year / 100);
 }
 
 ESAT_COMBuiltinHardwareClockClass ESAT_COMBuiltinHardwareClock;

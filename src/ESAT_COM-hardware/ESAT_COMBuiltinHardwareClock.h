@@ -35,6 +35,11 @@ class ESAT_COMBuiltinHardwareClockClass: public ESAT_Clock
 
   // Set the time to the given timestamp.
   void write(ESAT_Timestamp timestamp);
+  
+  private:
+  
+  // Full year location in RTC backup registers.
+  const unsigned int YEAR_BACKUP_REGISTER = 0;
 
 };
 

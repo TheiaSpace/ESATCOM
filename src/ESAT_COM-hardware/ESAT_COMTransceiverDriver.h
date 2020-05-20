@@ -99,12 +99,6 @@ class ESAT_COMTransceiverDriverClass
     // Default modulation schema.
     const enum ModulationType DEFAULT_MODULATION_TYPE = OOK;
     
-    // Default reception channel.
-    const byte DEFAULT_RECEPTION_CHANNEL = 16;    
-    
-    // Default transmission channel.
-    const byte DEFAULT_TRANSMISSION_CHANNEL = 0;    
-    
     // Default transmission power rate.
     const float DEFAULT_TRANSMISSION_POWER_RATE = 100.0;
     
@@ -128,6 +122,12 @@ class ESAT_COMTransceiverDriverClass
     
     // Maximum packet length supported by radio transceiver.
     static const byte RADIO_MAX_PACKET_LENGTH = 129;
+    
+    // Highest channel allowed for the transceiver band.
+    byte highestChannel = 31;
+    
+    // Lowest channel allowed for the transceiver band.
+    byte lowestChannel = 0;
     
     // Constructor. Initializes the transceiver API software
     // and attaches it to a physical interface.    
@@ -264,12 +264,6 @@ class ESAT_COMTransceiverDriverClass
     
     // Reception chain losses for RSSI calculation.
     const float RECEPTION_LOSSES_dB = 130.0;
-    
-    // Highest channel allowed for the transceiver band.
-    byte highestChannel = 31;
-    
-    // Lowest channel allowed for the transceiver band.
-    byte lowestChannel = 0;
     
     // Next bit of the manual bit stream.
     byte outputDataStreamNextBit;

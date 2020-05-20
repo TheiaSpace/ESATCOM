@@ -49,7 +49,7 @@ byte ESAT_COMNonVolatileDataStorageClass::readTransmissionChannel()
   {
     return (byte) EEPROM.read(TRANSMISSION_CHANNEL_PARAMETER_OFFSET);
   }
-  return TransmissionTransceiver.DEFAULT_TRANSMISSION_CHANNEL;
+  return TransmissionTransceiver.lowestChannel;
 }
 
 float ESAT_COMNonVolatileDataStorageClass::readTransmissionFrequency()
@@ -108,7 +108,7 @@ byte ESAT_COMNonVolatileDataStorageClass::readReceptionChannel()
   {
     return (byte) EEPROM.read(RECEPTION_CHANNEL_PARAMETER_OFFSET);
   }
-  return ReceptionTransceiver.DEFAULT_RECEPTION_CHANNEL;
+  return ReceptionTransceiver.lowestChannel;
 }
 
 float ESAT_COMNonVolatileDataStorageClass::readReceptionFrequency()

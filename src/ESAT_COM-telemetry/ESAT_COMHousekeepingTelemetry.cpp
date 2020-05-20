@@ -23,6 +23,7 @@
 #include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 #include <ProcessorTemperature.h>
 #include <ProcessorVoltage.h>
+#include <BatteryVoltage.h>
 
 boolean ESAT_COMHousekeepingTelemetryClass::available()
 {
@@ -50,6 +51,7 @@ boolean ESAT_COMHousekeepingTelemetryClass::fillUserData(ESAT_CCSDSPacket& packe
   // MCU telemetry (calibrated)
   packet.writeFloat(ProcessorVoltage.read());
   packet.writeFloat(ProcessorTemperature.read());
+  packet.writeFloat(BatteryVoltage.read());
   return true;
 }
 

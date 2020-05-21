@@ -76,16 +76,11 @@ void ESAT_COMTransceiverHALClass::clearRTSCounter()
 
 void ESAT_COMTransceiverHALClass::disable()
 {
-#if defined(SDN_HAS_HW_PULLUP)
-  // Let it be high at least 10 ms.
-  pinMode(shutdownPin, INPUT);       
-#else
   // We set it high first so we don't get a glitch 
   // after setting it as output (enables the weak pullup).
   digitalWrite(shutdownPin, HIGH);
   // Drive high 10 ms.
   pinMode(shutdownPin, OUTPUT);
-#endif
 }
 
 byte ESAT_COMTransceiverHALClass::getInterruptPin()
@@ -94,16 +89,9 @@ byte ESAT_COMTransceiverHALClass::getInterruptPin()
 }
 
 void ESAT_COMTransceiverHALClass::powerUpTransceiver()
-{  
-#if defined(SDN_HAS_HW_PULLUP)
-  // Enable output driver (disable high impedance input).
-  pinMode(shutdownPin, OUTPUT);
+{ 
   // Drive it low at least 10 ms.
   digitalWrite(shutdownPin, LOW);
-#else
-  // Drive it low at least 10 ms.
-  digitalWrite(shutdownPin, LOW);
-#endif
   delay(10);
 }
 

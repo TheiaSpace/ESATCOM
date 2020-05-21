@@ -23,8 +23,6 @@
 #include <Arduino.h>
 #include <SPI.h>
 
-#define SDN_HAS_HW_PULLUP
-
 class ESAT_COMTransceiverHALClass
 {    
   public:

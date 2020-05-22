@@ -70,6 +70,7 @@ void setup()
 {
   Serial.begin(9600);
   Serial.blockOnOverrun(false);
+  delay(1000);
   ReceptionTransceiver.setLowestChannel(0);
   ReceptionTransceiver.setHighestChannel(15);  
   TransmissionTransceiver.setLowestChannel(16);

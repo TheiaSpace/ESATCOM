@@ -62,7 +62,8 @@ void ESAT_COMClass::PeriodicalTelemetryDeliveryTaskClass::run()
 void setup()
 {
   Serial.begin(9600);
-  Serial.blockOnOverrun(false);        
+  Serial.blockOnOverrun(false);   
+  delay(1000);     
   ReceptionTransceiver.setLowestChannel(16);
   ReceptionTransceiver.setHighestChannel(31);  
   TransmissionTransceiver.setLowestChannel(0);

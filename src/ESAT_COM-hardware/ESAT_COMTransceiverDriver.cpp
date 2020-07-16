@@ -441,9 +441,16 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
 
 ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::setFrequency(float frequency)
 {
-  // Store set frequency.
-  transceiverFrequency = frequency;
-  return noError;
+  if ((frequency <= 1050.0 && frequency >= 850.0)
+    || (frequency <= 525.0 && frequency >= 425.0)
+    || (frequency <= 350.0 && frequency >= 284.0)
+    || (frequency <= 175.0 && frequency >= 142.0))
+  {
+    // Store set frequency.  
+    transceiverFrequency = frequency;
+    return noError;
+  }
+  return wrongFrequencyError;
 }
 
 void ESAT_COMTransceiverDriverClass::setHighestChannel(byte channel)

@@ -33,6 +33,7 @@ boolean ESAT_COMReceiverFrequencySelectionTelecommandClass::handleUserData(ESAT_
   {    
     return false;
   }
+  ReceptionTransceiver.startReception();
   return true; 
 }
 

@@ -20,6 +20,7 @@
  
 
 #include "ESAT_COM-telemetry/ESAT_COMHousekeepingTelemetry.h"
+#include "../ESAT_COM-hardware/ESAT_COMSequenceGenerator.h"
 #include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 #include <ProcessorTemperature.h>
 #include <ProcessorVoltage.h>
@@ -37,7 +38,7 @@ boolean ESAT_COMHousekeepingTelemetryClass::fillUserData(ESAT_CCSDSPacket& packe
   packet.writeByte((byte) TransmissionTransceiver.getModulation());
   packet.writeFloat(TransmissionTransceiver.getFrequency());
   packet.writeByte((byte) TransmissionTransceiver.getChannel());
-  packet.writeChar((char) TransmissionTransceiver.getModulationSource());
+  packet.writeChar(writeModulationSource());
   packet.writeFloat(TransmissionTransceiver.getTransmissionPowerRate());
   packet.writeFloat(TransmissionTransceiver.getTransceiverVoltage());
   packet.writeFloat(TransmissionTransceiver.getTransceiverTemperature());
@@ -54,5 +55,19 @@ boolean ESAT_COMHousekeepingTelemetryClass::fillUserData(ESAT_CCSDSPacket& packe
   packet.writeFloat(BatteryVoltage.read());
   return true;
 }
+
+char ESAT_COMHousekeepingTelemetryClass::writeModulationSource()
+{
+    switch(ESAT_COMSequenceGenerator.getMode())
+    {
+        default:
+        case 0: // Normal working
+          return (char) TransmissionTransceiver.getModulationSource();
+        case 1: // Two levels sweep
+          return 10;
+        case 2: // Four levels sweep
+          return 11;
+    }
+}    
 
 ESAT_COMHousekeepingTelemetryClass ESAT_COMHousekeepingTelemetry;

@@ -107,9 +107,13 @@ void loop()
       }
       else
       {
-        // Other telecommands: send it to the radio.
         packet.rewind();
-        ESAT_COM.writePacketToRadio(packet);
+        // Only if the sequencial sweep is disabled.
+        if (!((boolean) ESAT_COMSequenceGenerator.getMode()))
+        {
+          // Other telecommands: send it to the radio.
+          ESAT_COM.writePacketToRadio(packet);
+        }
       }   
     }
     

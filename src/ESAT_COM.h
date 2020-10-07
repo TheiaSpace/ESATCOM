@@ -37,6 +37,7 @@
 #include <ESAT_Task.h>
 #include <ESAT_TaskScheduler.h>
 #include "ESAT_COM-hardware/ESAT_COMBuiltinHardwareClock.h"
+#include "ESAT_COM-hardware/ESAT_COMSequenceGenerator.h"
 
 // Communications subsystem main class. It contains the hardware, software,
 // telemetry and telecommands initialization functions, the buffers and the

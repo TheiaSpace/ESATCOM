@@ -21,6 +21,7 @@
 #include <ESAT_I2CSlave.h>
 #include "../ESAT_COM.h"
 #include "../ESAT_COM-hardware/ESAT_COMRadioStream.h"
+#include "../ESAT_COM-hardware/ESAT_COMSequenceGenerator.h"
 #include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterDataSourceSelectionTelecommand.h"
 
@@ -33,6 +34,7 @@ boolean ESAT_COMTransmitterDataSourceSelectionTelecommandClass::handleUserData(E
       if (TransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::fifo) == ESAT_COMTransceiverDriverClass::noError)
       {
         // Drop all the pending temetry stored in the transmission queues.
+        ESAT_COMSequenceGenerator.disable();
         ESAT_COM.clearRadioTelemetryQueue();
         ESAT_I2CSlave.clearMasterWrittenPacketsQueue();
         TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
@@ -47,11 +49,11 @@ boolean ESAT_COMTransmitterDataSourceSelectionTelecommandClass::handleUserData(E
       }
       return false;
     case 2:
-      if (TransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::gpio2_asynchronous) == ESAT_COMTransceiverDriverClass::noError)
-      {    
-        return true;
-      }
-      return false;
+      ESAT_COMSequenceGenerator.enableTwoLevels();
+      return true;
+    case 3:
+      ESAT_COMSequenceGenerator.enableFourLevels();
+      return true;
   }
 }
 

@@ -44,6 +44,13 @@ class ESAT_COMHousekeepingTelemetryClass: public ESAT_CCSDSTelemetryPacketConten
     // of the user data field.
     // Return true on success; otherwise return false.
     boolean fillUserData(ESAT_CCSDSPacket& packet);
+    
+    private:
+    
+    // Fills the transmission modulation source field regarding the 
+    // settings at the driver and the sweeping controller.
+    char writeModulationSource();
+    
 };
 
 // Global instance of ESAT_COMHousekeepingTelemetry.  ESAT_COMSubsystem uses this

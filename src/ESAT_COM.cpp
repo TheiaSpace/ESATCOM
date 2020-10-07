@@ -76,6 +76,7 @@ void ESAT_COMClass::begin(word subsystemApplicationProcessIdentifier,
 
 void ESAT_COMClass::beginHardware()
 {  
+  ESAT_COMTaskScheduler.add(ESAT_COMSequenceGenerator.SequenceIncrementingTask);
   ESAT_COMHearthBeatLED.begin();
   WireCOM.begin(byte(COM_I2C_ADDRESS));
   // Keep reconfiguring the transmitter until everything went right.
@@ -206,75 +207,92 @@ boolean ESAT_COMClass::readPacketFromRadio(ESAT_CCSDSPacket& packet)
 
 void ESAT_COMClass::update()
 {
-  switch(ongoingTransmissionState)
+  if (!((boolean) ESAT_COMSequenceGenerator.getMode())) // Mode == 0
+  {  
+    switch(ongoingTransmissionState)
+    {
+      case IDLE:
+      case EXTERNAL_DATA_TRANSMITTED:
+        if (ESAT_SubsystemPacketHandler.readPacketFromI2C(ongoingTransmissionPacket))
+        { 
+          ongoingTransmissionPacket.rewind(); 
+          // If the packet is a telecommand for the board, it is dispatched 
+          // instead of being broadcasted and on the next cycle a new packet will be
+          // retrieved from the I2C queue (if there are any available).
+          if (isSubsystemTelecommand(ongoingTransmissionPacket))
+          {         
+            ongoingTransmissionPacket.rewind();
+            ESAT_SubsystemPacketHandler.dispatchTelecommand(ongoingTransmissionPacket);
+            break;
+          }
+          ongoingTransmissionPacket.rewind();
+          ongoingTransmissionState = TRANSMITTING_EXTERNAL_DATA;
+          // Packet transmission will begin on the next cycle.
+          break;
+        } 
+        if (ownDataQueue.read(ongoingTransmissionPacket))
+        {       
+          ongoingTransmissionPacket.rewind();       
+          ongoingTransmissionState = TRANSMITTING_OWN_DATA;
+          // Packet transmission will begin on the next cycle.
+          break;
+        }
+        break;
+      case  TRANSMITTING_EXTERNAL_DATA:
+        if (ESAT_COM.writePacketToRadio(ongoingTransmissionPacket))
+        { 
+          // Packet was successfully transmitted.
+          ongoingTransmissionState = EXTERNAL_DATA_TRANSMITTED;
+        }
+        else
+        {        
+          // Part of the packet could not be transmitted. It will be
+          // resumed on the next cycle.
+          ongoingTransmissionState = TRANSMITTING_EXTERNAL_DATA; 
+        }
+        break;      
+      case TRANSMITTING_OWN_DATA:
+        if (ESAT_COM.writePacketToRadio(ongoingTransmissionPacket))
+        {   
+          // Packet was successfully transmitted.;
+          ongoingTransmissionState = OWN_DATA_TRANSMITTED;
+        }
+        else
+        {
+          // Part of the packet could not be transmitted. It will be
+          // resumed on the next cycle.
+          ongoingTransmissionState = TRANSMITTING_OWN_DATA;
+        }
+        break;
+      case OWN_DATA_TRANSMITTED:
+        if (ownDataQueue.read(ongoingTransmissionPacket))
+        {
+          ongoingTransmissionPacket.rewind();
+          ongoingTransmissionState = TRANSMITTING_OWN_DATA;
+          // Packet transmission will begin on the next cycle.
+          break;
+        }
+        // No packets to be transmitted.
+        ongoingTransmissionState = IDLE;
+        break;
+      default:
+        ongoingTransmissionState = IDLE;
+        break;
+    }
+  }
+  else // Process I2C TC while the sequence sweep is on.
   {
-    case IDLE:
-    case EXTERNAL_DATA_TRANSMITTED:
-      if (ESAT_SubsystemPacketHandler.readPacketFromI2C(ongoingTransmissionPacket))
+    ongoingTransmissionPacket.rewind(); 
+    if (ESAT_SubsystemPacketHandler.readPacketFromI2C(ongoingTransmissionPacket))
       { 
         ongoingTransmissionPacket.rewind(); 
-        // If the packet is a telecommand for the board, it is dispatched 
-        // instead of being broadcasted and on the next cycle a new packet will be
-        // retrieved from the I2C queue (if there are any available).
+        // If the packet is a telecommand for the board, it is dispatched
         if (isSubsystemTelecommand(ongoingTransmissionPacket))
         {         
           ongoingTransmissionPacket.rewind();
-          ESAT_SubsystemPacketHandler.dispatchTelecommand(ongoingTransmissionPacket);
-          break;
+          ESAT_SubsystemPacketHandler.dispatchTelecommand(ongoingTransmissionPacket);          
         }
-        ongoingTransmissionPacket.rewind();
-        ongoingTransmissionState = TRANSMITTING_EXTERNAL_DATA;
-        // Packet transmission will begin on the next cycle.
-        break;
-      } 
-      if (ownDataQueue.read(ongoingTransmissionPacket))
-      {       
-        ongoingTransmissionPacket.rewind();       
-        ongoingTransmissionState = TRANSMITTING_OWN_DATA;
-        // Packet transmission will begin on the next cycle.
-        break;
       }
-      break;
-    case  TRANSMITTING_EXTERNAL_DATA:
-      if (ESAT_COM.writePacketToRadio(ongoingTransmissionPacket))
-      { 
-        // Packet was successfully transmitted.
-        ongoingTransmissionState = EXTERNAL_DATA_TRANSMITTED;
-      }
-      else
-      {        
-        // Part of the packet could not be transmitted. It will be
-        // resumed on the next cycle.
-        ongoingTransmissionState = TRANSMITTING_EXTERNAL_DATA; 
-      }
-      break;      
-    case TRANSMITTING_OWN_DATA:
-      if (ESAT_COM.writePacketToRadio(ongoingTransmissionPacket))
-      {   
-        // Packet was successfully transmitted.;
-        ongoingTransmissionState = OWN_DATA_TRANSMITTED;
-      }
-      else
-      {
-        // Part of the packet could not be transmitted. It will be
-        // resumed on the next cycle.
-        ongoingTransmissionState = TRANSMITTING_OWN_DATA;
-      }
-      break;
-    case OWN_DATA_TRANSMITTED:
-      if (ownDataQueue.read(ongoingTransmissionPacket))
-      {
-        ongoingTransmissionPacket.rewind();
-        ongoingTransmissionState = TRANSMITTING_OWN_DATA;
-        // Packet transmission will begin on the next cycle.
-        break;
-      }
-      // No packets to be transmitted.
-      ongoingTransmissionState = IDLE;
-      break;
-    default:
-      ongoingTransmissionState = IDLE;
-      break;
   }
   // Updates the transmission manual bit banging sequence.
   TransmissionTransceiver.updateManualDataStream();

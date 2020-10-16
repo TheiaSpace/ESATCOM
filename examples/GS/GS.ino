@@ -64,10 +64,10 @@ void setup()
   Serial.begin(9600);
   Serial.blockOnOverrun(false);   
   delay(1000);     
-  ReceptionTransceiver.setLowestChannel(0);
-  ReceptionTransceiver.setHighestChannel(15);  
-  TransmissionTransceiver.setLowestChannel(16);
-  TransmissionTransceiver.setHighestChannel(31);  
+  ReceptionTransceiver.setLowestChannel(0); //0
+  ReceptionTransceiver.setHighestChannel(31); //15 
+  TransmissionTransceiver.setLowestChannel(0); //16
+  TransmissionTransceiver.setHighestChannel(31);  //31
   ReceptionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readReceptionModulationType());  
   ReceptionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readReceptionFrequency());
   ReceptionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readReceptionChannel());

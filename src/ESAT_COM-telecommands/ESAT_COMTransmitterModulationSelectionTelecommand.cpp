@@ -33,30 +33,26 @@ boolean ESAT_COMTransmitterModulationSelectionTelecommandClass::handleUserData(E
   {
     case 0:
     default:
-      TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::OOK);
-      ESAT_COMRadioStream.beginWriting();
+      TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::OOK);      
       break;
     case 1:  
       TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode,ESAT_COMTransceiverDriverClass::twoFSK);
-      ESAT_COMRadioStream.beginWriting();
       break;
     case 2:
       TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::twoGaussianFSK);
-      ESAT_COMRadioStream.beginWriting();
       break;
     case 3:
       TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode,ESAT_COMTransceiverDriverClass::fourFSK);
-      ESAT_COMRadioStream.beginWriting();
       break;
     case 4:
       TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::fourGaussianFSK);
-      ESAT_COMRadioStream.beginWriting();
       break;
     case 5:
       TransmissionTransceiver.setModulationType(ESAT_COMTransceiverDriverClass::continuousWave);
       TransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::fifo);
-    break;
-  }    
+      break;
+  }   
+  ESAT_COMRadioStream.beginWriting();  
   return true;  
 }
 

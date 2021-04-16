@@ -27,34 +27,56 @@
 
 boolean ESAT_COMTransmitterDataSourceSelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
+  boolean returnValue;
   switch(packet.readByte())
   {
     case 0:
     default:
       if (TransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::fifo) == ESAT_COMTransceiverDriverClass::noError)
       {
-        // Drop all the pending temetry stored in the transmission queues.
         ESAT_COMSequenceGenerator.disable();
-        ESAT_COM.clearRadioTelemetryQueue();
-        ESAT_I2CSlave.clearMasterWrittenPacketsQueue();
-        TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
-        ESAT_COMRadioStream.beginWriting();
-        return true;
+        returnValue = true;
+        break;
       }
-      return false;
+      returnValue = false;
+      break;
     case 1:
       if (TransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::randomGenerator) == ESAT_COMTransceiverDriverClass::noError)
       {
-        return true;
+        ESAT_COMSequenceGenerator.disable();
+        returnValue = true;
+        break;
       }
-      return false;
+      returnValue = false;
+      break;
     case 2:
-      ESAT_COMSequenceGenerator.enableTwoLevels();
-      return true;
+      if (TransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::fifo) == ESAT_COMTransceiverDriverClass::noError)
+      {
+        ESAT_COMSequenceGenerator.enableTwoLevels();
+        returnValue = true;
+        break;
+      }
+      returnValue = false;
+      break;
     case 3:
-      ESAT_COMSequenceGenerator.enableFourLevels();
-      return true;
+      if (TransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::fifo) == ESAT_COMTransceiverDriverClass::noError)
+      {
+        ESAT_COMSequenceGenerator.enableFourLevels();
+        returnValue = true;
+        break;
+      }
+      returnValue = false;
+      break;
   }
+  if (returnValue)
+  {
+    // Drop all the pending temetry stored in the transmission queues.
+    ESAT_COM.clearRadioTelemetryQueue();
+    ESAT_I2CSlave.clearMasterWrittenPacketsQueue();
+    TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
+    ESAT_COMRadioStream.beginWriting();
+  }
+  return returnValue;
 }
 
 ESAT_COMTransmitterDataSourceSelectionTelecommandClass ESAT_COMTransmitterDataSourceSelectionTelecommand;

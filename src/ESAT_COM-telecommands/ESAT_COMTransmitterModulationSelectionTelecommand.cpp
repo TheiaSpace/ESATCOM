@@ -48,8 +48,7 @@ boolean ESAT_COMTransmitterModulationSelectionTelecommandClass::handleUserData(E
       TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::fourGaussianFSK);
       break;
     case 5:
-      TransmissionTransceiver.setModulationType(ESAT_COMTransceiverDriverClass::continuousWave);
-      TransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::fifo);
+      TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::continuousWave);
       break;
   }   
   ESAT_COMRadioStream.beginWriting();  

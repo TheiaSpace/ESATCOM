@@ -19,16 +19,27 @@
  */
 
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterChannelSelectionTelecommand.h"
+#include "../ESAT_COM-hardware/ESAT_COMRadioStream.h"
 #include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 
 boolean ESAT_COMTransmitterChannelSelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   const byte channel = packet.readByte();
-  if (TransmissionTransceiver.setChannel(channel) == ESAT_COMTransceiverDriverClass::noError)
+  if (TransmissionTransceiver.setChannel(channel) != ESAT_COMTransceiverDriverClass::noError)
   {  
-	return true;  
+	return false;  
   }
-  return false;
+  // If the transmitter is in continuos wave mode, it needs to be 
+  // reconfigured to apply the new frequency.
+  if (TransmissionTransceiver.getModulation() == 5) // Continuous wave
+  {
+    if (TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::continuousWave) != ESAT_COMTransceiverDriverClass::noError)
+    {
+      return false;
+    } 
+    ESAT_COMRadioStream.beginWriting(); 
+  }
+  return true;
 }
 
 ESAT_COMTransmitterChannelSelectionTelecommandClass ESAT_COMTransmitterChannelSelectionTelecommand;

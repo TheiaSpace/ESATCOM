@@ -29,8 +29,12 @@ boolean ESAT_COMTransmitterChannelSelectionTelecommandClass::handleUserData(ESAT
   {  
 	return false;  
   }
-  // If the transmitter is in continuos wave mode, it needs to be 
-  // reconfigured to apply the new frequency.
+  // If the transmitter is in continuos wave or random data modes, it needs 
+  // to be reconfigured to apply the new channel value.
+  if (TransmissionTransceiver.getModulationSource() == 1) // Random data
+  {
+    ESAT_COMRadioStream.beginWriting();
+  }
   if (TransmissionTransceiver.getModulation() == 5) // Continuous wave
   {
     if (TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::continuousWave) != ESAT_COMTransceiverDriverClass::noError)
@@ -38,7 +42,7 @@ boolean ESAT_COMTransmitterChannelSelectionTelecommandClass::handleUserData(ESAT
       return false;
     } 
     ESAT_COMRadioStream.beginWriting(); 
-  }
+  }      
   return true;
 }
 

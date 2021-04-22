@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2019, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -37,13 +37,13 @@ boolean ESAT_COMTransmitterFrequencySelectionTelecommandClass::handleUserData(ES
     if (TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::continuousWave) != ESAT_COMTransceiverDriverClass::noError)
     {
       return false;
-    } 
-    ESAT_COMRadioStream.beginWriting(); 
+    }
+    ESAT_COMRadioStream.beginWriting();
   }
   else
   {
     if (TransmissionTransceiver.updateFrequency() == ESAT_COMTransceiverDriverClass::wrongFrequencyError)
-    {    
+    {
       return false;
     }
     // If the transmitter is in random data, it needs to

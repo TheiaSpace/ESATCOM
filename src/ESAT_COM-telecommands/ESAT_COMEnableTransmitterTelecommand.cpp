@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -18,9 +18,9 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+#include "ESAT_COM-telecommands/ESAT_COMEnableTransmitterTelecommand.h"
 #include <ESAT_I2CSlave.h>
 #include "../ESAT_COM.h"
-#include "ESAT_COM-telecommands/ESAT_COMEnableTransmitterTelecommand.h"
 #include "../ESAT_COM-hardware/ESAT_COMRadioStream.h"
 #include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 

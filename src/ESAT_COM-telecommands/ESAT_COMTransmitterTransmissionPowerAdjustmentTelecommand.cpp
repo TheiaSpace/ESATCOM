@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2019, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -31,9 +31,9 @@ boolean ESAT_COMTransmitterTransmissionPowerAdjustmentTelecommandClass::handleUs
   }
   if (TransmissionTransceiver.updateTransmissionPower() == ESAT_COMTransceiverDriverClass::wrongPowerError)
   {
-	  return false;
+    return false;
   }
-  return true; 
+  return true;
 }
 
 ESAT_COMTransmitterTransmissionPowerAdjustmentTelecommandClass ESAT_COMTransmitterTransmissionPowerAdjustmentTelecommand;

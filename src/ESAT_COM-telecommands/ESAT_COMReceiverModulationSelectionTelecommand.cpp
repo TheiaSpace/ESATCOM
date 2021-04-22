@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -40,14 +40,14 @@ boolean ESAT_COMReceiverModulationSelectionTelecommandClass::handleUserData(ESAT
       ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::fourFSK);
       break;
     case 4:
-      ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::fourGaussianFSK);  
+      ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::fourGaussianFSK);
       break;
-    case 5: // No CW in reception mode
-      return false;    
+    case 5: // No CW in reception mode.
+      return false;
   }  
   ESAT_COMRadioStream.beginReading();
   ReceptionTransceiver.startReception();
-  return true;  
+  return true;
 }
 
 ESAT_COMReceiverModulationSelectionTelecommandClass ESAT_COMReceiverModulationSelectionTelecommand;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2018, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -19,8 +19,8 @@
  */
 
 #include "ESAT_COM-telecommands/ESAT_COMSetTimeTelecommand.h"
-#include "ESAT_COM.h"
 #include <ESAT_SubsystemPacketHandler.h>
+#include "ESAT_COM.h"
 
 boolean ESAT_COMSetTimeTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {

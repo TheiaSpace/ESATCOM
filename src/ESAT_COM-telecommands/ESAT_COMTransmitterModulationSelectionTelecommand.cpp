@@ -50,7 +50,7 @@ boolean ESAT_COMTransmitterModulationSelectionTelecommandClass::handleUserData(E
     case 5:
       TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::continuousWave);
       break;
-  }   
+  }
   ESAT_COMRadioStream.beginWriting();
   return true;
 }

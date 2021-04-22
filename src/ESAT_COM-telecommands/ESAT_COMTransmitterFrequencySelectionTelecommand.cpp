@@ -30,7 +30,7 @@ boolean ESAT_COMTransmitterFrequencySelectionTelecommandClass::handleUserData(ES
   {
     return false;
   }
-  // If the transmitter is in continuos wave mode, it needs to be 
+  // If the transmitter is in continuos wave mode, it needs to be
   // reconfigured to apply the new frequency.
   if (TransmissionTransceiver.getModulation() == 5) // Continuous wave.
   {

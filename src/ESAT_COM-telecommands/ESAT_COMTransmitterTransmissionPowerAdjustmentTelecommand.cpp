@@ -22,7 +22,7 @@
 #include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 
 boolean ESAT_COMTransmitterTransmissionPowerAdjustmentTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
-{ 
+{
   const float rawPower = packet.readFloat();
   const float power = constrain(rawPower, TransmissionTransceiver.MINIMUM_TRANSMISSION_POWER_RATE, TransmissionTransceiver.MAXIMUM_TRANSMISSION_POWER_RATE);
   if (TransmissionTransceiver.setTransmissionPower(power) == ESAT_COMTransceiverDriverClass::wrongPowerError)

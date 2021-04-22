@@ -44,7 +44,7 @@ boolean ESAT_COMReceiverModulationSelectionTelecommandClass::handleUserData(ESAT
       break;
     case 5: // No CW in reception mode.
       return false;
-  }  
+  }
   ESAT_COMRadioStream.beginReading();
   ReceptionTransceiver.startReception();
   return true;

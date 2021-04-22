@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #ifndef ESAT_COMBuiltinHardwareClock_h
 #define ESAT_COMBuiltinHardwareClock_h
 
@@ -35,9 +35,9 @@ class ESAT_COMBuiltinHardwareClockClass: public ESAT_Clock
 
   // Set the time to the given timestamp.
   void write(ESAT_Timestamp timestamp);
-  
+
   private:
-  
+
   // Full year location in RTC backup registers.
   const unsigned int YEAR_BACKUP_REGISTER = 0;
 

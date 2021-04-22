@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -17,11 +17,11 @@
  * along with Theia Space's ESAT COM library.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "ESAT_COMTransceiverHAL.h"
 
 ESAT_COMTransceiverHALClass::ESAT_COMTransceiverHALClass()
-{  
+{
 }
 
 ESAT_COMTransceiverHALClass::ESAT_COMTransceiverHALClass(SPIClass& spiBus,
@@ -76,7 +76,7 @@ void ESAT_COMTransceiverHALClass::clearRTSCounter()
 
 void ESAT_COMTransceiverHALClass::disable()
 {
-  // We set it high first so we don't get a glitch 
+  // We set it high first so we don't get a glitch
   // after setting it as output (enables the weak pullup).
   digitalWrite(shutdownPin, HIGH);
   // Drive high 10 ms.
@@ -89,14 +89,14 @@ byte ESAT_COMTransceiverHALClass::getInterruptPin()
 }
 
 void ESAT_COMTransceiverHALClass::powerUpTransceiver()
-{ 
+{
   // Drive it low at least 10 ms.
   digitalWrite(shutdownPin, LOW);
   delay(10);
 }
 
-void ESAT_COMTransceiverHALClass::readData(byte command, 
-                                           byte dataByteCount, 
+void ESAT_COMTransceiverHALClass::readData(byte command,
+                                           byte dataByteCount,
                                            byte* data)
 {
   if (requestToSend())
@@ -109,9 +109,9 @@ void ESAT_COMTransceiverHALClass::readData(byte command,
 }
 
 byte ESAT_COMTransceiverHALClass::requestToSend()
-{  
+{
   do
-  {    
+  {
     if (checkClearToSendPin())
     {
       RTSCounter = 0;
@@ -130,7 +130,7 @@ void ESAT_COMTransceiverHALClass::reset()
   delay(10);
   // Shutdown the radio, wait and power it up.
   disable();
-  delay(10); 
+  delay(10);
   powerUpTransceiver();
   delay(10);
 }
@@ -197,7 +197,7 @@ void ESAT_COMTransceiverHALClass::writeCommand(byte byteCount, byte* data)
     }
     clearChipSelect();
   }
-} 
+}
 
 byte ESAT_COMTransceiverHALClass::writeCommandAndRetrieveResponse(byte commandByteCount,
                                                                      byte* commandData,

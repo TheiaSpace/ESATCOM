@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2019, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -19,14 +19,14 @@
  */
 
 #include <Arduino.h>
-#include <string.h>
 #include "ESAT_COMSequenceGenerator.h"
+#include <string.h>
 #include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 
 
 void SequenceIncrementingTaskClass::run()
 {
-    ESAT_COMSequenceGenerator.handleSequenceTransmission();                
+    ESAT_COMSequenceGenerator.handleSequenceTransmission();
 }
 
 void ESAT_COMSequenceGeneratorClass::disable()
@@ -107,7 +107,7 @@ boolean ESAT_COMSequenceGeneratorClass::transmitPacket(byte symbol)
     // Pattern to be sent
     byte fillValue;
     if (TransmissionTransceiver.available())
-    {        
+    {
         switch (symbol)
         {
             default:
@@ -133,6 +133,6 @@ boolean ESAT_COMSequenceGeneratorClass::transmitPacket(byte symbol)
         return true;
     }
     return false;
-}   
+}
 
 ESAT_COMSequenceGeneratorClass ESAT_COMSequenceGenerator;

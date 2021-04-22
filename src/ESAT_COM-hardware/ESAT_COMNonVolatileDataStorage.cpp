@@ -18,9 +18,9 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+#include "ESAT_COMNonVolatileDataStorage.h"
 #include <EEPROM.h>
 #include "ESAT_Util.h"
-#include "ESAT_COMNonVolatileDataStorage.h"
 
 boolean ESAT_COMNonVolatileDataStorageClass::checkMemoryStatus()
 {
@@ -222,6 +222,6 @@ void ESAT_COMNonVolatileDataStorageClass::writeReceptionModulationType()
 {
     (void) EEPROM.write(RECEPTION_MODULTATION_TYPE_PARAMETER_OFFSET,
     ReceptionTransceiver.getModulation());
-}   
+}
 
 ESAT_COMNonVolatileDataStorageClass ESAT_COMNonVolatileDataStorage;

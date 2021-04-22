@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ void ESAT_COMHearthBeatLEDClass::update()
   else
   {
     ESAT_COMHearthBeatLED.write(0.0);
-  }  
+  }
 }
 
 void ESAT_COMHearthBeatLEDClass::write(const float brightness)

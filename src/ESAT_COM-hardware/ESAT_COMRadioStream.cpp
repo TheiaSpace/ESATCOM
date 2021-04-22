@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -17,17 +17,17 @@
  * along with Theia Space's ESAT COM library.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
- 
-#include <Arduino.h> 
+
+#include <Arduino.h>
 #include "ESAT_COMRadioStream.h"
 #include "ESAT_COMTransceiverDriver.h"
- 
+
 int ESAT_COMRadioStreamClass::available()
 {
   // If the reception buffer is empty.
   if (rxBufferAvailableBytes <= 0)
   {
-    // Check if the FIFO has new data and retrieve it to 
+    // Check if the FIFO has new data and retrieve it to
     // the driver buffer.
     if (ReceptionTransceiver.available() > 0)
     {
@@ -46,42 +46,42 @@ int ESAT_COMRadioStreamClass::availableWrite()
 {
   return (int) TransmissionTransceiver.available();
 }
- 
+
 void ESAT_COMRadioStreamClass::begin()
 {
   beginReading();
   beginWriting();
-} 
- 
+}
+
 // Begin reception.
 void ESAT_COMRadioStreamClass::beginReading()
 {
   rxBufferAvailableBytes=0;
-} 
- 
+}
+
 // Begin transmission.
 void ESAT_COMRadioStreamClass::beginWriting()
-{   
+{
   initializeTXBuffer(DEFAULT_TX_BUFFER_VALUE);
   flush();
 }
 
-// Useless function. All the writings flush the buffer and this buffer 
+// Useless function. All the writings flush the buffer and this buffer
 // is not accessible outside.
 void ESAT_COMRadioStreamClass::flush()
 {
   // May went wrong if transmitter is busy.
-  TransmissionTransceiver.nonBlockingWrite(txBuffer); 
+  TransmissionTransceiver.nonBlockingWrite(txBuffer);
 }
 
 void ESAT_COMRadioStreamClass::initializeTXBuffer(byte initValue)
 {
-  for (unsigned int index=1; 
-      index < ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH; 
+  for (unsigned int index=1;
+      index < ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH;
       ++index)
   {
     txBuffer[index]=initValue;
-  }  
+  }
 }
 
 int ESAT_COMRadioStreamClass::peek ()
@@ -113,7 +113,7 @@ int ESAT_COMRadioStreamClass::read()
 }
 
 size_t ESAT_COMRadioStreamClass::read(ESAT_Buffer& inputBuffer)
-{  
+{
   unsigned long readCounter;
   // Read and write into the inputBuffer as many received bytes as possible.
   for (readCounter = 0; available() > 0 && inputBuffer.capacity() > inputBuffer.length(); ++readCounter)
@@ -129,9 +129,9 @@ size_t ESAT_COMRadioStreamClass::read(ESAT_Buffer& inputBuffer)
 }
 
 size_t ESAT_COMRadioStreamClass::write (byte datum)
-{  
+{
   // If a transmission is pending nothing is written.
-  if (TransmissionTransceiver.available() <= 0) 
+  if (TransmissionTransceiver.available() <= 0)
   {
     return 0;
   }
@@ -139,7 +139,7 @@ size_t ESAT_COMRadioStreamClass::write (byte datum)
   txBuffer[0]=1; // First byte is length.
   txBuffer[1]=datum;
   // If the transmission goes wrong (because transceiver is bad configured or shutdown).
-  if (TransmissionTransceiver.nonBlockingWrite(txBuffer)!=ESAT_COMTransceiverDriverClass::noError) 
+  if (TransmissionTransceiver.nonBlockingWrite(txBuffer)!=ESAT_COMTransceiverDriverClass::noError)
   {
     return 0;
   }
@@ -147,7 +147,7 @@ size_t ESAT_COMRadioStreamClass::write (byte datum)
 }
 
 size_t ESAT_COMRadioStreamClass::write(const byte *buffer, size_t size)
-{  
+{
   unsigned int index;
   // Copy the data to the transmission buffer.
   for (index=0;
@@ -156,12 +156,12 @@ size_t ESAT_COMRadioStreamClass::write(const byte *buffer, size_t size)
   {
     txBuffer[index + 1] = buffer[index];
   }
-  txBuffer[0] = index; // Set the length field. 
+  txBuffer[0] = index; // Set the length field.
   if ((TransmissionTransceiver.available() <= 0) || (index == 0))
   {
     return 0;
   }
-  
+
   if (TransmissionTransceiver.nonBlockingWrite(txBuffer)!= ESAT_COMTransceiverDriverClass::noError)
   {
     return 0;
@@ -175,8 +175,8 @@ signed char ESAT_COMRadioStreamClass::write(ESAT_Buffer& outputBuffer)
   const unsigned long initialPosition = outputBuffer.position();
   unsigned int index;
   // Copy data to txBuffer.
-  for (index = 0; outputBuffer.availableBytes() > 0 && index < (ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH-1); ++index) 
-  {    
+  for (index = 0; outputBuffer.availableBytes() > 0 && index < (ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH-1); ++index)
+  {
     txBuffer[index + 1] = outputBuffer.read();
   }
   // Set length field.
@@ -193,8 +193,8 @@ signed char ESAT_COMRadioStreamClass::write(ESAT_Buffer& outputBuffer)
   {
     outputBuffer.seek(initialPosition); // Rewind source buffer.
     return 0;
-  }  
-  outputBuffer.seek(initialPosition); // Rewind source buffer. 
+  }
+  outputBuffer.seek(initialPosition); // Rewind source buffer.
   return index;
 }
 

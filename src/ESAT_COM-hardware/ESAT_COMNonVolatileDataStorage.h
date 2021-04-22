@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -37,102 +37,101 @@
 // ESAT_COMNonVolatileDataStorage.eraseAll().
 class ESAT_COMNonVolatileDataStorageClass
 {
-  public:  
-  
+  public:
     // Check if the stored data is valid or not.
-    boolean checkMemoryStatus(); 
-    
+    boolean checkMemoryStatus();
+
     // Erases all the non volatile memory contents
     void eraseAll();
-    
+
     // Reads the stored transmission channel.
     byte readTransmissionChannel();
-    
+
     // Reads the stored transmission frequency.
     float readTransmissionFrequency();
-    
+
     // Reads the stored transmission power.
     float readTransmissionPower();
 
     // Reads the stored modulation type.
     ESAT_COMTransceiverDriverClass::ModulationType readTransmissionModulationType();
-    
+
     // Reads the stored reception channel.
     byte readReceptionChannel();
-    
+
     // Reads the stored reception frequency.
     float readReceptionFrequency();
 
     // Reads the stored reception modulation type.
     ESAT_COMTransceiverDriverClass::ModulationType readReceptionModulationType();
-    
+
     // Writes all radio driver configurations into
     // non volatile memory.
     void writeConfigurations();
-    
+
   private:
-  
+
     // Length of the memory valid flag.
     static const word MEMORY_CONTENTS_STATUS_LENGHT = 1;
-    
+
     // Offset of the memory valid flag.
-    static const word MEMORY_CONTENTS_STATUS_OFFSET = 0;    
-    
+    static const word MEMORY_CONTENTS_STATUS_OFFSET = 0;
+
     // Length of the transmission channel parameter.
     static const word TRANSMISSION_CHANNEL_PARAMETER_LENGTH = 1;
-    
+
     // Offset of the transmission channel parameter.
-    static const word TRANSMISSION_CHANNEL_PARAMETER_OFFSET = 
+    static const word TRANSMISSION_CHANNEL_PARAMETER_OFFSET =
       MEMORY_CONTENTS_STATUS_OFFSET
-      + MEMORY_CONTENTS_STATUS_LENGHT;    
+      + MEMORY_CONTENTS_STATUS_LENGHT;
 
     // Length of the transmission frequency parameter.
     static const word TRANSMISSION_FREQUENCY_PARAMETER_LENGTH = 4;
 
     // Offset of the transmission frequency parameter.
-    static const word TRANSMISSION_FREQUENCY_PARAMETER_OFFSET = 
+    static const word TRANSMISSION_FREQUENCY_PARAMETER_OFFSET =
       TRANSMISSION_CHANNEL_PARAMETER_OFFSET
       + TRANSMISSION_CHANNEL_PARAMETER_LENGTH;
 
     // Length of the transmission modulation type parameter;
-    static const word TRANSMISSION_MODULTATION_TYPE_PARAMETER_LENGTH = 1; 
+    static const word TRANSMISSION_MODULTATION_TYPE_PARAMETER_LENGTH = 1;
 
     // Offset of the transmission modulation type parameter;
-    static const word TRANSMISSION_MODULTATION_TYPE_PARAMETER_OFFSET = 
+    static const word TRANSMISSION_MODULTATION_TYPE_PARAMETER_OFFSET =
       TRANSMISSION_FREQUENCY_PARAMETER_OFFSET
       + TRANSMISSION_FREQUENCY_PARAMETER_LENGTH;
-    
+
     // Length of the transmission power parameter.
     static const word TRANSMISSION_POWER_PARAMETER_LENGTH = 4;
-    
+
     // Offset of the transmission power parameter.
-    static const word TRANSMISSION_POWER_PARAMETER_OFFSET = 
+    static const word TRANSMISSION_POWER_PARAMETER_OFFSET =
       TRANSMISSION_MODULTATION_TYPE_PARAMETER_OFFSET
       + TRANSMISSION_MODULTATION_TYPE_PARAMETER_LENGTH;
-   
+
     // Length of the reception channel parameter.
     static const word RECEPTION_CHANNEL_PARAMETER_LENGTH = 1;
-    
+
     // Offset of the reception channel parameter.
-    static const word RECEPTION_CHANNEL_PARAMETER_OFFSET = 
+    static const word RECEPTION_CHANNEL_PARAMETER_OFFSET =
       TRANSMISSION_POWER_PARAMETER_OFFSET
       + TRANSMISSION_POWER_PARAMETER_LENGTH;
 
     // Length of the reception frequency parameter.
     static const word RECEPTION_FREQUENCY_PARAMETER_LENGTH = 4;
-    
+
     // Offset of the reception frequency parameter.
-    static const word RECEPTION_FREQUENCY_PARAMETER_OFFSET = 
+    static const word RECEPTION_FREQUENCY_PARAMETER_OFFSET =
       RECEPTION_CHANNEL_PARAMETER_OFFSET
       + RECEPTION_CHANNEL_PARAMETER_LENGTH;
-    
+
     // Length of the reception modulation type parameter;
-    static const word RECEPTION_MODULTATION_TYPE_PARAMETER_LENGTH = 1;   
-    
+    static const word RECEPTION_MODULTATION_TYPE_PARAMETER_LENGTH = 1;
+
     // Offset of the reception modulation type parameter;
     static const word RECEPTION_MODULTATION_TYPE_PARAMETER_OFFSET =
       RECEPTION_FREQUENCY_PARAMETER_OFFSET
-      + RECEPTION_FREQUENCY_PARAMETER_LENGTH;  
+      + RECEPTION_FREQUENCY_PARAMETER_LENGTH;
 
     // Total length of the configuration.
     static const word CONFIGURATION_LENGTH =
@@ -144,34 +143,34 @@ class ESAT_COMNonVolatileDataStorageClass
       + RECEPTION_CHANNEL_PARAMETER_LENGTH
       + RECEPTION_FREQUENCY_PARAMETER_LENGTH
       + RECEPTION_MODULTATION_TYPE_PARAMETER_LENGTH;
-      
+
     // Value to store in memory if the data was erased.
-    const byte MEMORY_CONTENTS_ERASED = 0;    
-    
+    const byte MEMORY_CONTENTS_ERASED = 0;
+
     // Value to store in memory if the data was updated.
-    const byte MEMORY_CONTENTS_VALID = 0b01010101;  
-   
+    const byte MEMORY_CONTENTS_VALID = 0b01010101;
+
     // Stores the transmission channel into non volatile memory.
     void writeTransmissionChannel();
-   
+
     // Stores the transmission frequency into non volatile memory.
     void writeTransmissionFrequency();
-    
+
     // Stores the transmission modulation type into non volatile
     // memory.
     void writeTransmissionModulationType();
-    
+
     // Stores the transmission power into non volatile memory.
     void writeTransmissionPower();
-    
+
     // Stores the reception channel into non volatile memory.
     void writeReceptionChannel();
-    
+
     // Stores the reception frequency into non volatile memory.
     void writeReceptionFrequency();
 
     // Stores the reception modulation type into non volatile memory.
-    void writeReceptionModulationType();   
+    void writeReceptionModulationType();
 };
 
 // Global instance of the COM non-volatile data storage library.

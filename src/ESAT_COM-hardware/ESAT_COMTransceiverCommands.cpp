@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -66,13 +66,13 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverC
   };
   uint8_t cmdBuff[8];
   // Check if the patch is needed.
-  const PartInfoReply partInfoReply = partInfo(transceiver);       
+  const PartInfoReply partInfoReply = partInfo(transceiver);
   if ((partInfoReply.ROMID == TRANSCEIVER_PATCH_ROMID) && ((partInfoReply.ID >> 8) <= TRANSCEIVER_PATCH_ID))
-  {       
+  {
     for (line = 0; line < (sizeof(TRANSCEIVER_PATCH) / 9); line++)
-    {             
+    {
       for (row = 0; row < 8; row++)
-      {    
+      {
         cmdBuff[row] = TRANSCEIVER_PATCH[(line * 9) + row + 1];
       }
       if (transceiver.writeCommandAndRetrieveResponse(8, cmdBuff, 0, 0) != 0xFF)
@@ -81,7 +81,7 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverC
       }
       // Check if an error has occured.
       if (transceiver.checkInterruptPin() == 0)
-      {        
+      {
         getInterruptStatus(transceiver, 0, 0, 0);
         // No return values are necessary.
         return ESAT_COMTransceiverHALClass::TRANSCEIVER_CHIP_ERROR;
@@ -103,7 +103,7 @@ ESAT_COMTransceiverCommandsClass::GPIOConfigurationReply ESAT_COMTransceiverComm
                                                                                                           ESAT_COMTransceiverCommandsClass::GPIODriveStrength driveStrength)
 {
   byte cmdBuff[8];
-  GPIOConfigurationReply GPIOConfigurationReply;  
+  GPIOConfigurationReply GPIOConfigurationReply;
   cmdBuff[0] = COMMAND_CONFIGURE_GPIO;
   cmdBuff[1] = getGPIOPullUpMask(enableGPIO0PullUp) | getGPIOConfigurationMask(GPIO0Config);
   cmdBuff[2] = getGPIOPullUpMask(enableGPIO1PullUp) | getGPIOConfigurationMask(GPIO1Config);
@@ -122,13 +122,13 @@ ESAT_COMTransceiverCommandsClass::GPIOConfigurationReply ESAT_COMTransceiverComm
   GPIOConfigurationReply.GPIO[3]        = cmdBuff[3];
   GPIOConfigurationReply.NIRQ           = cmdBuff[4];
   GPIOConfigurationReply.SDO            = cmdBuff[5];
-  GPIOConfigurationReply.generalConfiguration   = cmdBuff[6];  
+  GPIOConfigurationReply.generalConfiguration   = cmdBuff[6];
   return GPIOConfigurationReply;
 }
 
 ESAT_COMTransceiverCommandsClass::GPIOConfigurationReply ESAT_COMTransceiverCommandsClass::configureGPIODefault(ESAT_COMTransceiverHALClass& transceiver)
 {
-  return configureGPIO(transceiver, 
+  return configureGPIO(transceiver,
                       ESAT_COMTransceiverCommandsClass::DONOTHING, false,
                       ESAT_COMTransceiverCommandsClass::DONOTHING, false,
                       ESAT_COMTransceiverCommandsClass::DONOTHING, false,
@@ -170,7 +170,7 @@ ESAT_COMTransceiverCommandsClass::FastResponseRegisterAReply  ESAT_COMTransceive
   fastResponseRegisterAReply.fastResponseRegisterD = cmdBuff[3];
   return fastResponseRegisterAReply;
 }
-  
+
 ESAT_COMTransceiverCommandsClass::FastResponseRegisterBReply  ESAT_COMTransceiverCommandsClass::getFastResponseRegisterB(ESAT_COMTransceiverHALClass& transceiver,
                                                                                                                          byte responseByteCount)
 {
@@ -185,7 +185,7 @@ ESAT_COMTransceiverCommandsClass::FastResponseRegisterBReply  ESAT_COMTransceive
   fastResponseRegisterBReply.fastResponseRegisterA = cmdBuff[3];
   return fastResponseRegisterBReply;
 }
-  
+
 ESAT_COMTransceiverCommandsClass::FastResponseRegisterCReply  ESAT_COMTransceiverCommandsClass::getFastResponseRegisterC(ESAT_COMTransceiverHALClass& transceiver,
                                                                                                                          byte responseByteCount)
 {
@@ -200,7 +200,7 @@ ESAT_COMTransceiverCommandsClass::FastResponseRegisterCReply  ESAT_COMTransceive
   fastResponseRegisterCReply.fastResponseRegisterB = cmdBuff[3];
   return fastResponseRegisterCReply;
 }
-  
+
 ESAT_COMTransceiverCommandsClass::FastResponseRegisterDReply  ESAT_COMTransceiverCommandsClass::getFastResponseRegisterD(ESAT_COMTransceiverHALClass& transceiver,
                                                                                                                          byte responseByteCount)
 {
@@ -282,7 +282,7 @@ byte ESAT_COMTransceiverCommandsClass::getGPIOConfigurationMask(ESAT_COMTranscei
 byte ESAT_COMTransceiverCommandsClass::getGPIODriveStrengthMask(GPIODriveStrength strength)
 {
   switch (strength)
-  {    
+  {
     case RADIO_HIGH:
       return (0 << 5);
     case RADIO_MED_HIGH:
@@ -299,7 +299,7 @@ byte ESAT_COMTransceiverCommandsClass::getGPIOPullUpMask(boolean pullUpEnabled)
 {
   if (pullUpEnabled)
   {
-    return (1 << 6);    
+    return (1 << 6);
   }
   return 0;
 }
@@ -346,7 +346,7 @@ ESAT_COMTransceiverCommandsClass::ModemStatusReply ESAT_COMTransceiverCommandsCl
   modemStatusReply.currentReceivedSignalStregnthIndicator     = cmdBuff[2];
   modemStatusReply.latchedReceivedSignalStrengthIndicator     = cmdBuff[3];
   modemStatusReply.antenna1ReceivedSignalStrengthIndicator    = cmdBuff[4];
-  modemStatusReply.antenna2ReceivedSignalStrengthIndicator    = cmdBuff[5];  
+  modemStatusReply.antenna2ReceivedSignalStrengthIndicator    = cmdBuff[5];
   modemStatusReply.automaticFrequencyControlFrequencyOffset   = ((word)cmdBuff[6] << 8) & 0xFF00;
   modemStatusReply.automaticFrequencyControlFrequencyOffset  |= (word)cmdBuff[7] & 0x00FF;
   return modemStatusReply;
@@ -459,7 +459,7 @@ void ESAT_COMTransceiverCommandsClass::startReception(ESAT_COMTransceiverHALClas
                                                       byte channel,
                                                       word receptionLength)
 {
-  byte cmdBuff[8];  
+  byte cmdBuff[8];
   cmdBuff[0] = COMMAND_START_RECEPTION;
   cmdBuff[1] = channel;
   cmdBuff[2] = 0x00; // Condition.
@@ -481,7 +481,7 @@ void ESAT_COMTransceiverCommandsClass::startTransmission(ESAT_COMTransceiverHALC
   cmdBuff[2] = 0x30;
   cmdBuff[3] = (byte)(transmissionLength >> 8);
   cmdBuff[4] = (byte)(transmissionLength);
-  cmdBuff[5] = 0x00;  
+  cmdBuff[5] = 0x00;
   // Don't repeat the packet,
   // ie. transmit the packet only once.
   cmdBuff[6] = 0x00;

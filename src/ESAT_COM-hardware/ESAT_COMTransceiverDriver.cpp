@@ -18,13 +18,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+#include "ESAT_COMTransceiverDriver.h"
 #include <SPI.h>
 #include "ESAT_COMReceptionLED.h"
 #include "ESAT_COMTransmissionLED.h"
-#include "ESAT_COMTransceiverDriver.h"
 #include "ESAT_COMTransceiverCommands.h"
 #include "ESAT_COMTransceiverProperties.h"
-
+// Configurations for the different working schemas.
 #include "configurations/ESAT_COMOOKReceptionConfiguration.h"
 #include "configurations/ESAT_COM2FSKReceptionConfiguration.h"
 #include "configurations/ESAT_COM2GFSKReceptionConfiguration.h"

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "ESAT_COMBuiltinHardwareClock.h"
 #include <RTC.h>
 
@@ -28,9 +27,9 @@ ESAT_Timestamp ESAT_COMBuiltinHardwareClockClass::read()
   timeToBeRead.day = (byte) RTC.getDay();
   timeToBeRead.month = (byte) RTC.getMonth();
   // Yikes! Year 2000 problem strikes again!
-  timeToBeRead.year = (word) (RTC.getYear() 
+  timeToBeRead.year = (word) (RTC.getYear()
     + RTC.read(YEAR_BACKUP_REGISTER) * 100);
-  return timeToBeRead;  
+  return timeToBeRead;
 }
 
 void ESAT_COMBuiltinHardwareClockClass::write(ESAT_Timestamp timeToSet)
@@ -40,7 +39,7 @@ void ESAT_COMBuiltinHardwareClockClass::write(ESAT_Timestamp timeToSet)
   RTC.setHours((byte) timeToSet.hours);
   RTC.setDay((byte) timeToSet.day);
   RTC.setMonth((byte) timeToSet.month);
-  // RTC doesn't handle century and millenium digits, so we store them 
+  // RTC doesn't handle century and millenium digits, so we store them
   // in a backup register.
   RTC.setYear((byte) (timeToSet.year % 100));
   RTC.write(YEAR_BACKUP_REGISTER, timeToSet.year / 100);

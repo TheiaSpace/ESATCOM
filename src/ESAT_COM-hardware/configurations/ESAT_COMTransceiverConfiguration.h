@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -28,19 +28,19 @@
 // Abstract class for setting the transceiver properties according to
 // the desired working mode and modulation. User must extend this class
 // implementing the applyConfiguration function according to the desired
-// settings. This class also provides already implemented functions for 
-// configuring the common properties that the user can change (modulation 
+// settings. This class also provides already implemented functions for
+// configuring the common properties that the user can change (modulation
 // source, frequency and transmission power).
 class ESAT_COMTransceiverConfigurationClass
 {
   public:
-    
+
     // Pure virtual function for implementing the different configuration
     // variations according to the desired settings. It receives the
     // HAL reference of the transceiver that has to be configured and
     // returns any possible error. Used by the COM driver during initialization.
     virtual ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError applyConfiguration(ESAT_COMTransceiverHALClass& transceiver) = 0;
-    
+
     // Configures the transmission power property to the selected transceiver.
     // Requires the transceiver HAL and the power value. Returns any possible error.
     ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError setTransmissionPower(ESAT_COMTransceiverHALClass& transceiver,
@@ -54,10 +54,10 @@ class ESAT_COMTransceiverConfigurationClass
       cmdBuff[1] = 0;
       return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
     }
-   
+
     // Configures the clock generator property of the selected transceiver.
     // This function is used for setting the radio central frequency.
-    // Requires the transceiver HAL and the clock generator band. Returns 
+    // Requires the transceiver HAL and the clock generator band. Returns
     // any possible error.
     ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureClockGenerator(ESAT_COMTransceiverHALClass& transceiver,
                                                                                         byte clkGenBand)
@@ -65,13 +65,13 @@ class ESAT_COMTransceiverConfigurationClass
       const byte numProperties = 1;
       const byte group = ESAT_COMTransceiverPropertiesClass::PROPERTY_MODEM;
       const byte offset = ESAT_COMTransceiverPropertiesClass::PARAMETER_MODEM_CLOCK_GENERATOR_BAND;
-      byte cmdBuff[numProperties];     
+      byte cmdBuff[numProperties];
       cmdBuff[0] = clkGenBand | ESAT_COMTransceiverPropertiesClass::PARAMETER_MODEM_CLOCK_GENERATOR_BAND_HIGH_PERFORMANCE_MASK;
       return ESAT_COMTransceiverCommands.setProperty(transceiver, group, numProperties, offset, cmdBuff);
     }
-    
+
     // Configures the central frequency  property of the selected transceiver.
-    // Requires the transceiver HAL and the central frequency. Returns 
+    // Requires the transceiver HAL and the central frequency. Returns
     // any possible error.
     ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError setFrequency(ESAT_COMTransceiverHALClass& transceiver,
                                                                              byte PLLInteger,
@@ -91,7 +91,7 @@ class ESAT_COMTransceiverConfigurationClass
     }
 
     // Configures the modulation source property of the selected transceiver.
-    // Requires the transceiver HAL and the modulation source value. Returns 
+    // Requires the transceiver HAL and the modulation source value. Returns
     // any possible error.
     ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError configureModulationSource(ESAT_COMTransceiverHALClass& transceiver,
                                                                                           byte modulationSourceMask)

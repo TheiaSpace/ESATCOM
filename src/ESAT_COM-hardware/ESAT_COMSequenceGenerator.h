@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -28,18 +28,18 @@
 class SequenceIncrementingTaskClass: public ESAT_Task
 {
   public:
-  
+
     // Updating period (in us).
     // Set it here.
     unsigned long period()
     {
       return 300000;
     }
-    
+
     // Periodic task function. Called by an ESAT_TaskScheduler.
     // Transmits the proper frame.
     void run();
-        
+
 };
 
 // This class generates a binary or quaternary CCSDS packet to test the
@@ -47,7 +47,7 @@ class SequenceIncrementingTaskClass: public ESAT_Task
 class ESAT_COMSequenceGeneratorClass
 {
   public:
-  
+
     // Perodic task instance.
     SequenceIncrementingTaskClass SequenceIncrementingTask;
 
@@ -56,18 +56,18 @@ class ESAT_COMSequenceGeneratorClass
 
     // Configures the 4-level radio sweep.
     void enableFourLevels();
-    
+
     // Configures the 2-level radio sweep.
-    void enableTwoLevels();    
-    
+    void enableTwoLevels();
+
     // Returns if the sweep is enabled and the selected mode.
     byte getMode();
-    
+
     // Process the sequence transmission
     void handleSequenceTransmission();
 
-  private:  
-    
+  private:
+
     // Controls the working mode of the sequence generator.
     enum SequenceMode
     {
@@ -75,18 +75,18 @@ class ESAT_COMSequenceGeneratorClass
       TWO_LEVELS = 1,
       FOUR_LEVELS = 2
     };
-    
+
     // Number of times a packet is repeated before skipping to the next oen.
-    const byte NUMBER_OF_RETRIALS = 1;    
+    const byte NUMBER_OF_RETRIALS = 1;
 
     // Index of the sequence.
     byte levelCounter = 0;
-    
+
     // Mode of operation.
     SequenceMode mode = DISABLED;
-    
+
     // Number of times each step of the sequence have been repeated.
-    byte retrialsCounter = 0;    
+    byte retrialsCounter = 0;
 
     // Sends the packet.
     // Requires the symbol to be transmitted

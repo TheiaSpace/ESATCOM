@@ -27,20 +27,20 @@ class ESAT_COMHearthBeatLEDClass
   public:
     // Configure the LED control line.
     void begin();
-    
+
     // Update the LED brightness value.
-    void update();    
+    void update();
 
   private:
     // Pin number of the LED control line.
     static const int LED_CONTROL_LINE = LED_C;
-    
+
     // Blinking period of the LED.
     const word LED_BLINKING_PERIOD_MS = 400;
-    
+
     // On duty cycle of the LED.
     const byte LED_BLINKING_DUTY = 80;
-    
+
     // Write a brightness value (from 0 to 100 %) to the LED.
     void write(float brightness);
 };

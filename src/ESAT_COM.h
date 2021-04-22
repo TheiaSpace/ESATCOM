@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -41,32 +41,31 @@
 
 // Communications subsystem main class. It contains the hardware, software,
 // telemetry and telecommands initialization functions, the buffers and the
-// queues for the telemetry and the telecommands and the callbacks for 
+// queues for the telemetry and the telecommands and the callbacks for
 // handling the reading and the writing of the CCSDS packets and the KISS
 // frames. This class software is used by both the ground station and the
 // on-board software versions.
 class ESAT_COMClass
 {
-  public: 
-  
+  public:
     // Periodic task for reading and delivering the board's telemetry.
     // This class is registered to an ESAT_TaskScheduler that will
     // call the run() function within the set period.
     class PeriodicalTelemetryDeliveryTaskClass: public ESAT_Task
     {
       public:
-      
+
         // Delivery period (in us).
         // Set it here.
         unsigned long period()
         {
           return 1000000;
         }
-        
+
         // Periodic task function. Called by an ESAT_TaskScheduler.
         // Its implementation is done inside the sketch and it varies
-        // between the ground station and the on-board softwares.    
-        void run();   
+        // between the ground station and the on-board softwares.
+        void run();
     };
 
     // Maximum packet data length that the board will handle.
@@ -77,67 +76,66 @@ class ESAT_COMClass
     ESAT_CCSDSPrimaryHeader::LENGTH + PACKET_DATA_BUFFER_LENGTH;
 
     // Maximum KISS frame length taht the board will handle.
-    static const word WHOLE_KISS_FRAME_MAX_LENGTH = 
+    static const word WHOLE_KISS_FRAME_MAX_LENGTH =
     ESAT_KISSStream::frameLength(WHOLE_PACKET_BUFFER_LENGTH);
-      
+
     // Instance of the TelemetryDeliveryTaskClass.
-    PeriodicalTelemetryDeliveryTaskClass PeriodicalTelemetryDeliveryTask; 
-    
+    PeriodicalTelemetryDeliveryTaskClass PeriodicalTelemetryDeliveryTask;
+
     // Sets up the board.
     // Configures the APID and the version numbers (they change between
     // ground segment and on-board softwares).
-    void begin(word subsystemApplicationProcessIdentifier, 
+    void begin(word subsystemApplicationProcessIdentifier,
                byte subsystemMajorVersionNumber,
                byte subsystemMinorVersionNumber,
                byte subsystemPatchVersionNumber);
-                 
+
     // Disables the on-board telemetry delivery over the radio without OBC
     // interaction.
     void disableCOMTelemetryRadioDelivery();
-               
+
     // Enables the on-board telemetry delivery over radio without OBC
     // interaction.
     void enableCOMTelemetryRadioDelivery();
-    
+
     // Empties the board's transmission pending telemetry queue.
     void clearRadioTelemetryQueue();
-      
+
     // Checks if the on-board telemetry delivery over the radio is enabled.
     boolean isCOMTelemetryRadioDeliveryEnabled();
-                  
+
     // Checks wether a packet is a telecommand for the current subsystem
     // (on-board or ground station).
     boolean isSubsystemTelecommand(ESAT_CCSDSPacket& packet);
-      
+
     // Queues a telecommand to the radio output buffer (for the ground station).
     boolean queueTelecommandToRadio(ESAT_CCSDSPacket& packet);
-      
+
     // Queues a telemetry to the radio output buffer(for the on-board module).
     boolean queueTelemetryToRadio(ESAT_CCSDSPacket& packet);
 
     // Fills the packet with the data read from the radio interface.
     // Returns true if a new packet was read, otherwise returns false.
     boolean readPacketFromRadio(ESAT_CCSDSPacket& packet);
-    
+
     // Performs the background tasks:
     //  -I2C written packets: radio telecommands or any subsystem telemetry.
-    //                        Radio telecommands are handled and the subsystem 
+    //                        Radio telecommands are handled and the subsystem
     //                        telemetry is queued to be transmitted by the radio
     //                        when it were possible.
     //  -Radio transmissions: broadcasts either any I2C received (and queued) telemetries
-    //                        and the queued own subsystem's telemetry using a sequential 
+    //                        and the queued own subsystem's telemetry using a sequential
     //                        dispatching algorithm.
     //  -Manual data stream:  updates the bit-banged transmission testing sequence.
     //  -Heath beat LED update.
     void update();
-      
+
     // Starts the radio transmission of the given packet.
     // Returns true if a new packet was fully written and transmitted,
     // otherwise returns false.
     boolean writePacketToRadio(ESAT_CCSDSPacket& packet);
 
-  private:  
-  
+  private:
     // Multi-source transmission state machine states.
     enum RadioTransmissionState
     {
@@ -147,10 +145,10 @@ class ESAT_COMClass
       TRANSMITTING_OWN_DATA, // Board's telemetry.
       OWN_DATA_TRANSMITTED
     };
-  
+
     // I2C Address of the board.
     const byte COM_I2C_ADDRESS = 3;
-  
+
     // Size of the board external (I2C) data radio transmission buffer.
     const unsigned long EXTERNAL_DATA_TRANSMISSION_QUEUE_CAPACITY = 10;
 
@@ -178,10 +176,10 @@ class ESAT_COMClass
 
     // Use this queue to store the user controlled data.
     ESAT_CCSDSPacketQueue ownDataQueue;
-    
+
     // Backend array for the radioOutputBuffer.
     byte radioInputBufferBackendArray[WHOLE_PACKET_BUFFER_LENGTH];
-    
+
     // KISS frame transmission buffer.
     ESAT_Buffer radioOutputBuffer;
 
@@ -190,7 +188,7 @@ class ESAT_COMClass
 
     // Use this to read CCSDS packets from the radio interface.
     ESAT_CCSDSPacketFromKISSFrameReader radioReader;
-    
+
     // Use this to write packets to the radio interface.
     ESAT_KISSStream radioWriter;
 
@@ -204,7 +202,7 @@ class ESAT_COMClass
     void beginTelecommands();
 
     // Configures the telemetry packets.
-    void beginTelemetry();    
+    void beginTelemetry();
 };
 
 // Instance of the tasks scheduler (should be global?).

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2019, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -17,14 +17,13 @@
  * along with Theia Space's ESAT COM library.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
- 
 
 #include "ESAT_COM-telemetry/ESAT_COMHousekeepingTelemetry.h"
-#include "../ESAT_COM-hardware/ESAT_COMSequenceGenerator.h"
-#include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 #include <ProcessorTemperature.h>
 #include <ProcessorVoltage.h>
 #include <BatteryVoltage.h>
+#include "../ESAT_COM-hardware/ESAT_COMSequenceGenerator.h"
+#include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 
 boolean ESAT_COMHousekeepingTelemetryClass::available()
 {
@@ -48,7 +47,7 @@ boolean ESAT_COMHousekeepingTelemetryClass::fillUserData(ESAT_CCSDSPacket& packe
   packet.writeByte((byte) ReceptionTransceiver.getChannel());
   packet.writeFloat(ReceptionTransceiver.getReceivedSignalStrengthIndicator());
   packet.writeFloat(ReceptionTransceiver.getTransceiverVoltage());
-  packet.writeFloat(ReceptionTransceiver.getTransceiverTemperature());  
+  packet.writeFloat(ReceptionTransceiver.getTransceiverTemperature());
   // MCU telemetry (calibrated)
   packet.writeFloat(ProcessorVoltage.read());
   packet.writeFloat(ProcessorTemperature.read());
@@ -68,6 +67,6 @@ char ESAT_COMHousekeepingTelemetryClass::writeModulationSource()
         case 2: // Four levels sweep
           return 11;
     }
-}    
+}
 
 ESAT_COMHousekeepingTelemetryClass ESAT_COMHousekeepingTelemetry;

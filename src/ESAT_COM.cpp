@@ -215,7 +215,7 @@ void ESAT_COMClass::update()
       TransmissionTransceiver.getModulation() != 5 && // No random mode.
       TransmissionTransceiver.getModulation() != 255) // No wrong modulation error.
   {
-    switch(ongoingTransmissionState)
+    switch (ongoingTransmissionState)
     {
       case IDLE:
       case EXTERNAL_DATA_TRANSMITTED:

@@ -37,7 +37,7 @@ ESAT_CCSDSPacket packet(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
 // Configures the priodical delivery of the board telemetry.
 // This funcion is called periodically by the scheduler according
 // to the period set.
-void ESAT_COMClass::PeriodicalTelemetryDeliveryTaskClass::run()
+void ESAT_COMClass::PeriodicTelemetryDeliveryTaskClass::run()
 {
   ESAT_CCSDSPacket telemetryPacket(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
   // Prepare telemetry.
@@ -135,6 +135,6 @@ void loop()
   ESAT_COM.update();
 
   // Updates the periodic tasks:
-  // - PeriodicalTelemetryDeliveryTask: Delivers system telemetry to the USB port.
+  // - PeriodicTelemetryDeliveryTask: Delivers system telemetry to the USB port.
   ESAT_COMTaskScheduler.run();
 }

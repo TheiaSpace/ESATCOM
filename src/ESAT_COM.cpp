@@ -138,7 +138,7 @@ void ESAT_COMClass::beginTelemetry()
 {
   ESAT_SubsystemPacketHandler.addTelemetry(ESAT_COMHousekeepingTelemetry);
   ESAT_SubsystemPacketHandler.enableTelemetry(ESAT_COMHousekeepingTelemetry.packetIdentifier());
-  ESAT_COMTaskScheduler.add(ESAT_COM.PeriodicalTelemetryDeliveryTask);
+  ESAT_COMTaskScheduler.add(ESAT_COM.PeriodicTelemetryDeliveryTask);
 }
 
 void ESAT_COMClass::disableCOMTelemetryRadioDelivery()

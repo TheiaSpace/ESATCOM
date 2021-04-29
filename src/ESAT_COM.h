@@ -51,7 +51,7 @@ class ESAT_COMClass
     // Periodic task for reading and delivering the board's telemetry.
     // This class is registered to an ESAT_TaskScheduler that will
     // call the run() function within the set period.
-    class PeriodicalTelemetryDeliveryTaskClass: public ESAT_Task
+    class PeriodicTelemetryDeliveryTaskClass: public ESAT_Task
     {
       public:
 
@@ -80,7 +80,7 @@ class ESAT_COMClass
     ESAT_KISSStream::frameLength(WHOLE_PACKET_BUFFER_LENGTH);
 
     // Instance of the TelemetryDeliveryTaskClass.
-    PeriodicalTelemetryDeliveryTaskClass PeriodicalTelemetryDeliveryTask;
+    PeriodicTelemetryDeliveryTaskClass PeriodicalTelemetryDeliveryTask;
 
     // Sets up the board.
     // Configures the APID and the version numbers (they change between

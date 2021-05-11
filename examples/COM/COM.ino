@@ -1,6 +1,6 @@
 /*
  * ESAT COM Main Program version 1.0.0
- * Copyright (C) 2020 Theia Space, Universidad Politécnica
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica
  * de Madrid.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -40,7 +40,7 @@ ESAT_CCSDSPacket packet(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
 void ESAT_COMClass::PeriodicalTelemetryDeliveryTaskClass::run()
 {
   ESAT_CCSDSPacket telemetryPacket(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
-  // Prepare telemetry.   
+  // Prepare telemetry.
   ESAT_SubsystemPacketHandler.prepareSubsystemsOwnTelemetry();
   // Send own telemetry.
   if  (ESAT_SubsystemPacketHandler.readSubsystemsOwnTelemetry(telemetryPacket))
@@ -52,8 +52,8 @@ void ESAT_COMClass::PeriodicalTelemetryDeliveryTaskClass::run()
     if (ESAT_COM.isCOMTelemetryRadioDeliveryEnabled())
     {
       telemetryPacket.rewind();
-      ESAT_COM.queueTelemetryToRadio(telemetryPacket);        
-    }      
+      ESAT_COM.queueTelemetryToRadio(telemetryPacket);
+    }
   }
 }
 
@@ -71,24 +71,27 @@ void setup()
   Serial.begin(9600);
   Serial.blockOnOverrun(false);
   delay(1000);
-  ReceptionTransceiver.setLowestChannel(0); //16
-  ReceptionTransceiver.setHighestChannel(31); //31 
-  TransmissionTransceiver.setLowestChannel(0); //0
-  TransmissionTransceiver.setHighestChannel(31); //15
-  ReceptionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readReceptionModulationType());  
+  ReceptionTransceiver.setLowestChannel(0);
+  ReceptionTransceiver.setHighestChannel(31);
+  ReceptionTransceiver.setDefaultChannel(31);
+  TransmissionTransceiver.setLowestChannel(0);
+  TransmissionTransceiver.setHighestChannel(31);
+  TransmissionTransceiver.setDefaultChannel(0);
+  ReceptionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readReceptionModulationType());
   ReceptionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readReceptionFrequency());
   ReceptionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readReceptionChannel());
   TransmissionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readTransmissionModulationType());
   TransmissionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readTransmissionFrequency());
-  TransmissionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readTransmissionChannel());  
+  TransmissionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readTransmissionChannel());
   ESAT_COM.begin(COM_APPLICATION_PROCESS_IDENTIFIER,
                COM_MAJOR_VERSION_NUMBER,
                COM_MINOR_VERSION_NUMBER,
                COM_PATCH_VERSION_NUMBER);
-  TransmissionTransceiver.setTransmissionPower(ESAT_COMNonVolatileDataStorage.readTransmissionPower());  
+  TransmissionTransceiver.setTransmissionPower(ESAT_COMNonVolatileDataStorage.readTransmissionPower());
+  TransmissionTransceiver.updateTransmissionPower();
   ESAT_COMTaskScheduler.begin();
-  ReceptionTransceiver.startReception();  
-  delay(1000);    
+  ReceptionTransceiver.startReception();
+  delay(1000);
 }
 
 // Body of the main loop of the program:
@@ -101,7 +104,7 @@ void setup()
 //   packets to the ground station or it can store them for later use).
 // This function is run in an infinite loop that starts after setup().
 void loop()
-{      
+{
   // Handle USB telecommands.
   packet.rewind();
   if (ESAT_SubsystemPacketHandler.readPacketFromUSB(packet))
@@ -126,30 +129,30 @@ void loop()
       packet.rewind();
       ESAT_SubsystemPacketHandler.queueTelecommandToI2C(packet);
     }
-   } 
-        
-  // Handle I2C requests. 
-  // They can be telemetry requests and/or telecommands queue status queries.    
+   }
+
+  // Handle I2C requests.
+  // They can be telemetry requests and/or telecommands queue status queries.
   // Note that this device is an I2C slave and the transactions will happen
   // when the master (OBC) will decide. This function only prepares the context
   // for them to happen under such requests.
   if (ESAT_SubsystemPacketHandler.pendingI2CPacketRequest())
   {
     ESAT_SubsystemPacketHandler.respondToI2CPacketRequest();
-  } 
-  
+  }
+
   // Handles:
   //  -I2C written packets: radio telecommands or any subsystem telemetry.
   //                        Radio telecommands are handled and subsystem
   //                        is queued to be transmitted by the radio when it
   //                        were possible.
   //  -Radio transmissions: broadcasts either I2C received (and queued) telemetries
-  //                        and queued own subsystem's telemetry using a sequential 
+  //                        and queued own subsystem's telemetry using a sequential
   //                        dispatching algorithm.
   //  -Manual data stream:  updates the bit-banged transmission testing sequence.
-  //  -Heath beat LED update.  
-  ESAT_COM.update();  
-  
+  //  -Heath beat LED update.
+  ESAT_COM.update();
+
   // Updates the periodic tasks:
   // - PeriodicalTelemetryDeliveryTask: Delivers system telemetry to USB and to
   //                                    the radio if the standalone mode is enabled.

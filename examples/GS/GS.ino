@@ -1,6 +1,6 @@
 /*
  * ESAT COM Ground Station Main Program version 1.0.0
- * Copyright (C) 2020 Theia Space, Universidad Politécnica
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica
  * de Madrid.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -40,14 +40,14 @@ ESAT_CCSDSPacket packet(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
 void ESAT_COMClass::PeriodicalTelemetryDeliveryTaskClass::run()
 {
   ESAT_CCSDSPacket telemetryPacket(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
-  // Prepare telemetry.   
+  // Prepare telemetry.
   ESAT_SubsystemPacketHandler.prepareSubsystemsOwnTelemetry();
   // Read GS telemetry.
   if (ESAT_SubsystemPacketHandler.readSubsystemsOwnTelemetry(telemetryPacket))
   {
     // Write to USB.
    ESAT_SubsystemPacketHandler.writePacketToUSB(telemetryPacket);
-  }    
+  }
 }
 
 // Start peripherals and do the initial bookkeeping here:
@@ -62,25 +62,28 @@ void ESAT_COMClass::PeriodicalTelemetryDeliveryTaskClass::run()
 void setup()
 {
   Serial.begin(9600);
-  Serial.blockOnOverrun(false);   
-  delay(1000);     
-  ReceptionTransceiver.setLowestChannel(0); //0
-  ReceptionTransceiver.setHighestChannel(31); //15 
-  TransmissionTransceiver.setLowestChannel(0); //16
-  TransmissionTransceiver.setHighestChannel(31);  //31
-  ReceptionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readReceptionModulationType());  
+  Serial.blockOnOverrun(false);
+  delay(1000);
+  ReceptionTransceiver.setLowestChannel(0);
+  ReceptionTransceiver.setHighestChannel(31);
+  ReceptionTransceiver.setDefaultChannel(0);
+  TransmissionTransceiver.setLowestChannel(0);
+  TransmissionTransceiver.setHighestChannel(31);
+  TransmissionTransceiver.setDefaultChannel(31);
+  ReceptionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readReceptionModulationType());
   ReceptionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readReceptionFrequency());
   ReceptionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readReceptionChannel());
   TransmissionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readTransmissionModulationType());
   TransmissionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readTransmissionFrequency());
-  TransmissionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readTransmissionChannel());  
+  TransmissionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readTransmissionChannel());
   ESAT_COM.begin(GS_APPLICATION_PROCESS_IDENTIFIER,
                GS_MAJOR_VERSION_NUMBER,
                GS_MINOR_VERSION_NUMBER,
                GS_PATCH_VERSION_NUMBER);
   TransmissionTransceiver.setTransmissionPower(ESAT_COMNonVolatileDataStorage.readTransmissionPower());
+  TransmissionTransceiver.updateTransmissionPower();
   ESAT_COMTaskScheduler.begin();
-  ReceptionTransceiver.startReception();  
+  ReceptionTransceiver.startReception();
   delay(1000);
 }
 
@@ -114,23 +117,23 @@ void loop()
           // Other telecommands: send it to the radio.
           ESAT_COM.writePacketToRadio(packet);
         }
-      }   
+      }
     }
-    
+
     // Handle radio received telemetry.
     packet.rewind();
     if (ESAT_COM.readPacketFromRadio(packet))
     {
       packet.rewind();
-      ESAT_SubsystemPacketHandler.writePacketToUSB(packet);    
-    }        
- 
+      ESAT_SubsystemPacketHandler.writePacketToUSB(packet);
+    }
+
   // Handles:
   //  -Radio transmissions: broadcasts nong-GS received telecommands.
   //  -Manual data stream:  updates the bit-banged transmission testing sequence.
-  //  -Heath beat LED update.  
-  ESAT_COM.update();  
-  
+  //  -Heath beat LED update.
+  ESAT_COM.update();
+
   // Updates the periodic tasks:
   // - PeriodicalTelemetryDeliveryTask: Delivers system telemetry to the USB port.
   ESAT_COMTaskScheduler.run();

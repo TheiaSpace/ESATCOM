@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -49,7 +49,7 @@ byte ESAT_COMNonVolatileDataStorageClass::readTransmissionChannel()
   {
     return (byte) EEPROM.read(TRANSMISSION_CHANNEL_PARAMETER_OFFSET);
   }
-  return TransmissionTransceiver.lowestChannel;
+  return TransmissionTransceiver.getDefaultChannel();
 }
 
 float ESAT_COMNonVolatileDataStorageClass::readTransmissionFrequency()
@@ -62,7 +62,7 @@ if (checkMemoryStatus())
                                                              EEPROM.read(TRANSMISSION_FREQUENCY_PARAMETER_OFFSET));
     return ESAT_Util.unsignedLongToFloat(frequencyUL);
   }
-  return TransmissionTransceiver.DEFAULT_FREQUENCY;
+  return TransmissionTransceiver.getDefaultFrequency();
 }
 
 float ESAT_COMNonVolatileDataStorageClass::readTransmissionPower()
@@ -75,7 +75,7 @@ float ESAT_COMNonVolatileDataStorageClass::readTransmissionPower()
                                                          EEPROM.read(TRANSMISSION_POWER_PARAMETER_OFFSET));
     return ESAT_Util.unsignedLongToFloat(powerUL);
   }
-  return TransmissionTransceiver.DEFAULT_TRANSMISSION_POWER_RATE;
+  return TransmissionTransceiver.getDefaultTransmissionPower();
 }
 
 ESAT_COMTransceiverDriverClass::ModulationType ESAT_COMNonVolatileDataStorageClass::readTransmissionModulationType()
@@ -99,7 +99,7 @@ ESAT_COMTransceiverDriverClass::ModulationType ESAT_COMNonVolatileDataStorageCla
         return ESAT_COMTransceiverDriverClass::continuousWave;
     }
   }
-  return TransmissionTransceiver.DEFAULT_MODULATION_TYPE;
+  return TransmissionTransceiver.getDefaultModulationType();
 }
 
 byte ESAT_COMNonVolatileDataStorageClass::readReceptionChannel()
@@ -108,7 +108,7 @@ byte ESAT_COMNonVolatileDataStorageClass::readReceptionChannel()
   {
     return (byte) EEPROM.read(RECEPTION_CHANNEL_PARAMETER_OFFSET);
   }
-  return ReceptionTransceiver.lowestChannel;
+  return ReceptionTransceiver.getDefaultChannel();
 }
 
 float ESAT_COMNonVolatileDataStorageClass::readReceptionFrequency()
@@ -121,7 +121,7 @@ float ESAT_COMNonVolatileDataStorageClass::readReceptionFrequency()
                                                              EEPROM.read(RECEPTION_FREQUENCY_PARAMETER_OFFSET));
     return ESAT_Util.unsignedLongToFloat(frequencyUL);
   }
-  return ReceptionTransceiver.DEFAULT_FREQUENCY;
+  return ReceptionTransceiver.getDefaultFrequency();
 }
 
 ESAT_COMTransceiverDriverClass::ModulationType ESAT_COMNonVolatileDataStorageClass::readReceptionModulationType()
@@ -145,7 +145,7 @@ ESAT_COMTransceiverDriverClass::ModulationType ESAT_COMNonVolatileDataStorageCla
         return ESAT_COMTransceiverDriverClass::continuousWave;
     }
   }
-  return ReceptionTransceiver.DEFAULT_MODULATION_TYPE;
+  return ReceptionTransceiver.getDefaultModulationType();
 }
 
 void ESAT_COMNonVolatileDataStorageClass::writeConfigurations()

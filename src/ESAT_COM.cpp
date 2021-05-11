@@ -207,7 +207,13 @@ boolean ESAT_COMClass::readPacketFromRadio(ESAT_CCSDSPacket& packet)
 
 void ESAT_COMClass::update()
 {
-  if (!((boolean) ESAT_COMSequenceGenerator.getMode())) // Mode == 0
+  // Handle CCSDS packets. This flow is only followed if the CCSDS packets 
+  // transmission mode is enabled and functional. Otherwise I2C communications 
+  // can be blocked. This is also not followed when the transmitter is disabled.
+  if (ESAT_COMSequenceGenerator.getMode() == 0 && // Sequence mode is disabled.
+      TransmissionTransceiver.getModulationSource() == 0 &&  // FIFO data source.
+      TransmissionTransceiver.getModulation() != 5 && // No random mode.
+      TransmissionTransceiver.getModulation() != 255) // No wrong modulation error.
   {  
     switch(ongoingTransmissionState)
     {

@@ -38,6 +38,9 @@
 class ESAT_COMNonVolatileDataStorageClass
 {
   public:  
+  
+    // Check if the stored data is valid or not.
+    boolean checkMemoryStatus(); 
     
     // Erases all the non volatile memory contents
     void eraseAll();
@@ -146,11 +149,8 @@ class ESAT_COMNonVolatileDataStorageClass
     const byte MEMORY_CONTENTS_ERASED = 0;    
     
     // Value to store in memory if the data was updated.
-    const byte MEMORY_CONTENTS_VALID = 0b01010101;
-    
-    // Check if the stored data is valid or not.
-    boolean checkMemoryStatus();    
-        
+    const byte MEMORY_CONTENTS_VALID = 0b01010101;  
+   
     // Stores the transmission channel into non volatile memory.
     void writeTransmissionChannel();
    

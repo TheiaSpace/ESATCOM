@@ -20,7 +20,7 @@
 
 #include <Arduino.h>
 
-// Heartbeat LED on the COM board.
+// Transmission heartbeat LED on the COM board.
 // Use the global instance ESAT_COMTransmissionLED.
 class ESAT_COMTransmissionLEDClass
 {
@@ -36,7 +36,7 @@ class ESAT_COMTransmissionLEDClass
     static const int LED_CONTROL_LINE = LED_COM_TX;
 };
 
-// Global instance of the COM reception LED library.
+// Global instance of the COM transmission LED library.
 extern ESAT_COMTransmissionLEDClass ESAT_COMTransmissionLED;
 
 #endif /* ESAT_COMTransmissionLED_h */

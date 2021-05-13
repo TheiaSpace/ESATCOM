@@ -20,7 +20,7 @@
 
 #include <Arduino.h>
 
-// Heartbeat LED on the COM board.
+// Reception heartbeat LED on the COM board.
 // Use the global instance ESAT_COMReceptionLED.
 class ESAT_COMReceptionLEDClass
 {

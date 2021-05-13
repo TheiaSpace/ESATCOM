@@ -23,7 +23,7 @@
 #include <ESAT_CCSDSPacketToKISSFrameWriter.h>
 #include <ESAT_I2CSlave.h>
 #include "ESAT_COM.h"
-#include "ESAT_COM-hardware/ESAT_COMHearthBeatLED.h"
+#include "ESAT_COM-hardware/ESAT_COMHeartBeatLED.h"
 #include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 // System telecommands.
 #include "ESAT_COM-telecommands/ESAT_COMDisableTelemetryTelecommand.h"
@@ -77,7 +77,7 @@ void ESAT_COMClass::begin(word subsystemApplicationProcessIdentifier,
 void ESAT_COMClass::beginHardware()
 {
   ESAT_COMTaskScheduler.add(ESAT_COMSequenceGenerator.SequenceIncrementingTask);
-  ESAT_COMHearthBeatLED.begin();
+  ESAT_COMHeartBeatLED.begin();
   WireCOM.begin(byte(COM_I2C_ADDRESS));
   // Keep reconfiguring the transmitter until everything went right.
   while(TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode)
@@ -302,7 +302,7 @@ void ESAT_COMClass::update()
   }
   // Updates the transmission manual bit banging sequence.
   TransmissionTransceiver.updateManualDataStream();
-  ESAT_COMHearthBeatLED.update();
+  ESAT_COMHeartBeatLED.update();
 }
 
 boolean ESAT_COMClass::writePacketToRadio(ESAT_CCSDSPacket& packet)

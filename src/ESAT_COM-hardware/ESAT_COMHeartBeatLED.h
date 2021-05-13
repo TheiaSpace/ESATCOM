@@ -15,14 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ESAT_COMHearthBeatLED_h
-#define ESAT_COMHearthBeatLED_h
+#ifndef ESAT_COMHeartBeatLED_h
+#define ESAT_COMHeartBeatLED_h
 
 #include <Arduino.h>
 
 // Heartbeat LED on the COM board.
-// Use the global instance ESAT_COMHearthBeatLED.
-class ESAT_COMHearthBeatLEDClass
+// Use the global instance ESAT_COMHeartBeatLED.
+class ESAT_COMHeartBeatLEDClass
 {
   public:
     // Configure the LED control line.
@@ -45,7 +45,7 @@ class ESAT_COMHearthBeatLEDClass
     void write(float brightness);
 };
 
-// Global instance of the COM hearthbeat LED library.
-extern ESAT_COMHearthBeatLEDClass ESAT_COMHearthBeatLED;
+// Global instance of the COM heartbeat LED library.
+extern ESAT_COMHeartBeatLEDClass ESAT_COMHeartBeatLED;
 
-#endif /* ESAT_COMHearthBeatLED_h */
+#endif /* ESAT_COMHeartBeatLED_h */

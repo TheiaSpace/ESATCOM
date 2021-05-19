@@ -19,7 +19,7 @@
  */
 
 #include "ESAT_COM-telecommands/ESAT_COMStoreSettingsTelecommand.h"
-#include "../ESAT_COM-hardware/ESAT_COMNonVolatileDataStorage.h"
+#include "ESAT_COM-hardware/ESAT_COMNonVolatileDataStorage.h"
 
 boolean ESAT_COMStoreSettingsTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {

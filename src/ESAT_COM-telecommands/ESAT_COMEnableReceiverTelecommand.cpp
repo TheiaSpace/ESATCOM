@@ -19,8 +19,8 @@
  */
 
 #include "ESAT_COM-telecommands/ESAT_COMEnableReceiverTelecommand.h"
-#include "../ESAT_COM-hardware/ESAT_COMRadioStream.h"
-#include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
+#include "ESAT_COM-hardware/ESAT_COMRadioStream.h"
+#include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 
 boolean ESAT_COMEnableReceiverTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {

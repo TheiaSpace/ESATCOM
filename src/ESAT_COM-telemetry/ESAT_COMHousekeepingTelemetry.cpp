@@ -22,8 +22,8 @@
 #include <ProcessorTemperature.h>
 #include <ProcessorVoltage.h>
 #include <BatteryVoltage.h>
-#include "../ESAT_COM-hardware/ESAT_COMSequenceGenerator.h"
-#include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
+#include "ESAT_COM-hardware/ESAT_COMSequenceGenerator.h"
+#include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 
 boolean ESAT_COMHousekeepingTelemetryClass::available()
 {

@@ -69,7 +69,7 @@ void ESAT_COMSequenceGeneratorClass::handleSequenceTransmission()
     case DISABLED:
       levelCounter = 0;
       retrialsCounter = 0;
-      return;
+      break;
     case TWO_LEVELS:
       Serial.println((byte)transmitPacket(levelCounter));
       Serial.println(levelCounter, DEC);

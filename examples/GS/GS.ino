@@ -99,34 +99,34 @@ void setup()
 void loop()
 {
   // Handle USB telecommands.
-    if (ESAT_SubsystemPacketHandler.readPacketFromUSB(packet))
-    {
-      packet.rewind();
-      if (ESAT_COM.isSubsystemTelecommand(packet))
-      {
-        // Own telecommand: self processed.
-        packet.rewind();
-        ESAT_SubsystemPacketHandler.dispatchTelecommand(packet);
-      }
-      else
-      {
-        packet.rewind();
-        // Only if the sequencial sweep is disabled.
-        if (!((boolean) ESAT_COMSequenceGenerator.getMode()))
-        {
-          // Other telecommands: send it to the radio.
-          ESAT_COM.writePacketToRadio(packet);
-        }
-      }
-    }
-
-    // Handle radio received telemetry.
+  if (ESAT_SubsystemPacketHandler.readPacketFromUSB(packet))
+  {
     packet.rewind();
-    if (ESAT_COM.readPacketFromRadio(packet))
+    if (ESAT_COM.isSubsystemTelecommand(packet))
+    {
+      // Own telecommand: self processed.
+      packet.rewind();
+      ESAT_SubsystemPacketHandler.dispatchTelecommand(packet);
+    }
+    else
     {
       packet.rewind();
-      ESAT_SubsystemPacketHandler.writePacketToUSB(packet);
+      // Only if the sequencial sweep is disabled.
+      if (!((boolean) ESAT_COMSequenceGenerator.getMode()))
+      {
+        // Other telecommands: send it to the radio.
+        ESAT_COM.writePacketToRadio(packet);
+      }
     }
+  }
+
+  // Handle radio received telemetry.
+  packet.rewind();
+  if (ESAT_COM.readPacketFromRadio(packet))
+  {
+    packet.rewind();
+    ESAT_SubsystemPacketHandler.writePacketToUSB(packet);
+  }
 
   // Handles:
   //  -Radio transmissions: broadcasts nong-GS received telecommands.

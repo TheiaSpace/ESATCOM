@@ -54,7 +54,7 @@ byte ESAT_COMNonVolatileDataStorageClass::readTransmissionChannel()
 
 float ESAT_COMNonVolatileDataStorageClass::readTransmissionFrequency()
 {
-if (checkMemoryStatus())
+  if (checkMemoryStatus())
   {
     const unsigned long frequencyUL = ESAT_Util.unsignedLong(EEPROM.read(TRANSMISSION_FREQUENCY_PARAMETER_OFFSET + 3),
                                                              EEPROM.read(TRANSMISSION_FREQUENCY_PARAMETER_OFFSET + 2),

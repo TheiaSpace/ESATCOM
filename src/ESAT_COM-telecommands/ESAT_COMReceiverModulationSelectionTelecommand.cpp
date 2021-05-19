@@ -24,7 +24,7 @@
 
 boolean ESAT_COMReceiverModulationSelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
-  switch(packet.readByte())
+  switch (packet.readByte())
   {
     case 0:
     default:

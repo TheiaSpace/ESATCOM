@@ -28,7 +28,6 @@
 class SequenceIncrementingTaskClass: public ESAT_Task
 {
   public:
-
     // Updating period (in us).
     // Set it here.
     unsigned long period()
@@ -39,7 +38,6 @@ class SequenceIncrementingTaskClass: public ESAT_Task
     // Periodic task function. Called by an ESAT_TaskScheduler.
     // Transmits the proper frame.
     void run();
-
 };
 
 // This class generates a binary or quaternary CCSDS packet to test the
@@ -47,7 +45,6 @@ class SequenceIncrementingTaskClass: public ESAT_Task
 class ESAT_COMSequenceGeneratorClass
 {
   public:
-
     // Perodic task instance.
     SequenceIncrementingTaskClass SequenceIncrementingTask;
 
@@ -67,7 +64,6 @@ class ESAT_COMSequenceGeneratorClass
     void handleSequenceTransmission();
 
   private:
-
     // Controls the working mode of the sequence generator.
     enum SequenceMode
     {

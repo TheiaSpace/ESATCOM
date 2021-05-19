@@ -23,116 +23,115 @@
 #include <string.h>
 #include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 
-
 void SequenceIncrementingTaskClass::run()
 {
-    ESAT_COMSequenceGenerator.handleSequenceTransmission();
+  ESAT_COMSequenceGenerator.handleSequenceTransmission();
 }
 
 void ESAT_COMSequenceGeneratorClass::disable()
 {
-    mode = ESAT_COMSequenceGeneratorClass::DISABLED;
+  mode = ESAT_COMSequenceGeneratorClass::DISABLED;
 }
 
 void ESAT_COMSequenceGeneratorClass::enableFourLevels()
 {
-    mode = ESAT_COMSequenceGeneratorClass::FOUR_LEVELS;
-    levelCounter = 0;
-    retrialsCounter = 0;
+  mode = ESAT_COMSequenceGeneratorClass::FOUR_LEVELS;
+  levelCounter = 0;
+  retrialsCounter = 0;
 }
 
 void ESAT_COMSequenceGeneratorClass::enableTwoLevels()
 {
-    mode = ESAT_COMSequenceGeneratorClass::TWO_LEVELS;
-    levelCounter = 0;
-    retrialsCounter = 0;
+  mode = ESAT_COMSequenceGeneratorClass::TWO_LEVELS;
+  levelCounter = 0;
+  retrialsCounter = 0;
 }
 
 byte ESAT_COMSequenceGeneratorClass::getMode()
 {
-    switch(mode)
-    {
-        default:
-        case ESAT_COMSequenceGeneratorClass::DISABLED:
-            return 0;
-        case ESAT_COMSequenceGeneratorClass::TWO_LEVELS:
-            return 1;
-        case ESAT_COMSequenceGeneratorClass::FOUR_LEVELS:
-            return 2;
-    }
+  switch (mode)
+  {
+    default:
+      case ESAT_COMSequenceGeneratorClass::DISABLED:
+        return 0;
+      case ESAT_COMSequenceGeneratorClass::TWO_LEVELS:
+        return 1;
+      case ESAT_COMSequenceGeneratorClass::FOUR_LEVELS:
+        return 2;
+  }
 }
 
 void ESAT_COMSequenceGeneratorClass::handleSequenceTransmission()
 {
-    switch (mode)
-    {
-        default:
-        case DISABLED:
-            levelCounter = 0;
-            retrialsCounter = 0;
-            return;
-        case TWO_LEVELS:
-            Serial.println((byte)transmitPacket(levelCounter));
-            Serial.println(levelCounter, DEC);
-            Serial.println(retrialsCounter, DEC);
-            if (retrialsCounter > NUMBER_OF_RETRIALS)
-            {
-                retrialsCounter = 0;
-                ++(levelCounter);
-                if (levelCounter > 1)
-                {
-                    levelCounter = 0;
-                }
-            }
-            break;
-        case FOUR_LEVELS:
-            transmitPacket(levelCounter);
-            if (retrialsCounter > NUMBER_OF_RETRIALS)
-            {
-                retrialsCounter = 0;
-                ++(levelCounter);
-                if (levelCounter > 3)
-                {
-                    levelCounter = 0;
-                }
-            }
-            break;
-    }
+  switch (mode)
+  {
+    default:
+    case DISABLED:
+      levelCounter = 0;
+      retrialsCounter = 0;
+      return;
+    case TWO_LEVELS:
+      Serial.println((byte)transmitPacket(levelCounter));
+      Serial.println(levelCounter, DEC);
+      Serial.println(retrialsCounter, DEC);
+      if (retrialsCounter > NUMBER_OF_RETRIALS)
+      {
+        retrialsCounter = 0;
+        ++(levelCounter);
+        if (levelCounter > 1)
+        {
+          levelCounter = 0;
+        }
+      }
+      break;
+    case FOUR_LEVELS:
+      transmitPacket(levelCounter);
+      if (retrialsCounter > NUMBER_OF_RETRIALS)
+      {
+        retrialsCounter = 0;
+        ++(levelCounter);
+        if (levelCounter > 3)
+        {
+          levelCounter = 0;
+        }
+      }
+      break;
+  }
 }
 
 boolean ESAT_COMSequenceGeneratorClass::transmitPacket(byte symbol)
 {
-    // Transmission buffer.
-    byte txBuffer[ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH];
-    // Pattern to be sent.
-    byte fillValue;
-    if (TransmissionTransceiver.available())
+  // Transmission buffer.
+  byte txBuffer[ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH];
+  // Pattern to be sent.
+  byte fillValue;
+  if (TransmissionTransceiver.available())
+  {
+    switch (symbol)
     {
-        switch (symbol)
-        {
-            default:
-            case 0:
-                fillValue = 0b00000000;
-            break;
-            case 1:
-                fillValue = 0b11111111;
-            break;
-            case 2:
-                fillValue = 0b01010101;
-            break;
-            case 3:
-                fillValue = 0b10101010;
-            break;
-        }
-        memset(txBuffer, (int) fillValue, ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH);
-        if (TransmissionTransceiver.nonBlockingWrite(txBuffer) != ESAT_COMTransceiverDriverClass::noError)
-        {
-            return false;
-        }
-        ++retrialsCounter;
-        return true;
+      default:
+      case 0:
+        fillValue = 0b00000000;
+        break;
+      case 1:
+        fillValue = 0b11111111;
+        break;
+      case 2:
+        fillValue = 0b01010101;
+        break;
+      case 3:
+        fillValue = 0b10101010;
+        break;
     }
-    return false;
+    memset(txBuffer, (int) fillValue, ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH);
+    if (TransmissionTransceiver.nonBlockingWrite(txBuffer) != ESAT_COMTransceiverDriverClass::noError)
+    {
+      return false;
+    }
+    ++retrialsCounter;
+    return true;
+  }
+  return false;
 }
 
 ESAT_COMSequenceGeneratorClass ESAT_COMSequenceGenerator;

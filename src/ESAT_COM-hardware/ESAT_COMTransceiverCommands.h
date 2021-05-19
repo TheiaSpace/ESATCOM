@@ -63,19 +63,19 @@ class ESAT_COMTransceiverCommandsClass
     // reading command.
     struct ADCReadingsReply
     {
-      word  GPIOAnalogRawValue;
-      word  voltageRawValue;
-      word  temperatureRawValue;
+      word GPIOAnalogRawValue;
+      word voltageRawValue;
+      word temperatureRawValue;
     };
 
     // Data structure for handling the reply of the chip
     // status command.
     struct ChipStatusReply
     {
-      byte  chipPending;
-      byte  chipStatus;
-      byte  lastCommandErrorStatus;
-      byte  lastCommandErrorCommand;
+      byte chipPending;
+      byte chipStatus;
+      byte lastCommandErrorStatus;
+      byte lastCommandErrorCommand;
     };
 
     // Generic command reply handler.
@@ -89,68 +89,68 @@ class ESAT_COMTransceiverCommandsClass
     // state command.
     struct DeviceStateReply
     {
-      byte   currentState;
-      byte   currentChannel;
+      byte currentState;
+      byte currentChannel;
     };
 
     // Data structure for handling the reply of the fast
     // response register A reading command.
     struct FastResponseRegisterAReply
     {
-      byte   fastResponseRegisterA;
-      byte   fastResponseRegisterB;
-      byte   fastResponseRegisterC;
-      byte   fastResponseRegisterD;
+      byte fastResponseRegisterA;
+      byte fastResponseRegisterB;
+      byte fastResponseRegisterC;
+      byte fastResponseRegisterD;
     };
 
     // Data structure for handling the reply of the fast
     // response register B reading command.
     struct FastResponseRegisterBReply
     {
-      byte   fastResponseRegisterB;
-      byte   fastResponseRegisterC;
-      byte   fastResponseRegisterD;
-      byte   fastResponseRegisterA;
+      byte fastResponseRegisterB;
+      byte fastResponseRegisterC;
+      byte fastResponseRegisterD;
+      byte fastResponseRegisterA;
     };
 
     // Data structure for handling the reply of the fast
     // response register C reading command.
     struct FastResponseRegisterCReply
     {
-      byte   fastResponseRegisterC;
-      byte   fastResponseRegisterD;
-      byte   fastResponseRegisterA;
-      byte   fastResponseRegisterB;
+      byte fastResponseRegisterC;
+      byte fastResponseRegisterD;
+      byte fastResponseRegisterA;
+      byte fastResponseRegisterB;
     };
 
     // Data structure for handling the reply of the fast
     // response register D reading command.
     struct FastResponseRegisterDReply
     {
-      byte   fastResponseRegisterD;
-      byte   fastResponseRegisterA;
-      byte   fastResponseRegisterB;
-      byte   fastResponseRegisterC;
+      byte fastResponseRegisterD;
+      byte fastResponseRegisterA;
+      byte fastResponseRegisterB;
+      byte fastResponseRegisterC;
     };
 
     // Data structure for handling the reply of the FIFO
     // status command.
     struct FIFOStatusReply
     {
-      byte   receptionFIFOCount;
-      byte   transmissionFIFOSpace;
+      byte receptionFIFOCount;
+      byte transmissionFIFOSpace;
     };
 
     // Data structure for handling the reply of the function
     // info command.
     struct FunctionInfoReply
     {
-      byte   externalRevision;
-      byte   branchRevision;
-      byte   internalRevision;
+      byte externalRevision;
+      byte branchRevision;
+      byte internalRevision;
       // Added patch support.
-      word  appliedPatchID;
-      byte   currentFunctionalMode;
+      word appliedPatchID;
+      byte currentFunctionalMode;
     };
 
     // Generic reply handler.
@@ -164,44 +164,44 @@ class ESAT_COMTransceiverCommandsClass
     // configuration command.
     struct GPIOConfigurationReply
     {
-      byte   GPIO[4];
-      byte   NIRQ;
-      byte   SDO;
-      byte   generalConfiguration;
+      byte GPIO[4];
+      byte NIRQ;
+      byte SDO;
+      byte generalConfiguration;
     };
 
     // Data structure for handling the reply of the
     // interrupt status command.
     struct InterruptStatusReply
     {
-      byte   interruptPending;
-      byte   interruptStatus;
-      byte   packetHandlerPending;
-      byte   packetHandlerStatus;
-      byte   modemPending;
-      byte   modemStatus;
-      byte   chipPending;
-      byte   chipStatus;
+      byte interruptPending;
+      byte interruptStatus;
+      byte packetHandlerPending;
+      byte packetHandlerStatus;
+      byte modemPending;
+      byte modemStatus;
+      byte chipPending;
+      byte chipStatus;
     };
 
     // Data structure for handling the reply of the
     // manual image rejection calibation command.
     struct ManualImageRejectionCalibrationReply
     {
-      byte   imageRejectionCalibrationAppliedAmplitude;
-      byte   imageRejectionCalibrationAppliedPhase;
+      byte imageRejectionCalibrationAppliedAmplitude;
+      byte imageRejectionCalibrationAppliedPhase;
     };
 
     // Data structure for handling the reply of the modem
     // status reading command.
     struct ModemStatusReply
     {
-      byte  modemPending;
-      byte  modemStatus;
-      byte  currentReceivedSignalStregnthIndicator;
-      byte  latchedReceivedSignalStrengthIndicator;
-      byte  antenna1ReceivedSignalStrengthIndicator;
-      byte  antenna2ReceivedSignalStrengthIndicator;
+      byte modemPending;
+      byte modemStatus;
+      byte currentReceivedSignalStregnthIndicator;
+      byte latchedReceivedSignalStrengthIndicator;
+      byte antenna1ReceivedSignalStrengthIndicator;
+      byte antenna2ReceivedSignalStrengthIndicator;
       word automaticFrequencyControlFrequencyOffset;
     };
 
@@ -209,8 +209,8 @@ class ESAT_COMTransceiverCommandsClass
     // handler status reading command.
     struct PacketHandlerStatusReply
     {
-      byte  packetHandlerPending;
-      byte  packetHandlerStatus;
+      byte packetHandlerPending;
+      byte packetHandlerStatus;
     };
 
     // Data structure for handling the reply of the packet
@@ -224,19 +224,19 @@ class ESAT_COMTransceiverCommandsClass
     // info command.
     struct PartInfoReply
     {
-      byte   chipRevision;
-      word  partNumber;
-      byte   partBuild;
-      word  ID;
-      byte   customerID;
-      byte   ROMID;
+      byte chipRevision;
+      word partNumber;
+      byte partBuild;
+      word ID;
+      byte customerID;
+      byte ROMID;
     };
 
     // Generic properties reply handler.
     // Can hold up to 16 bytes.
     struct PropertiesReply
     {
-      byte   buffer[16];
+      byte buffer[16];
     };
 
 
@@ -468,11 +468,11 @@ class ESAT_COMTransceiverCommandsClass
   // the drive strength and the HAL reference of the transceiver
   // to be issued. Returns the GPIO configuration reply.
   GPIOConfigurationReply configureGPIO(ESAT_COMTransceiverHALClass& transceiver,
-                                        GPIOConfigurationArguments GPIO0Config, boolean enableGPIO0PullUp,
-                                        GPIOConfigurationArguments GPIO1Config, boolean enableGPIO1PullUp,
-                                        GPIOConfigurationArguments GPIO2Config, boolean enableGPIO2PullUp,
-                                        GPIOConfigurationArguments GPIO3Config, boolean enableGPIO3PullUp,
-                                        GPIODriveStrength driveStrength);
+                                       GPIOConfigurationArguments GPIO0Config, boolean enableGPIO0PullUp,
+                                       GPIOConfigurationArguments GPIO1Config, boolean enableGPIO1PullUp,
+                                       GPIOConfigurationArguments GPIO2Config, boolean enableGPIO2PullUp,
+                                       GPIOConfigurationArguments GPIO3Config, boolean enableGPIO3PullUp,
+                                       GPIODriveStrength driveStrength);
 
   // Initialize the GPIOs to their default settings.
   // Requires the HAL reference of the transceiver to be issued

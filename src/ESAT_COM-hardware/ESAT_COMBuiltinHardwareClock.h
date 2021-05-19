@@ -27,20 +27,17 @@
 class ESAT_COMBuiltinHardwareClockClass: public ESAT_Clock
 {
   public:
+    // Return the current timestamp.
+    // RTC starts counting as soon as it is powered up,
+    // either from the battery or Vcc.
+    ESAT_Timestamp read();
 
-  // Return the current timestamp.
-  // RTC starts counting as soon as it is powered up,
-  // either from the battery or Vcc.
-  ESAT_Timestamp read();
-
-  // Set the time to the given timestamp.
-  void write(ESAT_Timestamp timestamp);
+    // Set the time to the given timestamp.
+    void write(ESAT_Timestamp timestamp);
 
   private:
-
-  // Full year location in RTC backup registers.
-  const unsigned int YEAR_BACKUP_REGISTER = 0;
-
+    // Full year location in RTC backup registers.
+    const unsigned int YEAR_BACKUP_REGISTER = 0;
 };
 
 // Global instance of the ESAT_COMBuiltinHardwareClock library.

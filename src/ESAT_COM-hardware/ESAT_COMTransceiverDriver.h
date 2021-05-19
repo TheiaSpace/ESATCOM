@@ -32,62 +32,60 @@
 class ESAT_COMTransceiverDriverClass
 {
   public:
-
     // Data type for the different radio data sinks and sources.
     // FIFO and random generator supports all modulation types.
     // GPIO synchronous sources only support, OOK 2FSK and 2GFSK.
     // GPIO asynchronous sources only support OOK and 2FSK.
-
     enum ModulationSource
     {
-      fifo = 0, // Data is obtained from the FIFO written packets.
-      randomGenerator     = 1, // Data is obtained from a pseudo-random generator.
-      gpio0_synchronous   = 2, // Data is sampled from GPIO0 using an external clock.
-      gpio0_asynchronous  = 3, // Data is obtained from GPIO0 level (no clock).
-      gpio1_synchronous   = 4, // Data is sampled from GPIO1 using an external clock.
-      gpio1_asynchronous  = 5, // Data is obtained from GPIO1 level (no clock).
-      gpio2_synchronous   = 6, // Data is sampled from GPIO2 using an external clock.
-      gpio2_asynchronous  = 7, // Data is obtained from GPIO2 level (no clock).
-      gpio3_synchronous   = 8, // Data is sampled from GPIO3 using an external clock.
-      gpio3_asynchronous  = 9, // Data is obtained from GPIO3 level (no clock).
+      fifo               = 0, // Data is obtained from the FIFO written packets.
+      randomGenerator    = 1, // Data is obtained from a pseudo-random generator.
+      gpio0_synchronous  = 2, // Data is sampled from GPIO0 using an external clock.
+      gpio0_asynchronous = 3, // Data is obtained from GPIO0 level (no clock).
+      gpio1_synchronous  = 4, // Data is sampled from GPIO1 using an external clock.
+      gpio1_asynchronous = 5, // Data is obtained from GPIO1 level (no clock).
+      gpio2_synchronous  = 6, // Data is sampled from GPIO2 using an external clock.
+      gpio2_asynchronous = 7, // Data is obtained from GPIO2 level (no clock).
+      gpio3_synchronous  = 8, // Data is sampled from GPIO3 using an external clock.
+      gpio3_asynchronous = 9, // Data is obtained from GPIO3 level (no clock).
     };
 
     // Data type for the different modulation schemas.
     // Continuous wave broadcast a continuos carrier.
     enum ModulationType
     {
-      OOK = 0, // On-Off keying modulation.
-      twoFSK = 1, // Two level frequency shift keying modulation.
-      twoGaussianFSK = 2, // Two level gaussian frequency shift keying modulation.
-      fourFSK = 3, // Four level frequency shift keying modulation.
+      OOK             = 0, // On-Off keying modulation.
+      twoFSK          = 1, // Two level frequency shift keying modulation.
+      twoGaussianFSK  = 2, // Two level gaussian frequency shift keying modulation.
+      fourFSK         = 3, // Four level frequency shift keying modulation.
       fourGaussianFSK = 4, // Four level gaussian frequency shift keying modulation.
-      continuousWave = 5, // Continuous carrier.
+      continuousWave  = 5, // Continuous carrier.
     };
 
     // Data type for all possible errors returned by the driver.
     enum TransceiverErrorCode
     {
-      noError = 0,
+      noError             = 0,
       // High level errors.
       notInitializedError = 1, // Unused.
-      wrongModeError = 2, // Configuration not compatible with the set mode.
+      wrongModeError      = 2, // Configuration not compatible with the set mode.
       wrongFrequencyError = 3, // Frequency out of hardware bounds.
-      wrongChannelError = 4, // Channel out of set band bounds.
-      wrongPowerError = 5, // Transmission set power out of hardware bounds.
+      wrongChannelError   = 4, // Channel out of set band bounds.
+      wrongPowerError     = 5, // Transmission set power out of hardware bounds.
       // Low level errors.
-      CTSError = 6, // Transceiver doesn't accept commands.
-      commandError = 7, // Unused.
-      chipError = 8, // Fired if the interrupt line changes unexpectedly.
+      CTSError            = 6, // Transceiver doesn't accept commands.
+      commandError        = 7, // Unused.
+      chipError           = 8, // Fired if the interrupt line changes unexpectedly.
       // GenericError.
-      error = 9,
+      error               = 9,
     };
 
     // Data type for the different radio working modes.
     enum TransceiverMode
     {
       notInitializedMode = 0, // Transceiver not configured yet.
-      TXMode = 1, // Transceiver configured as a transmitter.
-      RXMode = 2, // Transceiver configured as a receiver.
+      TXMode             = 1, // Transceiver configured as a transmitter.
+      RXMode             = 2, // Transceiver configured as a receiver.
     };
 
     // Highest allowed frequency (in MHz) for reception.
@@ -269,7 +267,6 @@ class ESAT_COMTransceiverDriverClass
     TransceiverErrorCode write(byte* msgBuf);
 
   private:
-
     // Clock frequency for computing the radio frequency.
     const unsigned long CRYSTAL_FOR_FREQUENCY_COMPUTING = 30000000;
 

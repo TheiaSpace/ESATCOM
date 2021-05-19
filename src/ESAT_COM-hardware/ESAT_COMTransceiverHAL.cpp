@@ -166,21 +166,21 @@ void ESAT_COMTransceiverHALClass::SPIBulkRead(byte numBytes, byte* data)
 {
   while (numBytes--)
   {
-    *data++ = transceiverSPI -> transfer(0);
+    *data++ = transceiverSPI->transfer(0);
   }
 }
 
 void ESAT_COMTransceiverHALClass::SPIBulkWrite(byte numBytes, byte* data)
 {
-  while(numBytes--)
+  while (numBytes--)
   {
-    transceiverSPI -> transfer(*data++);
+    transceiverSPI->transfer(*data++);
   }
 }
 
 byte ESAT_COMTransceiverHALClass::SPIWriteReadByte(byte toWrite)
 {
-  return transceiverSPI -> transfer(toWrite);
+  return transceiverSPI->transfer(toWrite);
 }
 
 void ESAT_COMTransceiverHALClass::writeCommand(byte byteCount, byte* data)
@@ -213,7 +213,7 @@ void ESAT_COMTransceiverHALClass::writeData(byte command, byte dataByteCount, by
   if (requestToSend())
   {
     setChipSelect();
-    transceiverSPI -> transfer(command);
+    transceiverSPI->transfer(command);
     SPIBulkWrite(dataByteCount, data);
     clearChipSelect();
   }

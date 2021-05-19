@@ -50,7 +50,6 @@ class ESAT_COMHousekeepingTelemetryClass: public ESAT_CCSDSTelemetryPacketConten
     // Fills the transmission modulation source field regarding the
     // settings at the driver and the sweeping controller.
     char writeModulationSource();
-
 };
 
 // Global instance of ESAT_COMHousekeepingTelemetry.  ESAT_COMSubsystem uses this

@@ -57,16 +57,16 @@ boolean ESAT_COMHousekeepingTelemetryClass::fillUserData(ESAT_CCSDSPacket& packe
 
 char ESAT_COMHousekeepingTelemetryClass::writeModulationSource()
 {
-    switch(ESAT_COMSequenceGenerator.getMode())
-    {
-        default:
-        case 0: // Normal working
-          return (char) TransmissionTransceiver.getModulationSource();
-        case 1: // Two levels sweep
-          return 10;
-        case 2: // Four levels sweep
-          return 11;
-    }
+  switch (ESAT_COMSequenceGenerator.getMode())
+  {
+    default:
+    case 0: // Normal working
+      return (char) TransmissionTransceiver.getModulationSource();
+    case 1: // Two levels sweep
+      return 10;
+    case 2: // Four levels sweep
+      return 11;
+  }
 }
 
 ESAT_COMHousekeepingTelemetryClass ESAT_COMHousekeepingTelemetry;

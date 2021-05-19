@@ -27,7 +27,7 @@ boolean ESAT_COMEnableTelemetryTelecommandClass::handleUserData(ESAT_CCSDSPacket
   const byte identifier = packet.readByte();
   if (packet.triedToReadBeyondLength())
   {
-    (void) identifier;// Unused.
+    (void) identifier; // Unused.
     return false;
   }
   else

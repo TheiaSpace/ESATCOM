@@ -70,7 +70,6 @@ class ESAT_COMNonVolatileDataStorageClass
     void writeConfigurations();
 
   private:
-
     // Length of the memory valid flag.
     static const word MEMORY_CONTENTS_STATUS_LENGHT = 1;
 

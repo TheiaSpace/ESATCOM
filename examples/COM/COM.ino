@@ -129,7 +129,7 @@ void loop()
       packet.rewind();
       ESAT_SubsystemPacketHandler.queueTelecommandToI2C(packet);
     }
-   }
+  }
 
   // Handle I2C requests.
   // They can be telemetry requests and/or telecommands queue status queries.

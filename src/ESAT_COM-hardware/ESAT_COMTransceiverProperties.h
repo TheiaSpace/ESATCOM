@@ -27,7 +27,6 @@
 class ESAT_COMTransceiverPropertiesClass
 {
   public:
-
     // Global properties group number.
     static const byte PROPERTY_GLOBAL = 0;
 

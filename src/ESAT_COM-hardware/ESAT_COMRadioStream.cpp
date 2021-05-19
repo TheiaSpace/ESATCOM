@@ -77,8 +77,8 @@ void ESAT_COMRadioStreamClass::flush()
 void ESAT_COMRadioStreamClass::initializeTXBuffer(byte initValue)
 {
   for (unsigned int index=1;
-      index < ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH;
-      ++index)
+       index < ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH;
+       ++index)
   {
     txBuffer[index]=initValue;
   }
@@ -152,8 +152,8 @@ size_t ESAT_COMRadioStreamClass::write(const byte *buffer, size_t size)
   unsigned int index;
   // Copy the data to the transmission buffer.
   for (index=0;
-    (size_t) index < size && index < (ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH-1);
-    ++index)
+       (size_t) index < size && index < (ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH-1);
+       ++index)
   {
     txBuffer[index + 1] = buffer[index];
   }

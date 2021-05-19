@@ -260,7 +260,7 @@ void ESAT_COMClass::update()
       case TRANSMITTING_OWN_DATA:
         if (ESAT_COM.writePacketToRadio(ongoingTransmissionPacket))
         {
-          // Packet was successfully transmitted.;
+          // Packet was successfully transmitted.
           ongoingTransmissionState = OWN_DATA_TRANSMITTED;
         }
         else
@@ -286,13 +286,13 @@ void ESAT_COMClass::update()
         break;
     }
   }
-  else // Process I2C TC while the sequence sweep is on.
+  else // Process I2C telecommands while the sequence sweep is on.
   {
     ongoingTransmissionPacket.rewind();
     if (ESAT_SubsystemPacketHandler.readPacketFromI2C(ongoingTransmissionPacket))
       {
         ongoingTransmissionPacket.rewind();
-        // If the packet is a telecommand for the board, it is dispatched
+        // If the packet is a telecommand for the board, it is dispatched.
         if (isSubsystemTelecommand(ongoingTransmissionPacket))
         {
           ongoingTransmissionPacket.rewind();
@@ -300,7 +300,7 @@ void ESAT_COMClass::update()
         }
       }
   }
-  // Updates the transmission manual bit banging sequence.
+  // Update the transmission manual bit banging sequence.
   TransmissionTransceiver.updateManualDataStream();
   ESAT_COMHeartBeatLED.update();
 }
@@ -326,11 +326,11 @@ boolean ESAT_COMClass::writePacketToRadio(ESAT_CCSDSPacket& packet)
     radioWriter.beginFrame();
     packet.readPrimaryHeader().writeTo(radioWriter);
   }
-  // FIFO size is 129 bytes and the first is the length, so there
-  // are 128 free bytes. 2 free bytes should be reserved for scaping
+  // FIFO size is 129 bytes and the first byte is the length, so there
+  // are 128 free bytes. 2 free bytes should be reserved for escaping
   // the last character if it were necessary. This leaves 126 free
-  // bytes, being 125 the largest allowed index for indexing the buffer.
-  // If there is some data to be written and still fits in the buffer,
+  // bytes, 125 being the largest allowed index for indexing the buffer.
+  // If there is some data to be written and it still fits in the buffer,
   // it will be written.
   while (packet.available() && (radioOutputBuffer.position() < 126))
   {

@@ -41,31 +41,31 @@ class ESAT_COMNonVolatileDataStorageClass
     // Check if the stored data is valid or not.
     boolean checkMemoryStatus();
 
-    // Erases all the non volatile memory contents
+    // Erase all the non volatile memory contents
     void eraseAll();
 
-    // Reads the stored transmission channel.
+    // Read the stored transmission channel.
     byte readTransmissionChannel();
 
-    // Reads the stored transmission frequency.
+    // Read the stored transmission frequency.
     float readTransmissionFrequency();
 
-    // Reads the stored transmission power.
+    // Read the stored transmission power.
     float readTransmissionPower();
 
-    // Reads the stored modulation type.
+    // Read the stored modulation type.
     ESAT_COMTransceiverDriverClass::ModulationType readTransmissionModulationType();
 
-    // Reads the stored reception channel.
+    // Read the stored reception channel.
     byte readReceptionChannel();
 
-    // Reads the stored reception frequency.
+    // Read the stored reception frequency.
     float readReceptionFrequency();
 
-    // Reads the stored reception modulation type.
+    // Read the stored reception modulation type.
     ESAT_COMTransceiverDriverClass::ModulationType readReceptionModulationType();
 
-    // Writes all radio driver configurations into
+    // Write all radio driver configurations into
     // non volatile memory.
     void writeConfigurations();
 
@@ -150,26 +150,26 @@ class ESAT_COMNonVolatileDataStorageClass
     // Value to store in memory if the data was updated.
     const byte MEMORY_CONTENTS_VALID = 0b01010101;
 
-    // Stores the transmission channel into non volatile memory.
+    // Store the transmission channel into non volatile memory.
     void writeTransmissionChannel();
 
-    // Stores the transmission frequency into non volatile memory.
+    // Store the transmission frequency into non volatile memory.
     void writeTransmissionFrequency();
 
-    // Stores the transmission modulation type into non volatile
+    // Store the transmission modulation type into non volatile
     // memory.
     void writeTransmissionModulationType();
 
-    // Stores the transmission power into non volatile memory.
+    // Store the transmission power into non volatile memory.
     void writeTransmissionPower();
 
-    // Stores the reception channel into non volatile memory.
+    // Store the reception channel into non volatile memory.
     void writeReceptionChannel();
 
-    // Stores the reception frequency into non volatile memory.
+    // Store the reception frequency into non volatile memory.
     void writeReceptionFrequency();
 
-    // Stores the reception modulation type into non volatile memory.
+    // Store the reception modulation type into non volatile memory.
     void writeReceptionModulationType();
 };
 

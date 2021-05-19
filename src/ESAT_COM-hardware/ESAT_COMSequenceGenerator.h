@@ -24,7 +24,7 @@
 #include <Arduino.h>
 #include <ESAT_Task.h>
 
-// Periodic task for varying the sequence
+// Periodic task for varying the sequence.
 class SequenceIncrementingTaskClass: public ESAT_Task
 {
   public:
@@ -43,7 +43,7 @@ class SequenceIncrementingTaskClass: public ESAT_Task
 };
 
 // This class generates a binary or quaternary CCSDS packet to test the
-// transmission modulations
+// transmission modulations.
 class ESAT_COMSequenceGeneratorClass
 {
   public:
@@ -51,19 +51,19 @@ class ESAT_COMSequenceGeneratorClass
     // Perodic task instance.
     SequenceIncrementingTaskClass SequenceIncrementingTask;
 
-    // Disables the sequential mode.
+    // Disable the sequential mode.
     void disable();
 
-    // Configures the 4-level radio sweep.
+    // Configure the 4-level radio sweep.
     void enableFourLevels();
 
-    // Configures the 2-level radio sweep.
+    // Configure the 2-level radio sweep.
     void enableTwoLevels();
 
-    // Returns if the sweep is enabled and the selected mode.
+    // Return if the sweep is enabled and the selected mode.
     byte getMode();
 
-    // Process the sequence transmission
+    // Process the sequence transmission.
     void handleSequenceTransmission();
 
   private:
@@ -76,7 +76,7 @@ class ESAT_COMSequenceGeneratorClass
       FOUR_LEVELS = 2
     };
 
-    // Number of times a packet is repeated before skipping to the next oen.
+    // Number of times a packet is repeated before skipping to the next one.
     const byte NUMBER_OF_RETRIALS = 1;
 
     // Index of the sequence.
@@ -88,7 +88,7 @@ class ESAT_COMSequenceGeneratorClass
     // Number of times each step of the sequence have been repeated.
     byte retrialsCounter = 0;
 
-    // Sends the packet.
+    // Send the packet.
     // Requires the symbol to be transmitted
     boolean transmitPacket(byte symbol);
 };

@@ -458,15 +458,15 @@ class ESAT_COMTransceiverCommandsClass
   static const byte FIFO_STATUS_ARGUMENT_TRANSMISSION_FIFO_BITMASK = 0x1;
   static const byte FIFO_STATUS_ARGUMENT_RECEPTION_FIFO_BITMASK = 0x2;
 
-  // Loads the patch image into the transceiver.
+  // Load the patch image into the transceiver.
   // Requires the HAL reference of the transceiver to be issued
   // and returns any HAL error that may happen.
   ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError applyPatch(ESAT_COMTransceiverHALClass& transceiver);
 
-  // Configures all the GPIOs for any specific usage.
+  // Configure all the GPIOs for any specific usage.
   // Requires the desired configuration, the pull-up setting,
   // the drive strength and the HAL reference of the transceiver
-  // to be issued. returns the GPIO configuration reply.
+  // to be issued. Returns the GPIO configuration reply.
   GPIOConfigurationReply configureGPIO(ESAT_COMTransceiverHALClass& transceiver,
                                         GPIOConfigurationArguments GPIO0Config, boolean enableGPIO0PullUp,
                                         GPIOConfigurationArguments GPIO1Config, boolean enableGPIO1PullUp,
@@ -474,46 +474,46 @@ class ESAT_COMTransceiverCommandsClass
                                         GPIOConfigurationArguments GPIO3Config, boolean enableGPIO3PullUp,
                                         GPIODriveStrength driveStrength);
 
-  // Initializes the GPIOs to their default settings.
+  // Initialize the GPIOs to their default settings.
   // Requires the HAL reference of the transceiver to be issued
   // and returns the GPIO configuration reply.
   GPIOConfigurationReply configureGPIODefault(ESAT_COMTransceiverHALClass& transceiver);
 
-  // Reads the selected analog values from the transceiver.
+  // Read the selected analog values from the transceiver.
   // Use analogChannels to select which channels to read (GPIO,
   // voltage and/or temperature). Also requires the HAL
   // reference of the transceiver to be issued and returns the
   // ADC read value reply.
   ADCReadingsReply getADCReading(ESAT_COMTransceiverHALClass& transceiver, byte analogChannels);
 
-  // Reads the Fast Response Registers starting with A register.
+  // Read the Fast Response Registers starting with A register.
   // Requires the HAL reference of the transceiver to be issued
   // and returns the register content as a reply struct.
   FastResponseRegisterAReply getFastResponseRegisterA(ESAT_COMTransceiverHALClass& transceiver, byte responseByteCount);
 
-  // Reads the Fast Response Registers starting with B register.
+  // Read the Fast Response Registers starting with B register.
   // Requires the HAL reference of the transceiver to be issued
   // and returns the register content as a reply struct.
   FastResponseRegisterBReply getFastResponseRegisterB(ESAT_COMTransceiverHALClass& transceiver, byte responseByteCount);
 
-  // Reads the Fast Response Registers starting with C register.
+  // Read the Fast Response Registers starting with C register.
   // Requires the HAL reference of the transceiver to be issued
   // and returns the register content as a reply struct.
   FastResponseRegisterCReply getFastResponseRegisterC(ESAT_COMTransceiverHALClass& transceiver, byte responseByteCount);
 
-  // Reads the Fast Response Registers starting with D register.
+  // Read the Fast Response Registers starting with D register.
   // Requires the HAL reference of the transceiver to be issued
   // and returns the register content as a reply struct.
   FastResponseRegisterDReply getFastResponseRegisterD(ESAT_COMTransceiverHALClass& transceiver, byte responseByteCount);
 
-  // Retrieves the current byte counts in the transmission and
-  // reception FIFOs and resets them if desired.  Requires the
+  // Retrieve the current byte counts in the transmission and
+  // reception FIFOs and reset them if desired.  Requires the
   // HAL reference of the transceiver to be issued and returns
   // and returns the FIFO status reply.
   FIFOStatusReply getFIFOStatus(ESAT_COMTransceiverHALClass& transceiver, boolean resetTransmissionFIFO, boolean resetReceptionFIFO);
 
-  // Retrieves the interrupt status flags from the transceiver and
-  // clears the selected ones by the mask (0 means "clear").
+  // Retrieve the interrupt status flags from the transceiver and
+  // clear the selected ones by the mask (0 means "clear").
   // Also requires the HAL reference of the transceiver to be issued
   // and returns the interrupt status reply.
   InterruptStatusReply getInterruptStatus(ESAT_COMTransceiverHALClass&,
@@ -521,50 +521,50 @@ class ESAT_COMTransceiverCommandsClass
                                           byte modemClearingPendingInterruptsMask,
                                           byte chipClearingPendingInterruptsMask);
 
-  // Retrieves the modem status and clears its pending
+  // Retrieve the modem status and clears its pending
   // interrupts. Requires the HAL reference of the transceiver
   // to be issued and returns the modem status reply.
   ModemStatusReply getModemStatus(ESAT_COMTransceiverHALClass&, byte clearPendingFlagsMask);
 
-  // Reads a transceiver property. Requires the transceiver where to
+  // Read a transceiver property. Requires the transceiver where to
   // reas, the property group number to be retrieved, the number of
   // the property fields to be read (max. 12) and the initial field offset.
   // Requires the HAL reference of the transceiver to be issued
   // and returns the properties reply.
   PropertiesReply getProperty(ESAT_COMTransceiverHALClass& transceiver, byte group, byte numProperties, byte startingProperty);
 
-  // Retrieves the basic information about the transceiver.
+  // Retrieve the basic information about the transceiver.
   // Requires the HAL reference of the transceiver to be issued
   // and returs the part info reply.
   PartInfoReply partInfo(ESAT_COMTransceiverHALClass& transceiver);
 
-  // Initializes the transceiver after powering it up.
+  // Initialize the transceiver after powering it up.
   // Requires the HAL reference of the transceiver to be issued.
   void powerUp(ESAT_COMTransceiverHALClass& transceiver);
 
-  // Reads data from the reception buffer. Requires the data length and
+  // Read data from the reception buffer. Requires the data length and
   // its storing buffer and the HAL reference of the transceiver to be issued.
   void readReceptionFIFOBuffer(ESAT_COMTransceiverHALClass& transceiver, byte length, byte* dataReadBuffer);
 
-  // Configures a transceiver property. Requires the transceiver HAL to be
+  // Configure a transceiver property. Requires the transceiver HAL to be
   // configured, the property group number, the number of the property
   // fields to update (max. 12), the initial field offset and the field's
   // contents buffer.
   ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError setProperty(ESAT_COMTransceiverHALClass& transceiver, byte group, byte numProperties, byte startingProperty, byte* properties);
 
-  // Switches the transceiver to the reception state, thus being
+  // Switch the transceiver to the reception state, thus being
   // able to receive packets. It needs the reception
   // channel on which to listen, the expected packet length,
   // and the HAL reference of the transceiver to be issued.
   void startReception(ESAT_COMTransceiverHALClass& transceiver, byte channel, word receptionLength);
 
-  // Switches the transceiver to the transmission state and
-  // starts transmitting a packet. It needs the transmission
+  // Switch the transceiver to the transmission state and
+  // start transmitting a packet. It needs the transmission
   // channel on which to transmit, the packet length and the
   // HAL reference of the transceiver to be issued.
   void startTransmission(ESAT_COMTransceiverHALClass& transceiver, byte channel, word transmissionLength);
 
-  // Loads data into the trasmission FIFO buffer.
+  // Load data into the trasmission FIFO buffer.
   // Requires the transmission hardware transceiver,
   // the data length and the data buffer.
   void writeTransmissionFIFOBuffer(ESAT_COMTransceiverHALClass& transceiver, byte length, byte* dataToBeWritten);
@@ -577,17 +577,17 @@ class ESAT_COMTransceiverCommandsClass
   // ID of the ROM to be patched.
   const byte TRANSCEIVER_PATCH_ROMID = 0x06;
 
-  // Sets the GPIO mode mask for the selected configuration.
+  // Set the GPIO mode mask for the selected configuration.
   byte getGPIOConfigurationMask(ESAT_COMTransceiverCommandsClass::GPIOConfigurationArguments arguments);
 
-  // Sets the GPIO drive strength mask for the selected configuration.
+  // Set the GPIO drive strength mask for the selected configuration.
   byte getGPIODriveStrengthMask(GPIODriveStrength strength);
 
-  // Sets the GPIO pull-up mask for the selected configuration.
+  // Set the GPIO pull-up mask for the selected configuration.
   byte getGPIOPullUpMask(boolean pullUpEnabled);
 };
 
 // Global instance of the ESAT_COMTransceiverCommandsClass.
 extern ESAT_COMTransceiverCommandsClass ESAT_COMTransceiverCommands;
 
-#endif /*ESAT_COMTransceiverCommands_h*/
+#endif /* ESAT_COMTransceiverCommands_h */

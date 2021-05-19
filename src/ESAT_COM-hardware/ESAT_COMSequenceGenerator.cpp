@@ -102,9 +102,9 @@ void ESAT_COMSequenceGeneratorClass::handleSequenceTransmission()
 
 boolean ESAT_COMSequenceGeneratorClass::transmitPacket(byte symbol)
 {
-    // Transmission buffer
+    // Transmission buffer.
     byte txBuffer[ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH];
-    // Pattern to be sent
+    // Pattern to be sent.
     byte fillValue;
     if (TransmissionTransceiver.available())
     {

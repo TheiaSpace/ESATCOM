@@ -103,4 +103,4 @@ class ESAT_COMTransceiverPropertiesClass
     static const byte PARAMETER_MODEM_CLOCK_GENERATOR_BAND_HIGH_PERFORMANCE_MASK = 0x8;
 };
 
-#endif /*ESAT_COMTransceiverProperties_h*/
+#endif /* ESAT_COMTransceiverProperties_h */

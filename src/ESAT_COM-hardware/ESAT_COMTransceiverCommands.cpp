@@ -79,7 +79,7 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverC
       {
         return ESAT_COMTransceiverHALClass::TRANSCEIVER_CTS_TIMEOUT;
       }
-      // Check if an error has occured.
+      // Check if an error has occurred.
       if (transceiver.checkInterruptPin() == 0)
       {
         getInterruptStatus(transceiver, 0, 0, 0);
@@ -109,8 +109,8 @@ ESAT_COMTransceiverCommandsClass::GPIOConfigurationReply ESAT_COMTransceiverComm
   cmdBuff[2] = getGPIOPullUpMask(enableGPIO1PullUp) | getGPIOConfigurationMask(GPIO1Config);
   cmdBuff[3] = getGPIOPullUpMask(enableGPIO2PullUp) | getGPIOConfigurationMask(GPIO2Config);
   cmdBuff[4] = getGPIOPullUpMask(enableGPIO3PullUp) | getGPIOConfigurationMask(GPIO3Config);
-  cmdBuff[5] = 0x00; // Nirq
-  cmdBuff[6] = 0x00; // SDO
+  cmdBuff[5] = 0x00; // Nirq.
+  cmdBuff[6] = 0x00; // SDO.
   cmdBuff[7] = getGPIODriveStrengthMask(driveStrength);
   transceiver.writeCommandAndRetrieveResponse(COMMAND_CONFIGURE_GPIO_ARGUMENTS_COUNT,
                                   cmdBuff,
@@ -483,7 +483,7 @@ void ESAT_COMTransceiverCommandsClass::startTransmission(ESAT_COMTransceiverHALC
   cmdBuff[4] = (byte)(transmissionLength);
   cmdBuff[5] = 0x00;
   // Don't repeat the packet,
-  // ie. transmit the packet only once.
+  // i.e. transmit the packet only once.
   cmdBuff[6] = 0x00;
   transceiver.writeCommand(COMMAND_START_TRANSMISSION_ARGUMENTS_COUNT, cmdBuff);
 }

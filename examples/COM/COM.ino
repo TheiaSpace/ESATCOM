@@ -22,7 +22,7 @@
 #include <ESAT_SubsystemPacketHandler.h>
 #include <ESAT_Task.h>
 #include <ESAT_TaskScheduler.h>
-#include "ESAT_COM-hardware/ESAT_COMHearthBeatLED.h"
+#include "ESAT_COM-hardware/ESAT_COMHeartBeatLED.h"
 #include "ESAT_COM-hardware/ESAT_COMNonVolatileDataStorage.h"
 #include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 #include "ESAT_COM-hardware/ESAT_COMTransceiverHAL.h"
@@ -150,7 +150,7 @@ void loop()
   //                        and queued own subsystem's telemetry using a sequential
   //                        dispatching algorithm.
   //  -Manual data stream:  updates the bit-banged transmission testing sequence.
-  //  -Heath beat LED update.
+  //  -Heartbeat LED update.
   ESAT_COM.update();
 
   // Updates the periodic tasks:

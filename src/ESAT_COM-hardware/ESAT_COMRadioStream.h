@@ -34,55 +34,55 @@ class ESAT_COMRadioStreamClass: public Stream
 
   public:
 
-  // Checks if there are any bytes available to be read.
-  // Returns the number of available bytes.
+  // Check if there are any bytes available to be read.
+  // Return the number of available bytes.
   int available();
 
-  // Checks if there is possible to write any byte.
-  // Returns the number of bytes that can be written.
+  // Check if there is possible to write any byte.
+  // Return the number of bytes that can be written.
   int availableWrite();
 
-  // Initializes the software.
+  // Initialize the software.
   void begin();
 
-  // Initializes only the reception software.
+  // Initialize only the reception software.
   void beginReading();
 
-  // Initializes only the transmission software.
+  // Initialize only the transmission software.
   void beginWriting();
 
-  // Empties the transmission buffer.
+  // Empty the transmission buffer.
   void flush();
 
-  // Retrieves the last received byte without inecreasing
+  // Retrieve the last received byte without inecreasing
   // the reading position.
   int peek();
 
-  // Reads the last received byte and increases the reading
+  // Read the last received byte and increases the reading
   // position.
   int read();
 
-  // Reads as many pending received bytes as possible and stores
+  // Read as many pending received bytes as possible and store
   // them into an ESAT_Buffer.
-  // Returns the number of retreived bytes.
+  // Return the number of retreived bytes.
   size_t read(ESAT_Buffer& inputBuffer);
 
   // Required by Stream interface.
   using Print::write;
 
-  // Checks if the transmitter is ready and then writes a
+  // Check if the transmitter is ready and then write a
   // single byte to it to inmediately transmit it.
-  // Returns the number of successfully written bytes (0 or 1).
+  // Return the number of successfully written bytes (0 or 1).
   size_t write(byte datum);
 
-  // Checks if the transmitter is ready and then writes up
+  // Check if the transmitter is ready and then write up
   // to size bytes to it to inmediately start their transmission.
-  // Returnd the number of successfully written bytes.
+  // Return the number of successfully written bytes.
   size_t write(const byte *buffer, size_t size);
 
-  // Checks if the transmitter is ready and then writes up
+  // Check if the transmitter is ready and then write up
   // to ESAT_Buffer::availableBytes to it to inmediately start
-  // their transmission. Returns the number of successfully
+  // their transmission. Return the number of successfully
   // written bytes.
   signed char write(ESAT_Buffer& outputBuffer);
 
@@ -100,7 +100,7 @@ class ESAT_COMRadioStreamClass: public Stream
   // Transmission buffer.
   byte txBuffer[ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH];
 
-  // Fills the transmission buffer with the initialization value.
+  // Fill the transmission buffer with the initialization value.
   void initializeTXBuffer(byte initValue);
 
  };

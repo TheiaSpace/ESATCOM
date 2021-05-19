@@ -70,7 +70,7 @@ void ESAT_COMRadioStreamClass::beginWriting()
 // is not accessible outside.
 void ESAT_COMRadioStreamClass::flush()
 {
-  // May went wrong if transmitter is busy.
+  // May go wrong if transmitter is busy.
   TransmissionTransceiver.nonBlockingWrite(txBuffer);
 }
 
@@ -138,7 +138,8 @@ size_t ESAT_COMRadioStreamClass::write (byte datum)
   initializeTXBuffer(DEFAULT_TX_BUFFER_VALUE);
   txBuffer[0]=1; // First byte is length.
   txBuffer[1]=datum;
-  // If the transmission goes wrong (because transceiver is bad configured or shutdown).
+  // If the transmission goes wrong (because the transceiver
+  // is badly configured or shut down).
   if (TransmissionTransceiver.nonBlockingWrite(txBuffer)!=ESAT_COMTransceiverDriverClass::noError)
   {
     return 0;
@@ -188,7 +189,8 @@ signed char ESAT_COMRadioStreamClass::write(ESAT_Buffer& outputBuffer)
     outputBuffer.seek(initialPosition); // Rewind source buffer.
     return availableBuffer;
   }
-  // If the transmission went wrong (because transceiver is bad configured or shutdown) return 0.
+  // If the transmission went wrong (because the transceiver
+  // is badly configured or shut down) return 0.
   if (TransmissionTransceiver.nonBlockingWrite(txBuffer) != ESAT_COMTransceiverDriverClass::noError)
   {
     outputBuffer.seek(initialPosition); // Rewind source buffer.

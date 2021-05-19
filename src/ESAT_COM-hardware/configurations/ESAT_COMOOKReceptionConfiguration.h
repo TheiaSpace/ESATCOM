@@ -212,4 +212,4 @@ class ESAT_COMOOKReceptionConfigurationClass: public ESAT_COMTransceiverConfigur
 // Instance of the OOK reception configuration class.
 extern ESAT_COMOOKReceptionConfigurationClass ESAT_COMOOKReceptionConfiguration;
 
-#endif /*ESAT_COMOOKReceptionConfiguration_h*/
+#endif /* ESAT_COMOOKReceptionConfiguration_h */

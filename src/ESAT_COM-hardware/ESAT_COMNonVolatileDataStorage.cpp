@@ -85,7 +85,7 @@ ESAT_COMTransceiverDriverClass::ModulationType ESAT_COMNonVolatileDataStorageCla
     switch(EEPROM.read(TRANSMISSION_MODULTATION_TYPE_PARAMETER_OFFSET))
     {
       default:
-      case 0: // Most inocuous
+      case 0: // Most inocuous.
         return ESAT_COMTransceiverDriverClass::OOK;
       case 1:
         return ESAT_COMTransceiverDriverClass::twoFSK;
@@ -131,7 +131,7 @@ ESAT_COMTransceiverDriverClass::ModulationType ESAT_COMNonVolatileDataStorageCla
     switch(EEPROM.read(RECEPTION_MODULTATION_TYPE_PARAMETER_OFFSET))
     {
       default:
-      case 0: // Most inocuous
+      case 0: // Most inocuous.
         return ESAT_COMTransceiverDriverClass::OOK;
       case 1:
         return ESAT_COMTransceiverDriverClass::twoFSK;

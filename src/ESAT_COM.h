@@ -43,7 +43,7 @@
 // telemetry and telecommands initialization functions, the buffers and the
 // queues for the telemetry and the telecommands and the callbacks for
 // handling the reading and the writing of the CCSDS packets and the KISS
-// frames. This class software is used by both the ground station and the
+// frames. This class is used by both the ground station and the
 // on-board software versions.
 class ESAT_COMClass
 {
@@ -75,7 +75,7 @@ class ESAT_COMClass
     static const word WHOLE_PACKET_BUFFER_LENGTH =
     ESAT_CCSDSPrimaryHeader::LENGTH + PACKET_DATA_BUFFER_LENGTH;
 
-    // Maximum KISS frame length taht the board will handle.
+    // Maximum KISS frame length that the board will handle.
     static const word WHOLE_KISS_FRAME_MAX_LENGTH =
     ESAT_KISSStream::frameLength(WHOLE_PACKET_BUFFER_LENGTH);
 
@@ -104,7 +104,7 @@ class ESAT_COMClass
     // Checks if the on-board telemetry delivery over the radio is enabled.
     boolean isCOMTelemetryRadioDeliveryEnabled();
 
-    // Checks wether a packet is a telecommand for the current subsystem
+    // Checks whether a packet is a telecommand for the current subsystem
     // (on-board or ground station).
     boolean isSubsystemTelecommand(ESAT_CCSDSPacket& packet);
 
@@ -122,12 +122,14 @@ class ESAT_COMClass
     //  -I2C written packets: radio telecommands or any subsystem telemetry.
     //                        Radio telecommands are handled and the subsystem
     //                        telemetry is queued to be transmitted by the radio
-    //                        when it were possible.
-    //  -Radio transmissions: broadcasts either any I2C received (and queued) telemetries
-    //                        and the queued own subsystem's telemetry using a sequential
+    //                        when possible.
+    //  -Radio transmissions: broadcasts either any I2C received (and queued)
+    //                        telemetries and this board's (ground station or
+    //                        on-board COM) queued telemetry a sequential
     //                        dispatching algorithm.
-    //  -Manual data stream:  updates the bit-banged transmission testing sequence.
-    //  -Heath beat LED update.
+    //  -Manual data stream:  updates the bit-banged transmission
+    //                        testing sequence.
+    //  -Heart beat LED update.
     void update();
 
     // Starts the radio transmission of the given packet.
@@ -192,16 +194,16 @@ class ESAT_COMClass
     // Use this to write packets to the radio interface.
     ESAT_KISSStream radioWriter;
 
-    // Configures the board hardware.
+    // Configure the board hardware.
     void beginHardware();
 
-    // Configures the radio stream middleware.
+    // Configure the radio stream middleware.
     void beginRadioSoftware();
 
-    // Configures the telecommand handlers.
+    // Configure the telecommand handlers.
     void beginTelecommands();
 
-    // Configures the telemetry packets.
+    // Configure the telemetry packets.
     void beginTelemetry();
 };
 

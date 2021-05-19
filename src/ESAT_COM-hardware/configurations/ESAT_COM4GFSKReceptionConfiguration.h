@@ -212,4 +212,4 @@ class ESAT_COM4GFSKReceptionConfigurationClass: public ESAT_COMTransceiverConfig
 // Instance of the 4GFSK reception configuration class.
 extern ESAT_COM4GFSKReceptionConfigurationClass ESAT_COM4GFSKReceptionConfiguration;
 
-#endif /*ESAT_COM4GFSKReceptionConfiguration_h*/
+#endif /* ESAT_COM4GFSKReceptionConfiguration_h */

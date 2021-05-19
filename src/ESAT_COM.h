@@ -80,7 +80,7 @@ class ESAT_COMClass
     ESAT_KISSStream::frameLength(WHOLE_PACKET_BUFFER_LENGTH);
 
     // Instance of the TelemetryDeliveryTaskClass.
-    PeriodicTelemetryDeliveryTaskClass PeriodicalTelemetryDeliveryTask;
+    PeriodicTelemetryDeliveryTaskClass PeriodicTelemetryDeliveryTask;
 
     // Sets up the board.
     // Configures the APID and the version numbers (they change between

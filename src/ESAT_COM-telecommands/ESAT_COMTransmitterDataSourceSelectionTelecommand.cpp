@@ -32,7 +32,7 @@ boolean ESAT_COMTransmitterDataSourceSelectionTelecommandClass::handleUserData(E
   {
     case 0:
     default:
-      if (TransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::fifo) == ESAT_COMTransceiverDriverClass::noError)
+      if (ESAT_COMTransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::fifo) == ESAT_COMTransceiverDriverClass::noError)
       {
         ESAT_COMSequenceGenerator.disable();
         returnValue = true;
@@ -41,7 +41,7 @@ boolean ESAT_COMTransmitterDataSourceSelectionTelecommandClass::handleUserData(E
       returnValue = false;
       break;
     case 1:
-      if (TransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::randomGenerator) == ESAT_COMTransceiverDriverClass::noError)
+      if (ESAT_COMTransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::randomGenerator) == ESAT_COMTransceiverDriverClass::noError)
       {
         ESAT_COMSequenceGenerator.disable();
         returnValue = true;
@@ -50,7 +50,7 @@ boolean ESAT_COMTransmitterDataSourceSelectionTelecommandClass::handleUserData(E
       returnValue = false;
       break;
     case 2:
-      if (TransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::fifo) == ESAT_COMTransceiverDriverClass::noError)
+      if (ESAT_COMTransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::fifo) == ESAT_COMTransceiverDriverClass::noError)
       {
         ESAT_COMSequenceGenerator.enableTwoLevels();
         returnValue = true;
@@ -59,7 +59,7 @@ boolean ESAT_COMTransmitterDataSourceSelectionTelecommandClass::handleUserData(E
       returnValue = false;
       break;
     case 3:
-      if (TransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::fifo) == ESAT_COMTransceiverDriverClass::noError)
+      if (ESAT_COMTransmissionTransceiver.setModulationSource(ESAT_COMTransceiverDriverClass::fifo) == ESAT_COMTransceiverDriverClass::noError)
       {
         ESAT_COMSequenceGenerator.enableFourLevels();
         returnValue = true;
@@ -73,7 +73,7 @@ boolean ESAT_COMTransmitterDataSourceSelectionTelecommandClass::handleUserData(E
     // Drop all the pending temetry stored in the transmission queues.
     ESAT_COM.clearRadioTelemetryQueue();
     ESAT_I2CSlave.clearMasterWrittenPacketsQueue();
-    TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
+    ESAT_COMTransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
     ESAT_COMRadioStream.beginWriting();
   }
   return returnValue;

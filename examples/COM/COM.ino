@@ -75,27 +75,27 @@ void setup()
   Serial.begin(9600);
   Serial.blockOnOverrun(false);
   delay(1000);
-  ReceptionTransceiver.setLowestChannel(0);
-  ReceptionTransceiver.setHighestChannel(31);
-  ReceptionTransceiver.setDefaultChannel(31);
-  TransmissionTransceiver.setLowestChannel(0);
-  TransmissionTransceiver.setHighestChannel(31);
-  TransmissionTransceiver.setDefaultChannel(0);
-  TransmissionTransceiver.setDefaultModulationType(ESAT_COMTransceiverDriverClass::fourFSK);
-  ReceptionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readReceptionModulationType());
-  ReceptionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readReceptionFrequency());
-  ReceptionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readReceptionChannel());
-  TransmissionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readTransmissionModulationType());
-  TransmissionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readTransmissionFrequency());
-  TransmissionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readTransmissionChannel());
+  ESAT_COMReceptionTransceiver.setLowestChannel(0);
+  ESAT_COMReceptionTransceiver.setHighestChannel(31);
+  ESAT_COMReceptionTransceiver.setDefaultChannel(31);
+  ESAT_COMTransmissionTransceiver.setLowestChannel(0);
+  ESAT_COMTransmissionTransceiver.setHighestChannel(31);
+  ESAT_COMTransmissionTransceiver.setDefaultChannel(0);
+  ESAT_COMTransmissionTransceiver.setDefaultModulationType(ESAT_COMTransceiverDriverClass::fourFSK);
+  ESAT_COMReceptionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readReceptionModulationType());
+  ESAT_COMReceptionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readReceptionFrequency());
+  ESAT_COMReceptionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readReceptionChannel());
+  ESAT_COMTransmissionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readTransmissionModulationType());
+  ESAT_COMTransmissionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readTransmissionFrequency());
+  ESAT_COMTransmissionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readTransmissionChannel());
   ESAT_COM.begin(COM_APPLICATION_PROCESS_IDENTIFIER,
                COM_MAJOR_VERSION_NUMBER,
                COM_MINOR_VERSION_NUMBER,
                COM_PATCH_VERSION_NUMBER);
-  TransmissionTransceiver.setTransmissionPower(ESAT_COMNonVolatileDataStorage.readTransmissionPower());
-  TransmissionTransceiver.updateTransmissionPower();
+  ESAT_COMTransmissionTransceiver.setTransmissionPower(ESAT_COMNonVolatileDataStorage.readTransmissionPower());
+  ESAT_COMTransmissionTransceiver.updateTransmissionPower();
   ESAT_COMTaskScheduler.begin();
-  ReceptionTransceiver.startReception();
+  ESAT_COMReceptionTransceiver.startReception();
   delay(1000);
 }
 

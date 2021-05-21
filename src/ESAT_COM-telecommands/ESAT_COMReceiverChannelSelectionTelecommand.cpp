@@ -24,9 +24,9 @@
 boolean ESAT_COMReceiverChannelSelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   const byte channel = packet.readByte();
-  if (ReceptionTransceiver.setChannel(channel) == ESAT_COMTransceiverDriverClass::noError)
+  if (ESAT_COMReceptionTransceiver.setChannel(channel) == ESAT_COMTransceiverDriverClass::noError)
   {
-    ReceptionTransceiver.startReception();
+    ESAT_COMReceptionTransceiver.startReception();
     return true;
   }
   return false;

@@ -172,9 +172,9 @@ class ESAT_COMTransceiverHALClass
 };
 
 // Global instace of the reception transceiver low level driver.
-extern ESAT_COMTransceiverHALClass ReceptionTransceiverLowLevelDriver;
+extern ESAT_COMTransceiverHALClass ESAT_COMReceptionTransceiverLowLevelDriver;
 
 // Global instace of the transmission transceiver low level driver.
-extern ESAT_COMTransceiverHALClass TransmissionTransceiverLowLevelDriver;
+extern ESAT_COMTransceiverHALClass ESAT_COMTransmissionTransceiverLowLevelDriver;
 
 #endif /* ESAT_COMTransceiverHAL_h */

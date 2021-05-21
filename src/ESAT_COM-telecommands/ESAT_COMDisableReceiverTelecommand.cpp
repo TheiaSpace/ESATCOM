@@ -24,7 +24,7 @@
 boolean ESAT_COMDisableReceiverTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   (void) packet.readByte();
-  ReceptionTransceiver.disable();
+  ESAT_COMReceptionTransceiver.disable();
   return true;
 }
 

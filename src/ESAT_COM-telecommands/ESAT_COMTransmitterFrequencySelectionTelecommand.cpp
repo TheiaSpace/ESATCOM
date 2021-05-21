@@ -25,16 +25,16 @@
 boolean ESAT_COMTransmitterFrequencySelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   const float frequency = packet.readFloat();
-  const float constrainedFrequency = constrain(frequency, TransmissionTransceiver.LOWEST_TRANSMISSION_FREQUENCY, TransmissionTransceiver.HIGHEST_TRANSMISSION_FREQUENCY);
-  if (TransmissionTransceiver.setFrequency(constrainedFrequency)== ESAT_COMTransceiverDriverClass::wrongFrequencyError)
+  const float constrainedFrequency = constrain(frequency, ESAT_COMTransmissionTransceiver.LOWEST_TRANSMISSION_FREQUENCY, ESAT_COMTransmissionTransceiver.HIGHEST_TRANSMISSION_FREQUENCY);
+  if (ESAT_COMTransmissionTransceiver.setFrequency(constrainedFrequency)== ESAT_COMTransceiverDriverClass::wrongFrequencyError)
   {
     return false;
   }
   // If the transmitter is in continuos wave mode, it needs to be
   // reconfigured to apply the new frequency.
-  if (TransmissionTransceiver.getModulation() == 5) // Continuous wave.
+  if (ESAT_COMTransmissionTransceiver.getModulation() == 5) // Continuous wave.
   {
-    if (TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::continuousWave) != ESAT_COMTransceiverDriverClass::noError)
+    if (ESAT_COMTransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::continuousWave) != ESAT_COMTransceiverDriverClass::noError)
     {
       return false;
     }
@@ -42,13 +42,13 @@ boolean ESAT_COMTransmitterFrequencySelectionTelecommandClass::handleUserData(ES
   }
   else
   {
-    if (TransmissionTransceiver.updateFrequency() == ESAT_COMTransceiverDriverClass::wrongFrequencyError)
+    if (ESAT_COMTransmissionTransceiver.updateFrequency() == ESAT_COMTransceiverDriverClass::wrongFrequencyError)
     {
       return false;
     }
     // If the transmitter is in random data, it needs to
     // be restarted too.
-    if (TransmissionTransceiver.getModulationSource() == 1) // Random data.
+    if (ESAT_COMTransmissionTransceiver.getModulationSource() == 1) // Random data.
     {
       ESAT_COMRadioStream.beginWriting();
     }

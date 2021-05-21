@@ -25,9 +25,9 @@
 boolean ESAT_COMEnableReceiverTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   (void) packet.readByte();
-  ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode);
+  ESAT_COMReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode);
   ESAT_COMRadioStream.beginReading();
-  ReceptionTransceiver.startReception();
+  ESAT_COMReceptionTransceiver.startReception();
   return true;
 }
 

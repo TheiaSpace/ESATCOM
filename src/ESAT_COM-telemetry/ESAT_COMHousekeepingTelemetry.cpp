@@ -34,20 +34,20 @@ boolean ESAT_COMHousekeepingTelemetryClass::available()
 boolean ESAT_COMHousekeepingTelemetryClass::fillUserData(ESAT_CCSDSPacket& packet)
 {
   // Transmission transceiver telemetry.
-  packet.writeByte((byte) TransmissionTransceiver.getModulation());
-  packet.writeFloat(TransmissionTransceiver.getFrequency());
-  packet.writeByte((byte) TransmissionTransceiver.getChannel());
+  packet.writeByte((byte) ESAT_COMTransmissionTransceiver.getModulation());
+  packet.writeFloat(ESAT_COMTransmissionTransceiver.getFrequency());
+  packet.writeByte((byte) ESAT_COMTransmissionTransceiver.getChannel());
   packet.writeChar(writeModulationSource());
-  packet.writeFloat(TransmissionTransceiver.getTransmissionPowerRate());
-  packet.writeFloat(TransmissionTransceiver.getTransceiverVoltage());
-  packet.writeFloat(TransmissionTransceiver.getTransceiverTemperature());
+  packet.writeFloat(ESAT_COMTransmissionTransceiver.getTransmissionPowerRate());
+  packet.writeFloat(ESAT_COMTransmissionTransceiver.getTransceiverVoltage());
+  packet.writeFloat(ESAT_COMTransmissionTransceiver.getTransceiverTemperature());
   // Reception transceiver telemetry.
-  packet.writeByte((byte) ReceptionTransceiver.getModulation());
-  packet.writeFloat(ReceptionTransceiver.getFrequency());
-  packet.writeByte((byte) ReceptionTransceiver.getChannel());
-  packet.writeFloat(ReceptionTransceiver.getReceivedSignalStrengthIndicator());
-  packet.writeFloat(ReceptionTransceiver.getTransceiverVoltage());
-  packet.writeFloat(ReceptionTransceiver.getTransceiverTemperature());
+  packet.writeByte((byte) ESAT_COMReceptionTransceiver.getModulation());
+  packet.writeFloat(ESAT_COMReceptionTransceiver.getFrequency());
+  packet.writeByte((byte) ESAT_COMReceptionTransceiver.getChannel());
+  packet.writeFloat(ESAT_COMReceptionTransceiver.getReceivedSignalStrengthIndicator());
+  packet.writeFloat(ESAT_COMReceptionTransceiver.getTransceiverVoltage());
+  packet.writeFloat(ESAT_COMReceptionTransceiver.getTransceiverTemperature());
   // MCU telemetry (calibrated)
   packet.writeFloat(ProcessorVoltage.read());
   packet.writeFloat(ProcessorTemperature.read());
@@ -61,7 +61,7 @@ char ESAT_COMHousekeepingTelemetryClass::writeModulationSource()
   {
     default:
     case 0: // Normal working
-      return (char) TransmissionTransceiver.getModulationSource();
+      return (char) ESAT_COMTransmissionTransceiver.getModulationSource();
     case 1: // Two levels sweep
       return 10;
     case 2: // Four levels sweep

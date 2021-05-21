@@ -394,9 +394,9 @@ class ESAT_COMTransceiverDriverClass
 };
 
 // Global instace of the reception transceiver.
-extern ESAT_COMTransceiverDriverClass ReceptionTransceiver;
+extern ESAT_COMTransceiverDriverClass ESAT_COMReceptionTransceiver;
 
 // Global instace of the transmission transceiver.
-extern ESAT_COMTransceiverDriverClass TransmissionTransceiver;
+extern ESAT_COMTransceiverDriverClass ESAT_COMTransmissionTransceiver;
 
 #endif /* ESAT_COMTransceiverDriver_h */

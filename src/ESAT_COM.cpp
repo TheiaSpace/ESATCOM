@@ -80,16 +80,16 @@ void ESAT_COMClass::beginHardware()
   ESAT_COMHeartBeatLED.begin();
   WireCOM.begin(byte(COM_I2C_ADDRESS));
   // Keep reconfiguring the transmitter until everything went right.
-  while(TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode)
-        != ESAT_COMTransceiverDriverClass::noError)
+  while (ESAT_COMTransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode)
+         != ESAT_COMTransceiverDriverClass::noError)
   {
     delay(1000);
   }
   ESAT_COMRadioStream.beginWriting();
   delay(1000);
   // Keep reconfiguring the receiver until everything went right.
-  while (ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode)
-          != ESAT_COMTransceiverDriverClass::noError);
+  while (ESAT_COMReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode)
+         != ESAT_COMTransceiverDriverClass::noError);
   {
     delay(1000);
   }
@@ -211,9 +211,9 @@ void ESAT_COMClass::update()
   // transmission mode is enabled and functional. Otherwise I2C communications
   // can be blocked. This is also not followed when the transmitter is disabled.
   if (ESAT_COMSequenceGenerator.getMode() == 0 && // Sequence mode is disabled.
-      TransmissionTransceiver.getModulationSource() == 0 &&  // FIFO data source.
-      TransmissionTransceiver.getModulation() != 5 && // No random mode.
-      TransmissionTransceiver.getModulation() != 255) // No wrong modulation error.
+      ESAT_COMTransmissionTransceiver.getModulationSource() == 0 &&  // FIFO data source.
+      ESAT_COMTransmissionTransceiver.getModulation() != 5 && // No random mode.
+      ESAT_COMTransmissionTransceiver.getModulation() != 255) // No wrong modulation error.
   {
     switch (ongoingTransmissionState)
     {
@@ -301,7 +301,7 @@ void ESAT_COMClass::update()
       }
   }
   // Update the transmission manual bit banging sequence.
-  TransmissionTransceiver.updateManualDataStream();
+  ESAT_COMTransmissionTransceiver.updateManualDataStream();
   ESAT_COMHeartBeatLED.update();
 }
 

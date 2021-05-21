@@ -105,7 +105,7 @@ boolean ESAT_COMSequenceGeneratorClass::transmitPacket(byte symbol)
   byte txBuffer[ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH];
   // Pattern to be sent.
   byte fillValue;
-  if (TransmissionTransceiver.available())
+  if (ESAT_COMTransmissionTransceiver.available())
   {
     switch (symbol)
     {
@@ -124,7 +124,7 @@ boolean ESAT_COMSequenceGeneratorClass::transmitPacket(byte symbol)
         break;
     }
     memset(txBuffer, (int) fillValue, ESAT_COMTransceiverDriverClass::RADIO_MAX_PACKET_LENGTH);
-    if (TransmissionTransceiver.nonBlockingWrite(txBuffer) != ESAT_COMTransceiverDriverClass::noError)
+    if (ESAT_COMTransmissionTransceiver.nonBlockingWrite(txBuffer) != ESAT_COMTransceiverDriverClass::noError)
     {
       return false;
     }

@@ -49,7 +49,7 @@ byte ESAT_COMNonVolatileDataStorageClass::readTransmissionChannel()
   {
     return (byte) EEPROM.read(TRANSMISSION_CHANNEL_PARAMETER_OFFSET);
   }
-  return TransmissionTransceiver.getDefaultChannel();
+  return ESAT_COMTransmissionTransceiver.getDefaultChannel();
 }
 
 float ESAT_COMNonVolatileDataStorageClass::readTransmissionFrequency()
@@ -62,7 +62,7 @@ float ESAT_COMNonVolatileDataStorageClass::readTransmissionFrequency()
                                                              EEPROM.read(TRANSMISSION_FREQUENCY_PARAMETER_OFFSET));
     return ESAT_Util.unsignedLongToFloat(frequencyUL);
   }
-  return TransmissionTransceiver.getDefaultFrequency();
+  return ESAT_COMTransmissionTransceiver.getDefaultFrequency();
 }
 
 float ESAT_COMNonVolatileDataStorageClass::readTransmissionPower()
@@ -75,7 +75,7 @@ float ESAT_COMNonVolatileDataStorageClass::readTransmissionPower()
                                                          EEPROM.read(TRANSMISSION_POWER_PARAMETER_OFFSET));
     return ESAT_Util.unsignedLongToFloat(powerUL);
   }
-  return TransmissionTransceiver.getDefaultTransmissionPower();
+  return ESAT_COMTransmissionTransceiver.getDefaultTransmissionPower();
 }
 
 ESAT_COMTransceiverDriverClass::ModulationType ESAT_COMNonVolatileDataStorageClass::readTransmissionModulationType()
@@ -99,7 +99,7 @@ ESAT_COMTransceiverDriverClass::ModulationType ESAT_COMNonVolatileDataStorageCla
         return ESAT_COMTransceiverDriverClass::continuousWave;
     }
   }
-  return TransmissionTransceiver.getDefaultModulationType();
+  return ESAT_COMTransmissionTransceiver.getDefaultModulationType();
 }
 
 byte ESAT_COMNonVolatileDataStorageClass::readReceptionChannel()
@@ -108,7 +108,7 @@ byte ESAT_COMNonVolatileDataStorageClass::readReceptionChannel()
   {
     return (byte) EEPROM.read(RECEPTION_CHANNEL_PARAMETER_OFFSET);
   }
-  return ReceptionTransceiver.getDefaultChannel();
+  return ESAT_COMReceptionTransceiver.getDefaultChannel();
 }
 
 float ESAT_COMNonVolatileDataStorageClass::readReceptionFrequency()
@@ -121,7 +121,7 @@ float ESAT_COMNonVolatileDataStorageClass::readReceptionFrequency()
                                                              EEPROM.read(RECEPTION_FREQUENCY_PARAMETER_OFFSET));
     return ESAT_Util.unsignedLongToFloat(frequencyUL);
   }
-  return ReceptionTransceiver.getDefaultFrequency();
+  return ESAT_COMReceptionTransceiver.getDefaultFrequency();
 }
 
 ESAT_COMTransceiverDriverClass::ModulationType ESAT_COMNonVolatileDataStorageClass::readReceptionModulationType()
@@ -145,7 +145,7 @@ ESAT_COMTransceiverDriverClass::ModulationType ESAT_COMNonVolatileDataStorageCla
         return ESAT_COMTransceiverDriverClass::continuousWave;
     }
   }
-  return ReceptionTransceiver.getDefaultModulationType();
+  return ESAT_COMReceptionTransceiver.getDefaultModulationType();
 }
 
 void ESAT_COMNonVolatileDataStorageClass::writeConfigurations()
@@ -164,12 +164,12 @@ void ESAT_COMNonVolatileDataStorageClass::writeConfigurations()
 void ESAT_COMNonVolatileDataStorageClass::writeTransmissionChannel()
 {
   (void) EEPROM.write(TRANSMISSION_CHANNEL_PARAMETER_OFFSET,
-    TransmissionTransceiver.getChannel());
+    ESAT_COMTransmissionTransceiver.getChannel());
 }
 
 void ESAT_COMNonVolatileDataStorageClass::writeTransmissionFrequency()
 {
-  unsigned long frequencyUL = ESAT_Util.floatToUnsignedLong(TransmissionTransceiver.getFrequency());
+  unsigned long frequencyUL = ESAT_Util.floatToUnsignedLong(ESAT_COMTransmissionTransceiver.getFrequency());
   (void) EEPROM.write(TRANSMISSION_FREQUENCY_PARAMETER_OFFSET,
     lowByte(ESAT_Util.lowWord(frequencyUL)));
   (void) EEPROM.write(TRANSMISSION_FREQUENCY_PARAMETER_OFFSET + 1,
@@ -182,7 +182,7 @@ void ESAT_COMNonVolatileDataStorageClass::writeTransmissionFrequency()
 
 void ESAT_COMNonVolatileDataStorageClass::writeTransmissionPower()
 {
-  unsigned long powerUL = ESAT_Util.floatToUnsignedLong(TransmissionTransceiver.getTransmissionPowerRate());
+  unsigned long powerUL = ESAT_Util.floatToUnsignedLong(ESAT_COMTransmissionTransceiver.getTransmissionPowerRate());
   (void) EEPROM.write(TRANSMISSION_POWER_PARAMETER_OFFSET,
     lowByte(ESAT_Util.lowWord(powerUL)));
   (void) EEPROM.write(TRANSMISSION_POWER_PARAMETER_OFFSET + 1,
@@ -196,18 +196,18 @@ void ESAT_COMNonVolatileDataStorageClass::writeTransmissionPower()
 void ESAT_COMNonVolatileDataStorageClass::writeTransmissionModulationType()
 {
   (void) EEPROM.write(TRANSMISSION_MODULTATION_TYPE_PARAMETER_OFFSET,
-    TransmissionTransceiver.getModulation());
+    ESAT_COMTransmissionTransceiver.getModulation());
 }
 
 void ESAT_COMNonVolatileDataStorageClass::writeReceptionChannel()
 {
   (void) EEPROM.write(RECEPTION_CHANNEL_PARAMETER_OFFSET,
-    ReceptionTransceiver.getChannel());
+    ESAT_COMReceptionTransceiver.getChannel());
 }
 
 void ESAT_COMNonVolatileDataStorageClass::writeReceptionFrequency()
 {
-  unsigned long frequencyUL = ESAT_Util.floatToUnsignedLong(ReceptionTransceiver.getFrequency());
+  unsigned long frequencyUL = ESAT_Util.floatToUnsignedLong(ESAT_COMReceptionTransceiver.getFrequency());
   (void) EEPROM.write(RECEPTION_FREQUENCY_PARAMETER_OFFSET,
     lowByte(ESAT_Util.lowWord(frequencyUL)));
   (void) EEPROM.write(RECEPTION_FREQUENCY_PARAMETER_OFFSET + 1,
@@ -221,7 +221,7 @@ void ESAT_COMNonVolatileDataStorageClass::writeReceptionFrequency()
 void ESAT_COMNonVolatileDataStorageClass::writeReceptionModulationType()
 {
     (void) EEPROM.write(RECEPTION_MODULTATION_TYPE_PARAMETER_OFFSET,
-    ReceptionTransceiver.getModulation());
+    ESAT_COMReceptionTransceiver.getModulation());
 }
 
 ESAT_COMNonVolatileDataStorageClass ESAT_COMNonVolatileDataStorage;

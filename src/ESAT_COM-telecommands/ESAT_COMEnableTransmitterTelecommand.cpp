@@ -30,7 +30,7 @@ boolean ESAT_COMEnableTransmitterTelecommandClass::handleUserData(ESAT_CCSDSPack
   // Drop all the pending temetry stored in the transmission queues.
   ESAT_COM.clearRadioTelemetryQueue();
   ESAT_I2CSlave.clearMasterWrittenPacketsQueue();
-  TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
+  ESAT_COMTransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode);
   ESAT_COMRadioStream.beginWriting();
   return true;
 }

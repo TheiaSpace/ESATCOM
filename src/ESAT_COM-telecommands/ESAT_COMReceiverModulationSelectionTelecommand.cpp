@@ -28,25 +28,25 @@ boolean ESAT_COMReceiverModulationSelectionTelecommandClass::handleUserData(ESAT
   {
     case 0:
     default:
-      ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::OOK);
+      ESAT_COMReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::OOK);
       break;
     case 1:
-      ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::twoFSK);
+      ESAT_COMReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::twoFSK);
       break;
     case 2:
-      ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::twoGaussianFSK);
+      ESAT_COMReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::twoGaussianFSK);
       break;
     case 3:
-      ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::fourFSK);
+      ESAT_COMReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::fourFSK);
       break;
     case 4:
-      ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::fourGaussianFSK);
+      ESAT_COMReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::fourGaussianFSK);
       break;
     case 5: // No CW in reception mode.
       return false;
   }
   ESAT_COMRadioStream.beginReading();
-  ReceptionTransceiver.startReception();
+  ESAT_COMReceptionTransceiver.startReception();
   return true;
 }
 

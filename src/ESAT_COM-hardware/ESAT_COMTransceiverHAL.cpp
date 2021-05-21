@@ -224,6 +224,6 @@ void ESAT_COMTransceiverHALClass::writeDataStreamGPIO(byte level)
   digitalWrite(gpio2Pin, level);
 }
 
-ESAT_COMTransceiverHALClass ReceptionTransceiverLowLevelDriver(SPI, CS_RX, INT_RX, SDN_RX, GPIO0_RX, GPIO1_RX, GPIO2_RX, GPIO3_RX);
+ESAT_COMTransceiverHALClass ESAT_COMReceptionTransceiverLowLevelDriver(SPI, CS_RX, INT_RX, SDN_RX, GPIO0_RX, GPIO1_RX, GPIO2_RX, GPIO3_RX);
 
-ESAT_COMTransceiverHALClass TransmissionTransceiverLowLevelDriver(SPI1, CS_TX, INT_TX, SDN_TX, GPIO0_TX, GPIO1_TX, GPIO2_TX, GPIO3_TX);
+ESAT_COMTransceiverHALClass ESAT_COMTransmissionTransceiverLowLevelDriver(SPI1, CS_TX, INT_TX, SDN_TX, GPIO0_TX, GPIO1_TX, GPIO2_TX, GPIO3_TX);

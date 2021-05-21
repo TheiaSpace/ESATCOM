@@ -18,6 +18,10 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+#ifndef ARDUINO_ESAT_GS
+#error Wrong variant: you need to use the ESAT-GS variant with this program.
+#endif
+
 #include <ESAT_COM.h>
 #include <ESAT_SubsystemPacketHandler.h>
 #include <ESAT_Task.h>

@@ -81,6 +81,7 @@ void setup()
   TransmissionTransceiver.setLowestChannel(0);
   TransmissionTransceiver.setHighestChannel(31);
   TransmissionTransceiver.setDefaultChannel(0);
+  TransmissionTransceiver.setDefaultModulationType(ESAT_COMTransceiverDriverClass::fourFSK);
   ReceptionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readReceptionModulationType());
   ReceptionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readReceptionFrequency());
   ReceptionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readReceptionChannel());

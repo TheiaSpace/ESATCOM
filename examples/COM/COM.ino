@@ -19,7 +19,7 @@
  */
 
 #ifndef ARDUINO_ESAT_COM
-#error Wrong variant: you need to use the ESAT-COM variant with this program.
+#error Wrong board: you need to use the ESAT-COM board with this program.
 #endif
 
 #include <ESAT_COM.h>

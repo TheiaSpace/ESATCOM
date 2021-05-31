@@ -19,7 +19,7 @@
  */
 
 #ifndef ARDUINO_ESAT_GS
-#error Wrong variant: you need to use the ESAT-GS variant with this program.
+#error Wrong board: you need to use the ESAT-GS board with this program.
 #endif
 
 #include <ESAT_COM.h>

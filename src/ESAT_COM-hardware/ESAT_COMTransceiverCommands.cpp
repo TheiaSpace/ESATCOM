@@ -23,8 +23,8 @@
 
 ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverCommandsClass::applyPatch(ESAT_COMTransceiverHALClass& transceiver)
 {
-  volatile uint16_t line = 0;
-  volatile uint8_t row = 0;
+  volatile word line = 0;
+  volatile byte row = 0;
   const byte TRANSCEIVER_PATCH[] = {
     8, 4, 33, 113, 75, 0, 0, 220, 149, 8, 5, 166, 34, 33, 240, 65, 91, 38, \
     8, 226, 47, 28, 187, 10, 168, 148, 40, 8, 5, 135, 103, 226, 88, 26, \
@@ -64,7 +64,7 @@ ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError ESAT_COMTransceiverC
     158, 219, 222, 63, 148, 233, 107, 8, 236, 197, 5, 170, 87, 220, 138, \
     94, 8, 5, 112, 218, 132, 132, 221, 202, 144
   };
-  uint8_t cmdBuff[8];
+  byte cmdBuff[8];
   // Check if the patch is needed.
   const PartInfoReply partInfoReply = partInfo(transceiver);
   if ((partInfoReply.ROMID == TRANSCEIVER_PATCH_ROMID) && ((partInfoReply.ID >> 8) <= TRANSCEIVER_PATCH_ID))

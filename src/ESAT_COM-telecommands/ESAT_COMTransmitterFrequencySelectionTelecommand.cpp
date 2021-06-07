@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2019, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -19,16 +19,41 @@
  */
 
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterFrequencySelectionTelecommand.h"
-#include ".//ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
+#include "ESAT_COM-hardware/ESAT_COMRadioStream.h"
+#include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 
 boolean ESAT_COMTransmitterFrequencySelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
-  const float frequency = constrain(packet.readFloat(), TransmissionTransceiver.LOWEST_TRANSMISSION_FREQUENCY, TransmissionTransceiver.HIGHEST_TRANSMISSION_FREQUENCY);
-  if (TransmissionTransceiver.setFrequency(frequency)== ESAT_COMTransceiverDriverClass::wrongFrequencyError)
+  const float frequency = packet.readFloat();
+  const float constrainedFrequency = constrain(frequency, ESAT_COMTransmissionTransceiver.LOWEST_TRANSMISSION_FREQUENCY, ESAT_COMTransmissionTransceiver.HIGHEST_TRANSMISSION_FREQUENCY);
+  if (ESAT_COMTransmissionTransceiver.setFrequency(constrainedFrequency)== ESAT_COMTransceiverDriverClass::wrongFrequencyError)
   {
     return false;
   }
-  return true; 
+  // If the transmitter is in continuos wave mode, it needs to be
+  // reconfigured to apply the new frequency.
+  if (ESAT_COMTransmissionTransceiver.getModulation() == 5) // Continuous wave.
+  {
+    if (ESAT_COMTransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::continuousWave) != ESAT_COMTransceiverDriverClass::noError)
+    {
+      return false;
+    }
+    ESAT_COMRadioStream.beginWriting();
+  }
+  else
+  {
+    if (ESAT_COMTransmissionTransceiver.updateFrequency() == ESAT_COMTransceiverDriverClass::wrongFrequencyError)
+    {
+      return false;
+    }
+    // If the transmitter is in random data, it needs to
+    // be restarted too.
+    if (ESAT_COMTransmissionTransceiver.getModulationSource() == 1) // Random data.
+    {
+      ESAT_COMRadioStream.beginWriting();
+    }
+  }
+  return true;
 }
 
 ESAT_COMTransmitterFrequencySelectionTelecommandClass ESAT_COMTransmitterFrequencySelectionTelecommand;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,23 +20,23 @@
 
 #include <Arduino.h>
 
-// Heartbeat LED on the COM board.
+// Transmission heartbeat LED on the COM board.
 // Use the global instance ESAT_COMTransmissionLED.
 class ESAT_COMTransmissionLEDClass
 {
   public:
     // Configure the LED control line.
     void begin();
-    
+
     // Write a brightness value (from 0 to 100 %) to the LED.
-    void write(float brightness);   
+    void write(float brightness);
 
   private:
     // Pin number of the LED control line.
-    static const int LED_CONTROL_LINE = LED_COM_TX;    
+    static const int LED_CONTROL_LINE = LED_COM_TX;
 };
 
-// Global instance of the COM reception LED library.
+// Global instance of the COM transmission LED library.
 extern ESAT_COMTransmissionLEDClass ESAT_COMTransmissionLED;
 
 #endif /* ESAT_COMTransmissionLED_h */

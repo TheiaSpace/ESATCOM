@@ -35,150 +35,105 @@ Telecommand handler for COM_DISABLE_TELEMETRY (0x01): disable the
 generation of a COM telemetry packet.
 
 
-# ESAT_COMTransmitterEnableTelecommand
+# ESAT_COMEnableTransmitterTelecommand
 
-Telecommand handler for COM_TRANSMITTER_ENABLE (0x02): turn on the transmission
+Telecommand handler for COM_ENABLE_TRANSMITTER (0x02): turn on the transmission
 transceiver and start the transmission.
 
 
-# ESAT_COMTransmitterDisableTelecommand
+# ESAT_COMDisableTransmitterTelecommand
 
-Telecommand handler for COM_TRANSMITTER_DISABLE (0x03): turn off the transmission
+Telecommand handler for COM_DISABLE_TRANSMITTER (0x03): turn off the transmission
 transceiver and disable the transmission.
 
 
-# ESAT_COMReceiverEnableTelecommand
+# ESAT_COMEnableReceiverTelecommand
 
-Telecommand handler for COM_RECEIVER_ENABLE (0x04): turn on the reception
+Telecommand handler for COM_ENABLE_RECEIVER (0x04): turn on the reception
 transceiver and start the reception.
 
 
-# ESAT_COMReceiverDisableTelecommand
+# ESAT_COMDisableReceiverTelecommand
 
-Telecommand handler for COM_RECEIVER_DISABLE (0x05): turn off the reception
+Telecommand handler for COM_DISABLE_RECEIVER (0x05): turn off the reception
 transceiver and disable the reception.
 
 
 # ESAT_COMSetTimeTelecommand
 
-Telecommand handler for COM_SET_TIME (0x06): set the time of the real-time clock 
+Telecommand handler for COM_SET_TIME (0x06): set the time of the real-time clock
 of the ESAT COM board.
 
 
-# ESAT_COMTransmitterOOKModulationSelectionTelecommand
+# ESAT_COMEnableStandaloneModeTelecommand
 
-Telecommand handler for COM_TRANSMITTER_OOK_MODULATION_SELECTION (0x10):
-configure the on-board radiofrequency transmitter to use on-off keying 
-modulation (OOK).
-
-
-# ESAT_COMTransmitter2FSKModulationSelectionTelecommand
-
-Telecommand handler for COM_TRANSMITTER_2FSK_MODULATION_SELECTION (0x11):
-configure the on-board radiofrequency transmitter to use two frequency shift
-keying modulation (2FSK).
+Telecommand handler for COM_ENABLE_STANDALONE_MODE (0x07): enable the
+COM telecommands self handling without OBC.
 
 
-# ESAT_COMTransmitter2GFSKModulationSelectionTelecommand
+# ESAT_COMDisableStandaloneModeTelecommand
 
-Telecommand handler for COM_TRANSMITTER_2GFSK_MODULATION_SELECTION (0x12):
-configure the on-board radiofrequency transmitter to use two gaussian frequency 
-shift keying modulation (2GFSK).
-
-
-# ESAT_COMTransmitter4FSKModulationSelectionTelecommand
-
-Telecommand handler for COM_TRANSMITTER_4FSK_MODULATION_SELECTION (0x13):
-configure the on-board radiofrequency transmitter to use four frequency shift
-keying modulation (4FSK).
+Telecommand handler for COM_DISABLE_STANDALONE_MODE (0x08): disable the
+COM telecommands self handling without OBC.
 
 
-# ESAT_COMTransmitter4GFSKModulationSelectionTelecommand
+# ESAT_COMStoreSettingsTelecommand
 
-Telecommand handler for COM_TRANSMITTER_4GFSK_MODULATION_SELECTION (0x14):
-configure the on-board radiofrequency transmitter to use four gaussian frequency 
-shift keying modulation (4GFSK).
+Telecommand handler for COM_STORE_SETTINGS (0x09): store the current
+radio settings into non-volatile memory.
+
+
+# ESAT_COMEraseStoredSettingsTelecommand
+
+Telecommand handler for COM_ERASE_STORED_SETTINGS (0x0A): erase all
+the settings stored in non-volatile memory.
+
+
+# ESAT_COMTransmitterModulationSelectionTelecommand
+
+Telecommand handler for COM_TRANSMITTER_MODULATION_SELECTION (0x10): configure
+the on-board radiofrequency transmitter to use any of the 5 available
+modulations plus continuous wave.
 
 
 # ESAT_COMTransmitterChannelSelectionTelecommand
 
-Telecommand handler for COM_TRANSMITTER_CHANNEL_SELECTION (0x15): configure the 
+Telecommand handler for COM_TRANSMITTER_CHANNEL_SELECTION (0x11): configure the
 on-board radiofrequency transmitter transmission channel.
 
 
 # ESAT_COMTransmitterFrequencySelectionTelecommand
 
-Telecommand handler for COM_TRANSMITTER_FREQUENCY_SELECTION (0x16): configure the
+Telecommand handler for COM_TRANSMITTER_FREQUENCY_SELECTION (0x12): configure the
 on-board radiofrequency transmitter transmission central frequency.
 
 
 # ESAT_COMTransmitterTransmissionPowerAdjustmentTelecommand
 
-Telecommand handler for COM_TRANSMITTER_TRANSMISSION_POWER_ADJUSTMENT (0x17):
+Telecommand handler for COM_TRANSMITTER_TRANSMISSION_POWER_ADJUSTMENT (0x13):
 configure the transmitter output power.
 
 
-# ESAT_COMTransmitterContinuousWaveSelectionTelecommand
+# ESAT_COMTransmitterDataSourceSelectionTelecommand
 
-Telecommand handler for COM_TRANSMITTER_CONTINUOUS_WAVE_SELECTION (0x18): configure
-the transceiver to output a continuous carrier pilot waveform.
-
-
-# ESAT_COMTransmitterEnableRandomGeneratorTelecommand
-
-Telecommand handler for TRANSMITTER_ENABLE_RANDOM_GENERATOR (0x19): configure the
-transceiver to output a stream of random data.
+Telecommand handler for TRANSMITTER_DATA_SOURCE_SELECTION (0x14): configures
+the transmitter data sequence to be broadcasted.
 
 
-# ESAT_COMTransmitterDisableRandomGeneratorTelecommand
+# ESAT_COMReceiverModulationSelectionTelecommand
 
-Telecommand handler for TRANSMITTER_DISABLE_RANDOM_GENERATOR (0x1A): configure the
-transceiver to transmit the desired data.
-
-
-# ESAT_COMReceiverOOKModulationSelectionTelecommand
-
-Telecommand handler for COM_RECEIVER_OOK_MODULATION_SELECTION (0x30):
-configure the on-board radiofrequency receiver to use on-off keying 
-modulation (OOK).
-
-
-# ESAT_COMReceiver2FSKModulationSelectionTelecommand
-
-Telecommand handler for COM_RECEIVER_2FSK_MODULATION_SELECTION (0x31):
-configure the on-board radiofrequency receiver to use two frequency shift
-keying modulation (2FSK).
-
-
-# ESAT_COMReceiver2GFSKModulationSelectionTelecommand
-
-Telecommand handler for COM_RECEIVER_2GFSK_MODULATION_SELECTION (0x32):
-configure the on-board radiofrequency receiver to use two gaussian frequency 
-shift keying modulation (2GFSK).
-
-
-# ESAT_COMReceiver4FSKModulationSelectionTelecommand
-
-Telecommand handler for COM_RECEIVER_4FSK_MODULATION_SELECTION (0x33):
-configure the on-board radiofrequency receiver to use four frequency shift
-keying modulation (4FSK).
-
-
-# ESAT_COMReceiver4GFSKModulationSelectionTelecommand
-
-Telecommand handler for COM_RECEIVER_4GFSK_MODULATION_SELECTION (0x34):
-configure the on-board radiofrequency receiver to use four gaussian frequency 
-shift keying modulation (4GFSK).
+Telecommand handler for COM_RECEIVER_MODULATION_SELECTION (0x30): configure
+the on-board radiofrequency receiver to use any of the 5 available modulations.
 
 
 # ESAT_COMReceiverChannelSelectionTelecommand
 
-Telecommand handler for COM_RECEIVER_CHANNEL_SELECTION (0x35): configure the 
+Telecommand handler for COM_RECEIVER_CHANNEL_SELECTION (0x31): configure the
 on-board radiofrequency receiver reception channel.
 
 
 # ESAT_COMReceiverFrequencySelectionTelecommand
 
-Telecommand handler for COM_RECEIVER_FREQUENCY_SELECTION (0x36): configure the
+Telecommand handler for COM_RECEIVER_FREQUENCY_SELECTION (0x32): configure the
 on-board radiofrequency receiver reception central frequency.
 

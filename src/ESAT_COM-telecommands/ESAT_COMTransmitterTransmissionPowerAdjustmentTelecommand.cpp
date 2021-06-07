@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2019, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -23,12 +23,17 @@
 
 boolean ESAT_COMTransmitterTransmissionPowerAdjustmentTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
-  const float power = constrain(packet.readFloat(), TransmissionTransceiver.MINIMUM_TRANSMISSION_POWER_RATE, TransmissionTransceiver.MAXIMUM_TRANSMISSION_POWER_RATE);
-  if (TransmissionTransceiver.setTransmissionPower(power) == ESAT_COMTransceiverDriverClass::wrongPowerError)
+  const float rawPower = packet.readFloat();
+  const float power = constrain(rawPower, ESAT_COMTransmissionTransceiver.MINIMUM_TRANSMISSION_POWER_RATE, ESAT_COMTransmissionTransceiver.MAXIMUM_TRANSMISSION_POWER_RATE);
+  if (ESAT_COMTransmissionTransceiver.setTransmissionPower(power) == ESAT_COMTransceiverDriverClass::wrongPowerError)
   {
     return false;
   }
-  return true; 
+  if (ESAT_COMTransmissionTransceiver.updateTransmissionPower() == ESAT_COMTransceiverDriverClass::wrongPowerError)
+  {
+    return false;
+  }
+  return true;
 }
 
 ESAT_COMTransmitterTransmissionPowerAdjustmentTelecommandClass ESAT_COMTransmitterTransmissionPowerAdjustmentTelecommand;

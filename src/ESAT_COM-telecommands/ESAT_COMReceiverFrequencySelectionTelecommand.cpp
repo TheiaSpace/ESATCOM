@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2019, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -19,17 +19,22 @@
  */
 
 #include "ESAT_COM-telecommands/ESAT_COMReceiverFrequencySelectionTelecommand.h"
-#include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
+#include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 
 boolean ESAT_COMReceiverFrequencySelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
-  const float frequency = constrain(packet.readFloat(), ReceptionTransceiver.LOWEST_RECEPTION_FREQUENCY, ReceptionTransceiver.HIGHEST_RECEPTION_FREQUENCY);
-  if (ReceptionTransceiver.setFrequency(frequency)== ESAT_COMTransceiverDriverClass::wrongFrequencyError)
+  const float frequency = packet.readFloat();
+  const float constrainedFrequency = constrain(frequency, ESAT_COMReceptionTransceiver.LOWEST_TRANSMISSION_FREQUENCY, ESAT_COMReceptionTransceiver.HIGHEST_TRANSMISSION_FREQUENCY);
+  if (ESAT_COMReceptionTransceiver.setFrequency(constrainedFrequency)== ESAT_COMTransceiverDriverClass::wrongFrequencyError)
   {
     return false;
   }
+  if (ESAT_COMReceptionTransceiver.updateFrequency() == ESAT_COMTransceiverDriverClass::wrongFrequencyError)
+  {
+    return false;
+  }
+  ESAT_COMReceptionTransceiver.startReception();
   return true;
-
 }
 
 ESAT_COMReceiverFrequencySelectionTelecommandClass ESAT_COMReceiverFrequencySelectionTelecommand;

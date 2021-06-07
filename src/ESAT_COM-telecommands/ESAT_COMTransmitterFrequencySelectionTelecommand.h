@@ -42,7 +42,7 @@ class ESAT_COMTransmitterFrequencySelectionTelecommandClass: public ESAT_CCSDSTe
     // match.
     byte packetIdentifier()
     {
-      return 0x16;
+      return 0x12;
     }
 
     // Return the version number of this telecommand handler.

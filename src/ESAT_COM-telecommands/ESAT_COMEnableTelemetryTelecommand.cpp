@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -19,6 +19,7 @@
  */
 
 #include "ESAT_COM-telecommands/ESAT_COMEnableTelemetryTelecommand.h"
+#include <ESAT_SubsystemPacketHandler.h>
 #include "ESAT_COM.h"
 
 boolean ESAT_COMEnableTelemetryTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
@@ -31,7 +32,7 @@ boolean ESAT_COMEnableTelemetryTelecommandClass::handleUserData(ESAT_CCSDSPacket
   }
   else
   {
-    ESAT_COM.enableTelemetry(identifier);
+    ESAT_SubsystemPacketHandler.enableTelemetry(identifier);
     return true;
   }
 }

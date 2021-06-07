@@ -42,7 +42,7 @@ class ESAT_COMTransmitterTransmissionPowerAdjustmentTelecommandClass: public ESA
     // match.
     byte packetIdentifier()
     {
-      return 0x17;
+      return 0x13;
     }
 
     // Return the version number of this telecommand handler.

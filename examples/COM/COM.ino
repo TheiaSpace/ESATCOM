@@ -18,13 +18,17 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+#ifndef ARDUINO_ESAT_COM
+#error Wrong board: you need to use the ESAT-COM board with this program.
+#endif
+
 #include <ESAT_COM.h>
 #include <ESAT_SubsystemPacketHandler.h>
 #include <ESAT_Task.h>
 #include <ESAT_TaskScheduler.h>
+#include "ESAT_COM-hardware/ESAT_COMHeartBeatLED.h"
 #include "ESAT_COM-hardware/ESAT_COMNonVolatileDataStorage.h"
 #include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
-#include "ESAT_COM-hardware/ESAT_COMHearthBeatLED.h"
 #include "ESAT_COM-hardware/ESAT_COMTransceiverHAL.h"
 
 const word COM_APPLICATION_PROCESS_IDENTIFIER = 5;
@@ -37,7 +41,7 @@ ESAT_CCSDSPacket packet(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
 // Configures the priodical delivery of the board telemetry.
 // This funcion is called periodically by the scheduler according
 // to the period set.
-void ESAT_COMClass::PeriodicalTelemetryDeliveryTaskClass::run()
+void ESAT_COMClass::PeriodicTelemetryDeliveryTaskClass::run()
 {
   ESAT_CCSDSPacket telemetryPacket(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
   // Prepare telemetry.
@@ -71,26 +75,27 @@ void setup()
   Serial.begin(9600);
   Serial.blockOnOverrun(false);
   delay(1000);
-  ReceptionTransceiver.setLowestChannel(0);
-  ReceptionTransceiver.setHighestChannel(31);
-  ReceptionTransceiver.setDefaultChannel(31);
-  TransmissionTransceiver.setLowestChannel(0);
-  TransmissionTransceiver.setHighestChannel(31);
-  TransmissionTransceiver.setDefaultChannel(0);
-  ReceptionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readReceptionModulationType());
-  ReceptionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readReceptionFrequency());
-  ReceptionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readReceptionChannel());
-  TransmissionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readTransmissionModulationType());
-  TransmissionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readTransmissionFrequency());
-  TransmissionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readTransmissionChannel());
+  ESAT_COMReceptionTransceiver.setLowestChannel(0);
+  ESAT_COMReceptionTransceiver.setHighestChannel(31);
+  ESAT_COMReceptionTransceiver.setDefaultChannel(31);
+  ESAT_COMTransmissionTransceiver.setLowestChannel(0);
+  ESAT_COMTransmissionTransceiver.setHighestChannel(31);
+  ESAT_COMTransmissionTransceiver.setDefaultChannel(0);
+  ESAT_COMTransmissionTransceiver.setDefaultModulationType(ESAT_COMTransceiverDriverClass::fourFSK);
+  ESAT_COMReceptionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readReceptionModulationType());
+  ESAT_COMReceptionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readReceptionFrequency());
+  ESAT_COMReceptionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readReceptionChannel());
+  ESAT_COMTransmissionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readTransmissionModulationType());
+  ESAT_COMTransmissionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readTransmissionFrequency());
+  ESAT_COMTransmissionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readTransmissionChannel());
   ESAT_COM.begin(COM_APPLICATION_PROCESS_IDENTIFIER,
                COM_MAJOR_VERSION_NUMBER,
                COM_MINOR_VERSION_NUMBER,
                COM_PATCH_VERSION_NUMBER);
-  TransmissionTransceiver.setTransmissionPower(ESAT_COMNonVolatileDataStorage.readTransmissionPower());
-  TransmissionTransceiver.updateTransmissionPower();
+  ESAT_COMTransmissionTransceiver.setTransmissionPower(ESAT_COMNonVolatileDataStorage.readTransmissionPower());
+  ESAT_COMTransmissionTransceiver.updateTransmissionPower();
   ESAT_COMTaskScheduler.begin();
-  ReceptionTransceiver.startReception();
+  ESAT_COMReceptionTransceiver.startReception();
   delay(1000);
 }
 
@@ -129,7 +134,7 @@ void loop()
       packet.rewind();
       ESAT_SubsystemPacketHandler.queueTelecommandToI2C(packet);
     }
-   }
+  }
 
   // Handle I2C requests.
   // They can be telemetry requests and/or telecommands queue status queries.
@@ -150,11 +155,11 @@ void loop()
   //                        and queued own subsystem's telemetry using a sequential
   //                        dispatching algorithm.
   //  -Manual data stream:  updates the bit-banged transmission testing sequence.
-  //  -Heath beat LED update.
+  //  -Heartbeat LED update.
   ESAT_COM.update();
 
   // Updates the periodic tasks:
-  // - PeriodicalTelemetryDeliveryTask: Delivers system telemetry to USB and to
-  //                                    the radio if the standalone mode is enabled.
+  // - PeriodicTelemetryDeliveryTask: Delivers system telemetry to USB and to
+  //                                  the radio if the standalone mode is enabled.
   ESAT_COMTaskScheduler.run();
 }

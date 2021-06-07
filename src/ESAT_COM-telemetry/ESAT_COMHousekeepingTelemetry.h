@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2098 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2019, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -44,13 +44,12 @@ class ESAT_COMHousekeepingTelemetryClass: public ESAT_CCSDSTelemetryPacketConten
     // of the user data field.
     // Return true on success; otherwise return false.
     boolean fillUserData(ESAT_CCSDSPacket& packet);
-    
+
     private:
-    
-    // Fills the transmission modulation source field regarding the 
+
+    // Fills the transmission modulation source field regarding the
     // settings at the driver and the sweeping controller.
     char writeModulationSource();
-    
 };
 
 // Global instance of ESAT_COMHousekeepingTelemetry.  ESAT_COMSubsystem uses this

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -19,35 +19,35 @@
  */
 
 #include "ESAT_COM-telecommands/ESAT_COMReceiverModulationSelectionTelecommand.h"
-#include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
-#include "../ESAT_COM-hardware/ESAT_COMRadioStream.h"
+#include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
+#include "ESAT_COM-hardware/ESAT_COMRadioStream.h"
 
 boolean ESAT_COMReceiverModulationSelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
-  switch(packet.readByte())
+  switch (packet.readByte())
   {
     case 0:
     default:
-      ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::OOK);
+      ESAT_COMReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::OOK);
       break;
     case 1:
-      ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::twoFSK);
+      ESAT_COMReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::twoFSK);
       break;
     case 2:
-      ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::twoGaussianFSK);
+      ESAT_COMReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::twoGaussianFSK);
       break;
     case 3:
-      ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::fourFSK);
+      ESAT_COMReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::fourFSK);
       break;
     case 4:
-      ReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::fourGaussianFSK);  
+      ESAT_COMReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode, ESAT_COMTransceiverDriverClass::fourGaussianFSK);
       break;
-    case 5: // No CW in reception mode
-      return false;    
-  }  
+    case 5: // No CW in reception mode.
+      return false;
+  }
   ESAT_COMRadioStream.beginReading();
-  ReceptionTransceiver.startReception();
-  return true;  
+  ESAT_COMReceptionTransceiver.startReception();
+  return true;
 }
 
 ESAT_COMReceiverModulationSelectionTelecommandClass ESAT_COMReceiverModulationSelectionTelecommand;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -17,11 +17,11 @@
  * along with Theia Space's ESAT COM library.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "ESAT_COMTransceiverHAL.h"
 
 ESAT_COMTransceiverHALClass::ESAT_COMTransceiverHALClass()
-{  
+{
 }
 
 ESAT_COMTransceiverHALClass::ESAT_COMTransceiverHALClass(SPIClass& spiBus,
@@ -76,7 +76,7 @@ void ESAT_COMTransceiverHALClass::clearRTSCounter()
 
 void ESAT_COMTransceiverHALClass::disable()
 {
-  // We set it high first so we don't get a glitch 
+  // We set it high first so we don't get a glitch
   // after setting it as output (enables the weak pullup).
   digitalWrite(shutdownPin, HIGH);
   // Drive high 10 ms.
@@ -89,14 +89,14 @@ byte ESAT_COMTransceiverHALClass::getInterruptPin()
 }
 
 void ESAT_COMTransceiverHALClass::powerUpTransceiver()
-{ 
+{
   // Drive it low at least 10 ms.
   digitalWrite(shutdownPin, LOW);
   delay(10);
 }
 
-void ESAT_COMTransceiverHALClass::readData(byte command, 
-                                           byte dataByteCount, 
+void ESAT_COMTransceiverHALClass::readData(byte command,
+                                           byte dataByteCount,
                                            byte* data)
 {
   if (requestToSend())
@@ -109,9 +109,9 @@ void ESAT_COMTransceiverHALClass::readData(byte command,
 }
 
 byte ESAT_COMTransceiverHALClass::requestToSend()
-{  
+{
   do
-  {    
+  {
     if (checkClearToSendPin())
     {
       RTSCounter = 0;
@@ -130,7 +130,7 @@ void ESAT_COMTransceiverHALClass::reset()
   delay(10);
   // Shutdown the radio, wait and power it up.
   disable();
-  delay(10); 
+  delay(10);
   powerUpTransceiver();
   delay(10);
 }
@@ -166,21 +166,21 @@ void ESAT_COMTransceiverHALClass::SPIBulkRead(byte numBytes, byte* data)
 {
   while (numBytes--)
   {
-    *data++ = transceiverSPI -> transfer(0);
+    *data++ = transceiverSPI->transfer(0);
   }
 }
 
 void ESAT_COMTransceiverHALClass::SPIBulkWrite(byte numBytes, byte* data)
 {
-  while(numBytes--)
+  while (numBytes--)
   {
-    transceiverSPI -> transfer(*data++);
+    transceiverSPI->transfer(*data++);
   }
 }
 
 byte ESAT_COMTransceiverHALClass::SPIWriteReadByte(byte toWrite)
 {
-  return transceiverSPI -> transfer(toWrite);
+  return transceiverSPI->transfer(toWrite);
 }
 
 void ESAT_COMTransceiverHALClass::writeCommand(byte byteCount, byte* data)
@@ -197,7 +197,7 @@ void ESAT_COMTransceiverHALClass::writeCommand(byte byteCount, byte* data)
     }
     clearChipSelect();
   }
-} 
+}
 
 byte ESAT_COMTransceiverHALClass::writeCommandAndRetrieveResponse(byte commandByteCount,
                                                                      byte* commandData,
@@ -213,7 +213,7 @@ void ESAT_COMTransceiverHALClass::writeData(byte command, byte dataByteCount, by
   if (requestToSend())
   {
     setChipSelect();
-    transceiverSPI -> transfer(command);
+    transceiverSPI->transfer(command);
     SPIBulkWrite(dataByteCount, data);
     clearChipSelect();
   }
@@ -224,6 +224,6 @@ void ESAT_COMTransceiverHALClass::writeDataStreamGPIO(byte level)
   digitalWrite(gpio2Pin, level);
 }
 
-ESAT_COMTransceiverHALClass ReceptionTransceiverLowLevelDriver(SPI, CS_RX, INT_RX, SDN_RX, GPIO0_RX, GPIO1_RX, GPIO2_RX, GPIO3_RX);
+ESAT_COMTransceiverHALClass ESAT_COMReceptionTransceiverLowLevelDriver(SPI, CS_RX, INT_RX, SDN_RX, GPIO0_RX, GPIO1_RX, GPIO2_RX, GPIO3_RX);
 
-ESAT_COMTransceiverHALClass TransmissionTransceiverLowLevelDriver(SPI1, CS_TX, INT_TX, SDN_TX, GPIO0_TX, GPIO1_TX, GPIO2_TX, GPIO3_TX);
+ESAT_COMTransceiverHALClass ESAT_COMTransmissionTransceiverLowLevelDriver(SPI1, CS_TX, INT_TX, SDN_TX, GPIO0_TX, GPIO1_TX, GPIO2_TX, GPIO3_TX);

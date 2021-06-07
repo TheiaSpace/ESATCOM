@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -18,11 +18,11 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include <ESAT_I2CSlave.h>
-#include "../ESAT_COM.h"
-#include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
-#include "../ESAT_COM-hardware/ESAT_COMRadioStream.h"
 #include "ESAT_COM-telecommands/ESAT_COMTransmitterModulationSelectionTelecommand.h"
+#include <ESAT_I2CSlave.h>
+#include "ESAT_COM.h"
+#include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
+#include "ESAT_COM-hardware/ESAT_COMRadioStream.h"
 
 boolean ESAT_COMTransmitterModulationSelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
@@ -33,26 +33,26 @@ boolean ESAT_COMTransmitterModulationSelectionTelecommandClass::handleUserData(E
   {
     case 0:
     default:
-      TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::OOK);      
+      ESAT_COMTransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::OOK);
       break;
-    case 1:  
-      TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode,ESAT_COMTransceiverDriverClass::twoFSK);
+    case 1:
+      ESAT_COMTransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode,ESAT_COMTransceiverDriverClass::twoFSK);
       break;
     case 2:
-      TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::twoGaussianFSK);
+      ESAT_COMTransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::twoGaussianFSK);
       break;
     case 3:
-      TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode,ESAT_COMTransceiverDriverClass::fourFSK);
+      ESAT_COMTransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode,ESAT_COMTransceiverDriverClass::fourFSK);
       break;
     case 4:
-      TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::fourGaussianFSK);
+      ESAT_COMTransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::fourGaussianFSK);
       break;
     case 5:
-      TransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::continuousWave);
+      ESAT_COMTransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode, ESAT_COMTransceiverDriverClass::continuousWave);
       break;
-  }   
-  ESAT_COMRadioStream.beginWriting();  
-  return true;  
+  }
+  ESAT_COMRadioStream.beginWriting();
+  return true;
 }
 
 ESAT_COMTransmitterModulationSelectionTelecommandClass ESAT_COMTransmitterModulationSelectionTelecommand;

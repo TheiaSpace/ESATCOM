@@ -61,8 +61,9 @@ transceiver and disable the reception.
 
 # ESAT_COMSetTimeTelecommand
 
-Telecommand handler for COM_SET_TIME (0x06): set the time of the real-time clock 
+Telecommand handler for COM_SET_TIME (0x06): set the time of the real-time clock
 of the ESAT COM board.
+
 
 # ESAT_COMEnableStandaloneModeTelecommand
 
@@ -97,7 +98,7 @@ modulations plus continuous wave.
 
 # ESAT_COMTransmitterChannelSelectionTelecommand
 
-Telecommand handler for COM_TRANSMITTER_CHANNEL_SELECTION (0x11): configure the 
+Telecommand handler for COM_TRANSMITTER_CHANNEL_SELECTION (0x11): configure the
 on-board radiofrequency transmitter transmission channel.
 
 
@@ -127,7 +128,7 @@ the on-board radiofrequency receiver to use any of the 5 available modulations.
 
 # ESAT_COMReceiverChannelSelectionTelecommand
 
-Telecommand handler for COM_RECEIVER_CHANNEL_SELECTION (0x31): configure the 
+Telecommand handler for COM_RECEIVER_CHANNEL_SELECTION (0x31): configure the
 on-board radiofrequency receiver reception channel.
 
 

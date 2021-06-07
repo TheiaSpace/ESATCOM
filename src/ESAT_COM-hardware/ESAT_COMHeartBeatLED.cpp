@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,9 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ESAT_COMHearthBeatLED.h"
+#include "ESAT_COMHeartBeatLED.h"
 
-void ESAT_COMHearthBeatLEDClass::begin()
+void ESAT_COMHeartBeatLEDClass::begin()
 {
   // To control the LED, it is necessary to configure the control
   // line as an output.  In addition, we must start at a known
@@ -26,20 +26,20 @@ void ESAT_COMHearthBeatLEDClass::begin()
   write(0);
 }
 
-void ESAT_COMHearthBeatLEDClass::update()
+void ESAT_COMHeartBeatLEDClass::update()
 {
   const word milliseconds = millis() % LED_BLINKING_PERIOD_MS;
   if (milliseconds > (LED_BLINKING_PERIOD_MS * LED_BLINKING_DUTY) / 100)
   {
-    ESAT_COMHearthBeatLED.write(100.0);
+    ESAT_COMHeartBeatLED.write(100.0);
   }
   else
   {
-    ESAT_COMHearthBeatLED.write(0.0);
-  }  
+    ESAT_COMHeartBeatLED.write(0.0);
+  }
 }
 
-void ESAT_COMHearthBeatLEDClass::write(const float brightness)
+void ESAT_COMHeartBeatLEDClass::write(const float brightness)
 {
   // The brigthness goes from 0 % to 100 %, but the duty
   // cycle of the LED control line goes from 0 to 255,
@@ -48,4 +48,4 @@ void ESAT_COMHearthBeatLEDClass::write(const float brightness)
   analogWrite(LED_CONTROL_LINE, dutyCycle);
 }
 
-ESAT_COMHearthBeatLEDClass ESAT_COMHearthBeatLED;
+ESAT_COMHeartBeatLEDClass ESAT_COMHeartBeatLED;

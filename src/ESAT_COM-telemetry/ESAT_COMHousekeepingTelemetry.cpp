@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2019, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -17,14 +17,13 @@
  * along with Theia Space's ESAT COM library.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
- 
 
 #include "ESAT_COM-telemetry/ESAT_COMHousekeepingTelemetry.h"
-#include "../ESAT_COM-hardware/ESAT_COMSequenceGenerator.h"
-#include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 #include <ProcessorTemperature.h>
 #include <ProcessorVoltage.h>
 #include <BatteryVoltage.h>
+#include "ESAT_COM-hardware/ESAT_COMSequenceGenerator.h"
+#include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 
 boolean ESAT_COMHousekeepingTelemetryClass::available()
 {
@@ -35,20 +34,20 @@ boolean ESAT_COMHousekeepingTelemetryClass::available()
 boolean ESAT_COMHousekeepingTelemetryClass::fillUserData(ESAT_CCSDSPacket& packet)
 {
   // Transmission transceiver telemetry.
-  packet.writeByte((byte) TransmissionTransceiver.getModulation());
-  packet.writeFloat(TransmissionTransceiver.getFrequency());
-  packet.writeByte((byte) TransmissionTransceiver.getChannel());
+  packet.writeByte((byte) ESAT_COMTransmissionTransceiver.getModulation());
+  packet.writeFloat(ESAT_COMTransmissionTransceiver.getFrequency());
+  packet.writeByte((byte) ESAT_COMTransmissionTransceiver.getChannel());
   packet.writeChar(writeModulationSource());
-  packet.writeFloat(TransmissionTransceiver.getTransmissionPowerRate());
-  packet.writeFloat(TransmissionTransceiver.getTransceiverVoltage());
-  packet.writeFloat(TransmissionTransceiver.getTransceiverTemperature());
+  packet.writeFloat(ESAT_COMTransmissionTransceiver.getTransmissionPowerRate());
+  packet.writeFloat(ESAT_COMTransmissionTransceiver.getTransceiverVoltage());
+  packet.writeFloat(ESAT_COMTransmissionTransceiver.getTransceiverTemperature());
   // Reception transceiver telemetry.
-  packet.writeByte((byte) ReceptionTransceiver.getModulation());
-  packet.writeFloat(ReceptionTransceiver.getFrequency());
-  packet.writeByte((byte) ReceptionTransceiver.getChannel());
-  packet.writeFloat(ReceptionTransceiver.getReceivedSignalStrengthIndicator());
-  packet.writeFloat(ReceptionTransceiver.getTransceiverVoltage());
-  packet.writeFloat(ReceptionTransceiver.getTransceiverTemperature());  
+  packet.writeByte((byte) ESAT_COMReceptionTransceiver.getModulation());
+  packet.writeFloat(ESAT_COMReceptionTransceiver.getFrequency());
+  packet.writeByte((byte) ESAT_COMReceptionTransceiver.getChannel());
+  packet.writeFloat(ESAT_COMReceptionTransceiver.getReceivedSignalStrengthIndicator());
+  packet.writeFloat(ESAT_COMReceptionTransceiver.getTransceiverVoltage());
+  packet.writeFloat(ESAT_COMReceptionTransceiver.getTransceiverTemperature());
   // MCU telemetry (calibrated)
   packet.writeFloat(ProcessorVoltage.read());
   packet.writeFloat(ProcessorTemperature.read());
@@ -58,16 +57,16 @@ boolean ESAT_COMHousekeepingTelemetryClass::fillUserData(ESAT_CCSDSPacket& packe
 
 char ESAT_COMHousekeepingTelemetryClass::writeModulationSource()
 {
-    switch(ESAT_COMSequenceGenerator.getMode())
-    {
-        default:
-        case 0: // Normal working
-          return (char) TransmissionTransceiver.getModulationSource();
-        case 1: // Two levels sweep
-          return 10;
-        case 2: // Four levels sweep
-          return 11;
-    }
-}    
+  switch (ESAT_COMSequenceGenerator.getMode())
+  {
+    default:
+    case 0: // Normal working
+      return (char) ESAT_COMTransmissionTransceiver.getModulationSource();
+    case 1: // Two levels sweep
+      return 10;
+    case 2: // Four levels sweep
+      return 11;
+  }
+}
 
 ESAT_COMHousekeepingTelemetryClass ESAT_COMHousekeepingTelemetry;

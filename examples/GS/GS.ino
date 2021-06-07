@@ -18,13 +18,17 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+#ifndef ARDUINO_ESAT_GS
+#error Wrong board: you need to use the ESAT-GS board with this program.
+#endif
+
 #include <ESAT_COM.h>
 #include <ESAT_SubsystemPacketHandler.h>
 #include <ESAT_Task.h>
 #include <ESAT_TaskScheduler.h>
+#include "ESAT_COM-hardware/ESAT_COMHeartBeatLED.h"
 #include "ESAT_COM-hardware/ESAT_COMNonVolatileDataStorage.h"
 #include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
-#include "ESAT_COM-hardware/ESAT_COMHearthBeatLED.h"
 #include "ESAT_COM-hardware/ESAT_COMTransceiverHAL.h"
 
 const word GS_APPLICATION_PROCESS_IDENTIFIER = 6;
@@ -37,7 +41,7 @@ ESAT_CCSDSPacket packet(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
 // Configures the priodical delivery of the board telemetry.
 // This funcion is called periodically by the scheduler according
 // to the period set.
-void ESAT_COMClass::PeriodicalTelemetryDeliveryTaskClass::run()
+void ESAT_COMClass::PeriodicTelemetryDeliveryTaskClass::run()
 {
   ESAT_CCSDSPacket telemetryPacket(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
   // Prepare telemetry.
@@ -64,26 +68,27 @@ void setup()
   Serial.begin(9600);
   Serial.blockOnOverrun(false);
   delay(1000);
-  ReceptionTransceiver.setLowestChannel(0);
-  ReceptionTransceiver.setHighestChannel(31);
-  ReceptionTransceiver.setDefaultChannel(0);
-  TransmissionTransceiver.setLowestChannel(0);
-  TransmissionTransceiver.setHighestChannel(31);
-  TransmissionTransceiver.setDefaultChannel(31);
-  ReceptionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readReceptionModulationType());
-  ReceptionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readReceptionFrequency());
-  ReceptionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readReceptionChannel());
-  TransmissionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readTransmissionModulationType());
-  TransmissionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readTransmissionFrequency());
-  TransmissionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readTransmissionChannel());
+  ESAT_COMReceptionTransceiver.setLowestChannel(0);
+  ESAT_COMReceptionTransceiver.setHighestChannel(31);
+  ESAT_COMReceptionTransceiver.setDefaultChannel(0);
+  ESAT_COMReceptionTransceiver.setDefaultModulationType(ESAT_COMTransceiverDriverClass::fourFSK);
+  ESAT_COMTransmissionTransceiver.setLowestChannel(0);
+  ESAT_COMTransmissionTransceiver.setHighestChannel(31);
+  ESAT_COMTransmissionTransceiver.setDefaultChannel(31);
+  ESAT_COMReceptionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readReceptionModulationType());
+  ESAT_COMReceptionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readReceptionFrequency());
+  ESAT_COMReceptionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readReceptionChannel());
+  ESAT_COMTransmissionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readTransmissionModulationType());
+  ESAT_COMTransmissionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readTransmissionFrequency());
+  ESAT_COMTransmissionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readTransmissionChannel());
   ESAT_COM.begin(GS_APPLICATION_PROCESS_IDENTIFIER,
                GS_MAJOR_VERSION_NUMBER,
                GS_MINOR_VERSION_NUMBER,
                GS_PATCH_VERSION_NUMBER);
-  TransmissionTransceiver.setTransmissionPower(ESAT_COMNonVolatileDataStorage.readTransmissionPower());
-  TransmissionTransceiver.updateTransmissionPower();
+  ESAT_COMTransmissionTransceiver.setTransmissionPower(ESAT_COMNonVolatileDataStorage.readTransmissionPower());
+  ESAT_COMTransmissionTransceiver.updateTransmissionPower();
   ESAT_COMTaskScheduler.begin();
-  ReceptionTransceiver.startReception();
+  ESAT_COMReceptionTransceiver.startReception();
   delay(1000);
 }
 
@@ -99,34 +104,34 @@ void setup()
 void loop()
 {
   // Handle USB telecommands.
-    if (ESAT_SubsystemPacketHandler.readPacketFromUSB(packet))
-    {
-      packet.rewind();
-      if (ESAT_COM.isSubsystemTelecommand(packet))
-      {
-        // Own telecommand: self processed.
-        packet.rewind();
-        ESAT_SubsystemPacketHandler.dispatchTelecommand(packet);
-      }
-      else
-      {
-        packet.rewind();
-        // Only if the sequencial sweep is disabled.
-        if (!((boolean) ESAT_COMSequenceGenerator.getMode()))
-        {
-          // Other telecommands: send it to the radio.
-          ESAT_COM.writePacketToRadio(packet);
-        }
-      }
-    }
-
-    // Handle radio received telemetry.
+  if (ESAT_SubsystemPacketHandler.readPacketFromUSB(packet))
+  {
     packet.rewind();
-    if (ESAT_COM.readPacketFromRadio(packet))
+    if (ESAT_COM.isSubsystemTelecommand(packet))
+    {
+      // Own telecommand: self processed.
+      packet.rewind();
+      ESAT_SubsystemPacketHandler.dispatchTelecommand(packet);
+    }
+    else
     {
       packet.rewind();
-      ESAT_SubsystemPacketHandler.writePacketToUSB(packet);
+      // Only if the sequencial sweep is disabled.
+      if (!((boolean) ESAT_COMSequenceGenerator.getMode()))
+      {
+        // Other telecommands: send it to the radio.
+        ESAT_COM.writePacketToRadio(packet);
+      }
     }
+  }
+
+  // Handle radio received telemetry.
+  packet.rewind();
+  if (ESAT_COM.readPacketFromRadio(packet))
+  {
+    packet.rewind();
+    ESAT_SubsystemPacketHandler.writePacketToUSB(packet);
+  }
 
   // Handles:
   //  -Radio transmissions: broadcasts nong-GS received telecommands.
@@ -135,6 +140,6 @@ void loop()
   ESAT_COM.update();
 
   // Updates the periodic tasks:
-  // - PeriodicalTelemetryDeliveryTask: Delivers system telemetry to the USB port.
+  // - PeriodicTelemetryDeliveryTask: Delivers system telemetry to the USB port.
   ESAT_COMTaskScheduler.run();
 }

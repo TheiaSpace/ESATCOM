@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -26,44 +26,43 @@
 // or written using ESAT_COMTransceiverCommandsClass.
 class ESAT_COMTransceiverPropertiesClass
 {
-  public:    
-
+  public:
     // Global properties group number.
     static const byte PROPERTY_GLOBAL = 0;
-    
+
     // Interrupts control properties group number.
     static const byte PROPERTY_INTERRUPTS_CONTROL = 1;
-    
+
     // Fast response registers control properties number.
     static const byte PROPERTY_FAST_RESPONSE_REGISTERS_CONTROL = 2;
-    
+
     // Preamble properties group number.
     static const byte PROPERTY_PREAMBLE = 16;
-    
+
     // Sync properties group number.
     static const byte PROPERTY_SYNC = 17;
-    
+
     // Packet properties group number.
     static const byte PROPERTY_PACKET = 18;
-    
+
     // Modem properties group number.
     static const byte PROPERTY_MODEM = 32;
-    
+
     // Filter coefficients properties group number.
     static const byte PROPERTY_MODEM_FILTER_COEFFICIENTES = 33;
-    
+
     // Power amplifier properties group number.
     static const byte PROPERTY_POWER_AMPLIFIER = 34;
-    
+
     // Synthesizer properties group number.
     static const byte PROPERTY_SYNTHESIZER = 35;
-    
+
     // Match properties group number.
     static const byte PROPERTY_MATCH = 48;
-    
+
     // Frequency control properties group number.
     static const byte PROPERTY_FREQUENCY_CONTROL = 64;
-    
+
     // Reception hop properties group number.
     static const byte PROPERTY_RECEPTION_HOP = 80;
 
@@ -103,4 +102,4 @@ class ESAT_COMTransceiverPropertiesClass
     static const byte PARAMETER_MODEM_CLOCK_GENERATOR_BAND_HIGH_PERFORMANCE_MASK = 0x8;
 };
 
-#endif /*ESAT_COMTransceiverProperties_h*/
+#endif /* ESAT_COMTransceiverProperties_h */

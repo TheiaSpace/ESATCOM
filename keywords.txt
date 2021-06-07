@@ -1,0 +1,123 @@
+# Copyright (C) 2021 Theia Space, Universidad Politécnica de Madrid
+#
+# This file is part of Theia Space's ESAT COM library.
+#
+# Theia Space's ESAT COM library is free software: you can
+# redistribute it and/or modify it under the terms of the GNU General
+# Public License as published by the Free Software Foundation, either
+# version 3 of the License, or (at your option) any later version.
+#
+# Theia Space's ESAT COM library is distributed in the hope that it
+# will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Theia Space's ESAT COM library.  If not, see
+# <http://www.gnu.org/licenses/>.
+
+
+#######################################
+# Syntax Coloring Map For ESATCOM
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+ESAT_COM2FSKReceptionConfigurationClass	KEYWORD1
+ESAT_COM2FSKTransmissionConfigurationClass	KEYWORD1
+ESAT_COM2GFSKReceptionConfigurationClass	KEYWORD1
+ESAT_COM2GFSKTransmissionConfigurationClass	KEYWORD1
+ESAT_COM4FSKReceptionConfigurationClass	KEYWORD1
+ESAT_COM4FSKTransmissionConfigurationClass	KEYWORD1
+ESAT_COM4GFSKReceptionConfigurationClass	KEYWORD1
+ESAT_COM4GFSKTransmissionConfigurationClass	KEYWORD1
+ESAT_COMBuiltinHardwareClockClass	KEYWORD1
+ESAT_COMClass	KEYWORD1
+ESAT_COMDisableReceiverTelecommandClass	KEYWORD1
+ESAT_COMDisableStandaloneModeTelecommandClass	KEYWORD1
+ESAT_COMDisableTelemetryTelecommandClass	KEYWORD1
+ESAT_COMDisableTransmitterTelecommandClass	KEYWORD1
+ESAT_COMEnableReceiverTelecommandClass	KEYWORD1
+ESAT_COMEnableStandaloneModeTelecommandClass	KEYWORD1
+ESAT_COMEnableTelemetryTelecommandClass	KEYWORD1
+ESAT_COMEnableTransmitterTelecommandClass	KEYWORD1
+ESAT_COMEraseStoredSettingsTelecommandClass	KEYWORD1
+ESAT_COMHeartBeatLEDClass	KEYWORD1
+ESAT_COMHousekeepingTelemetryClass	KEYWORD1
+ESAT_COMNonVolatileDataStorageClass	KEYWORD1
+ESAT_COMOOKReceptionConfigurationClass	KEYWORD1
+ESAT_COMOOKTransmissionConfigurationClass	KEYWORD1
+ESAT_COMRadioStreamClass	KEYWORD1
+ESAT_COMReceiverChannelSelectionTelecommandClass	KEYWORD1
+ESAT_COMReceiverFrequencySelectionTelecommandClass	KEYWORD1
+ESAT_COMReceiverModulationSelectionTelecommandClass	KEYWORD1
+ESAT_COMReceptionLEDClass	KEYWORD1
+ESAT_COMSequenceGeneratorClass	KEYWORD1
+ESAT_COMSetTimeTelecommandClass	KEYWORD1
+ESAT_COMStoreSettingsTelecommandClass	KEYWORD1
+ESAT_COMTransceiverCommandsClass	KEYWORD1
+ESAT_COMTransceiverConfigurationClass	KEYWORD1
+ESAT_COMTransceiverDriverClass	KEYWORD1
+ESAT_COMTransceiverHALClass	KEYWORD1
+ESAT_COMTransceiverPropertiesClass	KEYWORD1
+ESAT_COMTransmissionLEDClass	KEYWORD1
+ESAT_COMTransmitterChannelSelectionTelecommandClass	KEYWORD1
+ESAT_COMTransmitterDataSourceSelectionTelecommandClass	KEYWORD1
+ESAT_COMTransmitterFrequencySelectionTelecommandClass	KEYWORD1
+ESAT_COMTransmitterModulationSelectionTelecommandClass	KEYWORD1
+ESAT_COMTransmitterTransmissionPowerAdjustmentTelecommandClass	KEYWORD1
+
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+ESAT_COM	KEYWORD2
+ESAT_COM2FSKReceptionConfiguration	KEYWORD2
+ESAT_COM2FSKTransmissionConfiguration	KEYWORD2
+ESAT_COM2GFSKReceptionConfiguration	KEYWORD2
+ESAT_COM2GFSKTransmissionConfiguration	KEYWORD2
+ESAT_COM4FSKReceptionConfiguration	KEYWORD2
+ESAT_COM4FSKTransmissionConfiguration	KEYWORD2
+ESAT_COM4GFSKReceptionConfiguration	KEYWORD2
+ESAT_COM4GFSKTransmissionConfiguration	KEYWORD2
+ESAT_COMBuiltinHardwareClock	KEYWORD2
+ESAT_COMDisableReceiverTelecommand	KEYWORD2
+ESAT_COMDisableStandaloneModeTelecommand	KEYWORD2
+ESAT_COMDisableTelemetryTelecommand	KEYWORD2
+ESAT_COMDisableTransmitterTelecommand	KEYWORD2
+ESAT_COMEnableReceiverTelecommand	KEYWORD2
+ESAT_COMEnableStandaloneModeTelecommand	KEYWORD2
+ESAT_COMEnableTelemetryTelecommand	KEYWORD2
+ESAT_COMEnableTransmitterTelecommand	KEYWORD2
+ESAT_COMEraseStoredSettingsTelecommand	KEYWORD2
+ESAT_COMHeartBeatLED	KEYWORD2
+ESAT_COMHousekeepingTelemetry	KEYWORD2
+ESAT_COMNonVolatileDataStorage	KEYWORD2
+ESAT_COMOOKReceptionConfiguration	KEYWORD2
+ESAT_COMOOKTransmissionConfiguration	KEYWORD2
+ESAT_COMRadioStream	KEYWORD2
+ESAT_COMReceiverChannelSelectionTelecommand	KEYWORD2
+ESAT_COMReceiverFrequencySelectionTelecommand	KEYWORD2
+ESAT_COMReceiverModulationSelectionTelecommand	KEYWORD2
+ESAT_COMReceptionLED	KEYWORD2
+ESAT_COMReceptionTransceiver	KEYWORD2
+ESAT_COMReceptionTransceiverLowLevelDriver	KEYWORD2
+ESAT_COMSequenceGenerator	KEYWORD2
+ESAT_COMSetTimeTelecommand	KEYWORD2
+ESAT_COMStoreSettingsTelecommand	KEYWORD2
+ESAT_COMTransceiverCommands	KEYWORD2
+ESAT_COMTransmissionLED	KEYWORD2
+ESAT_COMTransmissionTransceiver	KEYWORD2
+ESAT_COMTransmissionTransceiverLowLevelDriver	KEYWORD2
+ESAT_COMTransmitterChannelSelectionTelecommand	KEYWORD2
+ESAT_COMTransmitterDataSourceSelectionTelecommand	KEYWORD2
+ESAT_COMTransmitterFrequencySelectionTelecommand	KEYWORD2
+ESAT_COMTransmitterModulationSelectionTelecommand	KEYWORD2
+ESAT_COMTransmitterTransmissionPowerAdjustmentTelecommand	KEYWORD2

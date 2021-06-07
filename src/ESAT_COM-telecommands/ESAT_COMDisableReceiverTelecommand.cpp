@@ -19,12 +19,12 @@
  */
 
 #include "ESAT_COM-telecommands/ESAT_COMDisableReceiverTelecommand.h"
-#include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
+#include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 
 boolean ESAT_COMDisableReceiverTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   (void) packet.readByte();
-  ReceptionTransceiver.disable();
+  ESAT_COMReceptionTransceiver.disable();
   return true;
 }
 

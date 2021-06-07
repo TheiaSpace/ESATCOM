@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Theia Space, Universidad Politécnica de Madrid
+ * Copyright (C) 2019, 2020, 2021  Theia Space, Universidad Politécnica de Madrid
  *
  * This file is part of Theia Space's ESAT COM library.
  *
@@ -19,15 +19,15 @@
  */
 
 #include "ESAT_COM-telecommands/ESAT_COMReceiverChannelSelectionTelecommand.h"
-#include "../ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
+#include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
 
 boolean ESAT_COMReceiverChannelSelectionTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
   const byte channel = packet.readByte();
-  if (ReceptionTransceiver.setChannel(channel) == ESAT_COMTransceiverDriverClass::noError)
-  {  
-    ReceptionTransceiver.startReception();
-	return true;  
+  if (ESAT_COMReceptionTransceiver.setChannel(channel) == ESAT_COMTransceiverDriverClass::noError)
+  {
+    ESAT_COMReceptionTransceiver.startReception();
+    return true;
   }
   return false;
 }

@@ -25,7 +25,7 @@
 #include <ESAT_CCSDSTelecommandPacketHandler.h>
 #include <ESAT_SemanticVersionNumber.h>
 
-// Telecommand handler for COM_RECEIVER__MODULATION_SELECTION.
+// Telecommand handler for COM_RECEIVER_MODULATION_SELECTION.
 // Used by ESAT_COM.
 class ESAT_COMReceiverModulationSelectionTelecommandClass: public ESAT_CCSDSTelecommandPacketHandler
 {

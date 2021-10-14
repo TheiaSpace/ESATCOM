@@ -51,15 +51,7 @@ signed char ESAT_COMTransceiverDriverClass::available(void)
     {
       if (transmissionInProgress == true)
       {
-        noInterrupts();
-        if (transmissionInterruptFlag == 0xFF)
-        {
-          transmissionInterruptFlag = 0;
-          interrupts();
-          return checkTransmissionAvailability();
-        }
-        interrupts();
-        return 0;
+        return checkTransmissionAvailability();
       }
       else
       {

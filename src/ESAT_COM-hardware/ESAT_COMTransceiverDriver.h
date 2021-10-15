@@ -312,9 +312,6 @@ class ESAT_COMTransceiverDriverClass
     // Reception configuration object pointer.
     ESAT_COMTransceiverConfigurationClass* receptionConfigurationData;
 
-    // Interrupt flag for the reception transceiver.
-    static volatile byte receptionInterruptFlag;
-
     // Radio hardware abstranction layer entity.
     ESAT_COMTransceiverHALClass* transceiver;
 
@@ -350,10 +347,6 @@ class ESAT_COMTransceiverDriverClass
 
     // Configure the transceiver using the pointed configuration.
     ESAT_COMTransceiverHALClass::TransceiverLowLevelDriverError initializeTransceiver(ESAT_COMTransceiverConfigurationClass* transceiverConfiguration);
-
-    // Interrupt service routine for the reception transceiver.
-    // Set the reception interrupt flag when it is called.
-    static void setReceptionTransceiverInterruptFlag (void);
 
     // Turn the selected LED on or off. Requires the switched mode led
     // (transmission or reception) and the level (true for high and

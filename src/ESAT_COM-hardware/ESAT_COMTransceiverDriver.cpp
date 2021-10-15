@@ -67,18 +67,8 @@ signed char ESAT_COMTransceiverDriverClass::available(void)
       }
       // If the received data was read and the reception was reenabled.
       else
-      {
-        noInterrupts();
-        // Check if the interrupt flag is set.
-        if (receptionInterruptFlag)
-        {
-          receptionInterruptFlag = 0;
-          interrupts();
-          // Retrieve the received packet and set the available flag.
-          return checkReceptionAvailability();
-        }
-        interrupts();
-        return 0;
+      {        
+        return checkReceptionAvailability();       
       }
     }
     default:
@@ -124,13 +114,8 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
       error = translateLowLevelDriverError(initializeTransceiver(receptionConfigurationData));
       if(noError != error)
       {
-    return error;
+        return error;
       }
-      // Clear ISR flag.
-      receptionInterruptFlag = 0;
-      // Enable interrupts. If the ISR is fired during initialization
-      // and it is not cleared, interrupts may not retrigger.
-      attachInterrupt(digitalPinToInterrupt(transceiver -> getInterruptPin()), setReceptionTransceiverInterruptFlag,  FALLING);
       updateFrequency();
       break;
     }
@@ -188,10 +173,6 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
     }
     case RXMode:
     {
-      // Disable interrupts.
-      detachInterrupt(digitalPinToInterrupt(transceiver -> getInterruptPin()));
-      // Clear flags.
-      receptionInterruptFlag = 0;
       return noError;
     }
     default:
@@ -550,11 +531,6 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   return noError;
 }
 
-void ESAT_COMTransceiverDriverClass::setReceptionTransceiverInterruptFlag (void)
-{
-  receptionInterruptFlag = 0xFF;
-}
-
 ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::setTransmissionPower(float transmissionPowerRateToBeSet)
 {
   // Power can't be changed unless transmission mode is selected.
@@ -897,8 +873,6 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   }
   return noError;
 }
-
-volatile byte ESAT_COMTransceiverDriverClass::receptionInterruptFlag;
 
 ESAT_COMTransceiverDriverClass ESAT_COMReceptionTransceiver(ESAT_COMReceptionTransceiverLowLevelDriver);
 

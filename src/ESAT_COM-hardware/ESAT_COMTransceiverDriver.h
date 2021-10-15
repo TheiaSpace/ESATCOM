@@ -336,9 +336,6 @@ class ESAT_COMTransceiverDriverClass
     // Transmission configuration object pointer.
     ESAT_COMTransceiverConfigurationClass* transmissionConfigurationData;
 
-    // Interrupt flag for the transmission transceiver.
-    static volatile byte transmissionInterruptFlag;
-
     // Indicate if a transmission is going on.
     boolean transmissionInProgress;
 
@@ -357,10 +354,6 @@ class ESAT_COMTransceiverDriverClass
     // Interrupt service routine for the reception transceiver.
     // Set the reception interrupt flag when it is called.
     static void setReceptionTransceiverInterruptFlag (void);
-
-    // Interrupt service routine for the transmission transceiver.
-    // Set the transmission interrupt flag when it is called.
-    static void setTransmissionTransceiverInterruptFlag (void);
 
     // Turn the selected LED on or off. Requires the switched mode led
     // (transmission or reception) and the level (true for high and

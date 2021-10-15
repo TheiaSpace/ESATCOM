@@ -112,11 +112,6 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
       {
         return error;
       }
-      // Clear ISR flag.
-      transmissionInterruptFlag = 0;
-      // Enable interrupts. If the ISR is fired during initialization
-      // and it is not cleared, interrupts may not retrigger.
-      attachInterrupt(digitalPinToInterrupt(transceiver -> getInterruptPin()), setTransmissionTransceiverInterruptFlag,  FALLING);
       setModulationSource(transmitterModulationSource);
       updateFrequency();
       updateTransmissionPower();
@@ -189,10 +184,6 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   {
     case TXMode:
     {
-      // Disable interrupts.
-      detachInterrupt(digitalPinToInterrupt(transceiver -> getInterruptPin()));
-      // Clear flag.
-      transmissionInterruptFlag = 0;
       return noError;
     }
     case RXMode:
@@ -584,11 +575,6 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   return noError;
 }
 
-void ESAT_COMTransceiverDriverClass::setTransmissionTransceiverInterruptFlag (void)
-{
-    transmissionInterruptFlag = 0xFF;
-}
-
 ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverClass::startReception (void)
 {
   if (transceiverOperationMode!=RXMode)
@@ -915,7 +901,5 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
 volatile byte ESAT_COMTransceiverDriverClass::receptionInterruptFlag;
 
 ESAT_COMTransceiverDriverClass ESAT_COMReceptionTransceiver(ESAT_COMReceptionTransceiverLowLevelDriver);
-
-volatile byte ESAT_COMTransceiverDriverClass::transmissionInterruptFlag;
 
 ESAT_COMTransceiverDriverClass ESAT_COMTransmissionTransceiver(ESAT_COMTransmissionTransceiverLowLevelDriver);

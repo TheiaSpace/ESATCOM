@@ -145,7 +145,9 @@ class ESAT_COMClass
       TRANSMITTING_EXTERNAL_DATA, // I2C received telemetry.
       EXTERNAL_DATA_TRANSMITTED,
       TRANSMITTING_OWN_DATA, // Board's telemetry.
-      OWN_DATA_TRANSMITTED
+      OWN_DATA_TRANSMITTED,
+      RESETTING_TRANSMISSION_TRANSCEIVER,
+      WAITING_FOR_TRANSMISSION_TRANSCEIVER_RESET
     };
 
     // I2C Address of the board.
@@ -157,6 +159,17 @@ class ESAT_COMClass
     // Size of the board own data radio transmission buffer.
     const unsigned long OWN_DATA_TRANSMISSION_QUEUE_CAPACITY = 2;
 
+    // Time (in milliseconds) between attempts to reset the
+    // transmission transceiver.
+    const unsigned long TIME_BETWEEN_TRANSCEIVER_RESET_ATTEMPTS = 1000;
+
+    // Period of the transmission watchdog (in milliseconds).  The
+    // transmission transceiver will be reset if
+    // ongoingTransmissionState stays out of IDLE,
+    // EXTERNAL_DATA_TRANSMITTED or OWN_DATA_TRANSMITTED for more than
+    // TRANSMISSION_WATCHDOG_PERIOD milliseconds.
+    const unsigned long TRANSMISSION_WATCHDOG_PERIOD = 10000;
+
     // Unique identifier of the COM board for telemetry and
     // telecommand purposes.
     word applicationProcessIdentifier;
@@ -164,6 +177,14 @@ class ESAT_COMClass
     // Allows the board to deliver its telemetry to the radio without
     // OBC interaction.
     boolean isTelemetryRadioDeliveryEnabled = true;
+
+    // Last time (as returned by millis()) we tried a transmission
+    // transceiver reset.
+    unsigned long lastTransmissionTransceiverResetTime;
+
+    // Last time (as returned by millis()) the transmission watchdog
+    // was reset with resetTransmissionWatchdog().
+    unsigned long transmissionWatchdogResetTime;
 
     // Version numbers.
     byte majorVersionNumber;
@@ -205,6 +226,18 @@ class ESAT_COMClass
 
     // Configure the telemetry packets.
     void beginTelemetry();
+
+    // If ongoingTransmissionState has stayed out of IDLE,
+    // EXTERNAL_DATA_TRANSMITTED or OWN_DATA_TRANSMITTED for too long,
+    // switch to RESETTING_TRANSMISSION_TRANSCEIVER.
+    void checkTransmissionWatchdog();
+
+    // Reset the transmission watchdog so that it starts counting from
+    // 0.  If this method is called more often than once every
+    // TRANSMISSION_WATCHDOG_PERIOD milliseconds,
+    // checkTransmissionWatchdog() won't switch
+    // ongoingTransmissionState to RESETTING_TRANSMISSION_TRANSCEIVER.
+    void resetTransmissionWatchdog();
 };
 
 // Instance of the tasks scheduler (should be global?).

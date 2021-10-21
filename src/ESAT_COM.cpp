@@ -94,6 +94,7 @@ void ESAT_COMClass::beginHardware()
     delay(1000);
   }
   ESAT_COMRadioStream.beginReading();
+  resetTransmissionWatchdog();
 }
 
 void ESAT_COMClass::beginRadioSoftware()
@@ -151,6 +152,22 @@ void ESAT_COMClass::enableCOMTelemetryRadioDelivery()
   isTelemetryRadioDeliveryEnabled = true;
 }
 
+void ESAT_COMClass::checkTransmissionWatchdog()
+{
+  if (ongoingTransmissionState != IDLE
+      && ongoingTransmissionState != EXTERNAL_DATA_TRANSMITTED
+      && ongoingTransmissionState != OWN_DATA_TRANSMITTED
+      && ongoingTransmissionState != RESETTING_TRANSMISSION_TRANSCEIVER
+      && ongoingTransmissionState != WAITING_FOR_TRANSMISSION_TRANSCEIVER_RESET)
+  {
+    if ((millis() - transmissionWatchdogResetTime)
+        > TRANSMISSION_WATCHDOG_PERIOD)
+    {
+      ongoingTransmissionState = RESETTING_TRANSMISSION_TRANSCEIVER;
+    }
+  }
+}
+
 void ESAT_COMClass::clearRadioTelemetryQueue()
 {
   ownDataQueue.flush();
@@ -205,6 +222,11 @@ boolean ESAT_COMClass::readPacketFromRadio(ESAT_CCSDSPacket& packet)
   return radioReader.read(packet);
 }
 
+void ESAT_COMClass::resetTransmissionWatchdog()
+{
+  transmissionWatchdogResetTime = millis();
+}
+
 void ESAT_COMClass::update()
 {
   // Handle CCSDS packets. This flow is only followed if the CCSDS packets
@@ -215,10 +237,15 @@ void ESAT_COMClass::update()
       ESAT_COMTransmissionTransceiver.getModulation() != 5 && // No random mode.
       ESAT_COMTransmissionTransceiver.getModulation() != 255) // No wrong modulation error.
   {
+    // Check the transmission watchdog first.  If we've stayed out of
+    // IDLE or EXTERNAL_DATA_TRANSMITTED for too long, reset the transmission
+    // transceiver.
+    checkTransmissionWatchdog();
     switch (ongoingTransmissionState)
     {
       case IDLE:
       case EXTERNAL_DATA_TRANSMITTED:
+        resetTransmissionWatchdog();
         if (ESAT_SubsystemPacketHandler.readPacketFromI2C(ongoingTransmissionPacket))
         {
           ongoingTransmissionPacket.rewind();
@@ -271,6 +298,7 @@ void ESAT_COMClass::update()
         }
         break;
       case OWN_DATA_TRANSMITTED:
+        resetTransmissionWatchdog();
         if (ownDataQueue.read(ongoingTransmissionPacket))
         {
           ongoingTransmissionPacket.rewind();
@@ -280,6 +308,31 @@ void ESAT_COMClass::update()
         }
         // No packets to be transmitted.
         ongoingTransmissionState = IDLE;
+        break;
+      case RESETTING_TRANSMISSION_TRANSCEIVER:
+        // If the transmission transceiver has stopped working, we must keep
+        // trying to reset it until it works.
+        if (ESAT_COMTransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode)
+            == ESAT_COMTransceiverDriverClass::noError)
+        {
+          ESAT_COMRadioStream.beginWriting();
+          resetTransmissionWatchdog();
+          ongoingTransmissionState = IDLE;
+        }
+        else
+        {
+          lastTransmissionTransceiverResetTime = millis();
+          ongoingTransmissionState = WAITING_FOR_TRANSMISSION_TRANSCEIVER_RESET;
+        }
+        break;
+      case WAITING_FOR_TRANSMISSION_TRANSCEIVER_RESET:
+        // We don't try a reset on every cycle; instead, we wait
+        // a little while between attempts.
+        if (millis() - lastTransmissionTransceiverResetTime
+            >= TIME_BETWEEN_TRANSCEIVER_RESET_ATTEMPTS)
+        {
+          ongoingTransmissionState = RESETTING_TRANSMISSION_TRANSCEIVER;
+        }
         break;
       default:
         ongoingTransmissionState = IDLE;

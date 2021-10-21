@@ -18,6 +18,15 @@ You should have received a copy of the GNU General Public License
 along with Theia Space's ESAT COM library.  If not, see
 <http://www.gnu.org/licenses/>.
 
+
+* Changes in ESATCOM 1.0.1, 2021-10-21
+
+** Fixed issue with the transmission transceiver interrupts that
+could block the whole ESAT communications after certain time
+(these interrupts were removed).  In addition, a watchdog resets
+the transmission transceiver if it gets stuck.
+
+
 * Changes in ESATCOM 1.0.0, 2021-06-02
 
 ** This is the initial release.

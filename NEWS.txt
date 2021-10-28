@@ -21,6 +21,12 @@ along with Theia Space's ESAT COM library.  If not, see
 
 * Changes in ESATCOM 1.0.1, 2021-10-21
 
+** Default modulation: 4FSK for reception and transmission, both COM
+and GS.
+
+
+* Changes in ESATCOM 1.0.1, 2021-10-21
+
 ** Fixed issue with the transmission transceiver interrupts that
 could block the whole ESAT communications after certain time
 (these interrupts were removed).  In addition, a watchdog resets

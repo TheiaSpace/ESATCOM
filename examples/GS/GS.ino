@@ -1,5 +1,5 @@
 /*
- * ESAT COM Ground Station Main Program version 1.0.1
+ * ESAT COM Ground Station Main Program version 1.1.0
  * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica
  * de Madrid.
  *
@@ -33,8 +33,8 @@
 
 const word GS_APPLICATION_PROCESS_IDENTIFIER = 6;
 const byte GS_MAJOR_VERSION_NUMBER = 1;
-const byte GS_MINOR_VERSION_NUMBER = 0;
-const byte GS_PATCH_VERSION_NUMBER = 1;
+const byte GS_MINOR_VERSION_NUMBER = 1;
+const byte GS_PATCH_VERSION_NUMBER = 0;
 
 ESAT_CCSDSPacket packet(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
 
@@ -75,6 +75,7 @@ void setup()
   ESAT_COMTransmissionTransceiver.setLowestChannel(0);
   ESAT_COMTransmissionTransceiver.setHighestChannel(31);
   ESAT_COMTransmissionTransceiver.setDefaultChannel(31);
+  ESAT_COMTransmissionTransceiver.setDefaultModulationType(ESAT_COMTransceiverDriverClass::fourFSK);
   ESAT_COMReceptionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readReceptionModulationType());
   ESAT_COMReceptionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readReceptionFrequency());
   ESAT_COMReceptionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readReceptionChannel());

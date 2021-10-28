@@ -75,6 +75,7 @@ void setup()
   ESAT_COMTransmissionTransceiver.setLowestChannel(0);
   ESAT_COMTransmissionTransceiver.setHighestChannel(31);
   ESAT_COMTransmissionTransceiver.setDefaultChannel(31);
+  ESAT_COMTransmissionTransceiver.setDefaultModulationType(ESAT_COMTransceiverDriverClass::fourFSK);
   ESAT_COMReceptionTransceiver.setModulationType(ESAT_COMNonVolatileDataStorage.readReceptionModulationType());
   ESAT_COMReceptionTransceiver.setFrequency(ESAT_COMNonVolatileDataStorage.readReceptionFrequency());
   ESAT_COMReceptionTransceiver.setChannel(ESAT_COMNonVolatileDataStorage.readReceptionChannel());

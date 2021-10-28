@@ -17,7 +17,7 @@ along with Theia Space's ESAT COM library.  If not, see
 <http://www.gnu.org/licenses/>.
 
 
-ESAT COM library version 1.0.1.
+ESAT COM library version 1.1.0.
 
 Radio Communications Subsystem (COM) for ESAT.
 

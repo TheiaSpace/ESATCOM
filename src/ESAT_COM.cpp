@@ -94,6 +94,7 @@ void ESAT_COMClass::beginHardware()
     delay(1000);
   }
   ESAT_COMRadioStream.beginReading();
+  resetReceptionWatchdog();
   resetTransmissionWatchdog();
 }
 
@@ -102,6 +103,7 @@ void ESAT_COMClass::beginRadioSoftware()
   radioReader = ESAT_CCSDSPacketFromKISSFrameReader(ESAT_COMRadioStream,
                                                     radioInputBufferBackendArray,
                                                     WHOLE_PACKET_BUFFER_LENGTH);
+  ongoingReceptionState = AWAITING;                                                    
   radioOutputBuffer = ESAT_Buffer(radioOutputBufferBackendArray, WHOLE_KISS_FRAME_MAX_LENGTH);
   radioWriter = ESAT_KISSStream(radioOutputBuffer);
   ownDataQueue = ESAT_CCSDSPacketQueue(OWN_DATA_TRANSMISSION_QUEUE_CAPACITY, WHOLE_PACKET_BUFFER_LENGTH);
@@ -150,6 +152,19 @@ void ESAT_COMClass::disableCOMTelemetryRadioDelivery()
 void ESAT_COMClass::enableCOMTelemetryRadioDelivery()
 {
   isTelemetryRadioDeliveryEnabled = true;
+}
+
+void ESAT_COMClass::checkReceptionWatchdog()
+{
+  if (ongoingReceptionState != RESETTING_RECEPTION_TRANSCEIVER
+      && ongoingReceptionState != WAITING_FOR_RECEPTION_TRANSCEIVER_RESET)
+  {    
+    if ((millis() - receptionWatchdogResetTime)
+        > RECEPTION_WATCHDOG_PERIOD)
+    {
+      ongoingReceptionState = RESETTING_RECEPTION_TRANSCEIVER;
+    }
+  }
 }
 
 void ESAT_COMClass::checkTransmissionWatchdog()
@@ -218,8 +233,52 @@ boolean ESAT_COMClass::queueTelemetryToRadio(ESAT_CCSDSPacket& packet)
 }
 
 boolean ESAT_COMClass::readPacketFromRadio(ESAT_CCSDSPacket& packet)
+{  
+  checkReceptionWatchdog();
+  switch (ongoingReceptionState)
+  {
+    default:
+    case AWAITING:    
+      if (radioReader.read(packet))
+      {
+        resetReceptionWatchdog();
+        ongoingReceptionState = AWAITING;
+        return true;
+      }
+      ongoingReceptionState = AWAITING;
+      return false;
+    case RESETTING_RECEPTION_TRANSCEIVER:
+      // If the reception transceiver has stopped working, we must keep
+      // trying to reset it until it works.
+      if (ESAT_COMReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode)
+          == ESAT_COMTransceiverDriverClass::noError)
+      {
+        ESAT_COMRadioStream.beginReading();
+        ESAT_COMReceptionTransceiver.startReception();
+        resetReceptionWatchdog();
+        ongoingReceptionState = AWAITING;
+      }
+      else
+      {
+        lastReceptionTransceiverResetTime = millis();
+        ongoingReceptionState = WAITING_FOR_RECEPTION_TRANSCEIVER_RESET;
+      }
+      return false;
+    case WAITING_FOR_TRANSMISSION_TRANSCEIVER_RESET:
+      // We don't try a reset on every cycle; instead, we wait
+      // a little while between attempts.
+      if (millis() - lastReceptionTransceiverResetTime
+          >= TIME_BETWEEN_TRANSCEIVER_RESET_ATTEMPTS)
+      {
+        ongoingReceptionState = RESETTING_RECEPTION_TRANSCEIVER;
+      }
+      return false;
+  } 
+}
+
+void ESAT_COMClass::resetReceptionWatchdog()
 {
-  return radioReader.read(packet);
+  receptionWatchdogResetTime = millis();
 }
 
 void ESAT_COMClass::resetTransmissionWatchdog()

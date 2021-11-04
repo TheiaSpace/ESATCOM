@@ -19,7 +19,12 @@ along with Theia Space's ESAT COM library.  If not, see
 <http://www.gnu.org/licenses/>.
 
 
-* Changes in ESATCOM 1.0.1, 2021-10-21
+* Changes in ESATCOM 1.1.1, 2021-11-04
+
+** A watchdog resets the reception transceiver if it gets stuck.
+
+
+* Changes in ESATCOM 1.1.0, 2021-10-21
 
 ** Default modulation: 4FSK for reception and transmission, both COM
 and GS.

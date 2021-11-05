@@ -1,5 +1,5 @@
 /*
- * ESAT COM Ground Station Main Program version 1.1.0
+ * ESAT COM Ground Station Main Program version 1.1.1
  * Copyright (C) 2020, 2021 Theia Space, Universidad Politécnica
  * de Madrid.
  *
@@ -34,7 +34,7 @@
 const word GS_APPLICATION_PROCESS_IDENTIFIER = 6;
 const byte GS_MAJOR_VERSION_NUMBER = 1;
 const byte GS_MINOR_VERSION_NUMBER = 1;
-const byte GS_PATCH_VERSION_NUMBER = 0;
+const byte GS_PATCH_VERSION_NUMBER = 1;
 
 ESAT_CCSDSPacket packet(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
 

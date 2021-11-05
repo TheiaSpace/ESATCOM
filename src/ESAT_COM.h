@@ -138,6 +138,14 @@ class ESAT_COMClass
     boolean writePacketToRadio(ESAT_CCSDSPacket& packet);
 
   private:
+    //Reception state machine states.
+    enum RadioReceptionState
+    {
+      AWAITING,      
+      RESETTING_RECEPTION_TRANSCEIVER,
+      WAITING_FOR_RECEPTION_TRANSCEIVER_RESET
+    };
+  
     // Multi-source transmission state machine states.
     enum RadioTransmissionState
     {
@@ -158,9 +166,15 @@ class ESAT_COMClass
 
     // Size of the board own data radio transmission buffer.
     const unsigned long OWN_DATA_TRANSMISSION_QUEUE_CAPACITY = 2;
+    
+    // Period of the reception watchdog (in milliseconds). The
+    // recption transceiver will be reset if
+    // no packet is received for more than
+    // RECEPTION_WATCHDOG_PERIOD milliseconds.
+    const unsigned long RECEPTION_WATCHDOG_PERIOD = 10000;
 
     // Time (in milliseconds) between attempts to reset the
-    // transmission transceiver.
+    // transmission and reception transceiver.
     const unsigned long TIME_BETWEEN_TRANSCEIVER_RESET_ATTEMPTS = 1000;
 
     // Period of the transmission watchdog (in milliseconds).  The
@@ -178,6 +192,14 @@ class ESAT_COMClass
     // OBC interaction.
     boolean isTelemetryRadioDeliveryEnabled = true;
 
+    // Last time (as returned by millis()) we tried a reception
+    // transceiver reset.
+    unsigned long lastReceptionTransceiverResetTime;
+
+    // Last time (as returned by millis()) the reception watchdog
+    // was reset with resetReceptionWatchdog().
+    unsigned long receptionWatchdogResetTime;
+    
     // Last time (as returned by millis()) we tried a transmission
     // transceiver reset.
     unsigned long lastTransmissionTransceiverResetTime;
@@ -194,6 +216,9 @@ class ESAT_COMClass
     // Use this to store the packet while it is sent.
     ESAT_CCSDSPacket ongoingTransmissionPacket;
 
+    // Current state of the reception state machine.
+    RadioReceptionState ongoingReceptionState;
+    
     // Current state of the multi-source transmission state machine.
     RadioTransmissionState ongoingTransmissionState;
 
@@ -227,6 +252,13 @@ class ESAT_COMClass
     // Configure the telemetry packets.
     void beginTelemetry();
 
+    // If no packet is received for too long,
+    // reset the reception transceiver.
+    void checkReceptionWatchdog();
+
+    // Reset the reception watchdog so that it starts counting from 0.
+    void resetReceptionWatchdog();
+    
     // If ongoingTransmissionState has stayed out of IDLE,
     // EXTERNAL_DATA_TRANSMITTED or OWN_DATA_TRANSMITTED for too long,
     // switch to RESETTING_TRANSMISSION_TRANSCEIVER.

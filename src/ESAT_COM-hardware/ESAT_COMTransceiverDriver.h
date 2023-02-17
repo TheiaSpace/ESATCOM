@@ -283,7 +283,7 @@ class ESAT_COMTransceiverDriverClass
     const word OUTPUT_DATA_STREAM_TOGGLING_PERIOD_MS = 2000;
 
     // Reception chain losses for RSSI calculation.
-    const float RECEPTION_LOSSES_dB = 130.0;
+    const float RECEPTION_LOSSES_dB = 121.0;
 
     // Default radio channel.
     byte defaultChannel = 0;

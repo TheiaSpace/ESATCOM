@@ -1,4 +1,4 @@
-﻿Copyright (C) 2021 Theia Space, Universidad Politécnica de Madrid
+﻿Copyright (C) 2021, 2023 Theia Space, Universidad Politécnica de Madrid
 
 This file is part of Theia Space's ESAT COM library.
 
@@ -17,7 +17,7 @@ along with Theia Space's ESAT COM library.  If not, see
 <http://www.gnu.org/licenses/>.
 
 
-ESAT COM library version 1.1.1.
+ESAT COM library version 1.1.2.
 
 Radio Communications Subsystem (COM) for ESAT.
 

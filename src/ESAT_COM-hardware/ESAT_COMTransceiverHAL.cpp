@@ -52,6 +52,9 @@ void ESAT_COMTransceiverHALClass::begin()
   pinMode(gpio2Pin, OUTPUT);
   transceiverSPI -> begin();
   transceiverSPI -> setClockDivider(SPI_CLOCK_DIVIDER_FOR_STM32L4);
+  // Dummy transaction required to fully initializate the driver
+  // prior to perform any valid one to avoid booting up bugs.
+  transceiverSPI -> transfer(0);
 }
 
 byte ESAT_COMTransceiverHALClass::checkClearToSendPin()

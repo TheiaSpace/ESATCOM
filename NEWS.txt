@@ -24,7 +24,7 @@ along with Theia Space's ESAT COM library.  If not, see
 ** Fixed bug during SPI driver initialization that could prevent
 transceivers to boot up.
 
-** Corrected reception losses calibration. 
+** Corrected reception losses calibration.
 
 
 * Changes in ESATCOM 1.1.1, 2021-11-04

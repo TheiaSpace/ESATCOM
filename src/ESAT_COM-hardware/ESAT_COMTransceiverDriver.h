@@ -133,6 +133,9 @@ class ESAT_COMTransceiverDriverClass
     // mode and modulation set.
     // Return if the initialization goes wrong or not.
     TransceiverErrorCode begin(TransceiverMode mode, ModulationType modulationType);
+    
+    // Return if the transceiver is enabled or not.
+    byte checkIfTransceiverIsEnabled();
 
     // Disable and holds the transceiver in reset state.
     void disable();

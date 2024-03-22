@@ -158,7 +158,7 @@ void ESAT_COMClass::checkReceptionWatchdog()
 {
   if (!ESAT_COMReceptionTransceiver.checkIfTransceiverIsEnabled())
   {
-    ongoingReceptionState = RADIO_DISABLED;
+    ongoingReceptionState = RADIO_RECEIVER_DISABLED;
     return;
   }
   if (ongoingReceptionState != RESETTING_RECEPTION_TRANSCEIVER
@@ -243,9 +243,9 @@ boolean ESAT_COMClass::readPacketFromRadio(ESAT_CCSDSPacket& packet)
   switch (ongoingReceptionState)
   {
     default:
-    case RADIO_DISABLED:
+    case RADIO_RECEIVER_DISABLED:
       resetReceptionWatchdog();
-      ongoingReceptionState = RADIO_DISABLED;
+      ongoingReceptionState = RADIO_RECEIVER_DISABLED;
       return false;
     case AWAITING:    
       if (radioReader.read(packet))
@@ -404,7 +404,7 @@ void ESAT_COMClass::update()
         }
         break;
       // Unused for transmission. Initial if clause will detect and handle disabled condition.
-      case RADIO_DISABLED:       
+      case RADIO_TRANSMITTER_DISABLED:       
       default:
         ongoingTransmissionState = IDLE;
         break;

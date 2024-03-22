@@ -156,6 +156,11 @@ void ESAT_COMClass::enableCOMTelemetryRadioDelivery()
 
 void ESAT_COMClass::checkReceptionWatchdog()
 {
+  if (!ESAT_COMReceptionTransceiver.checkIfTransceiverIsEnabled())
+  {
+    ongoingReceptionState = RADIO_DISABLED;
+    return;
+  }
   if (ongoingReceptionState != RESETTING_RECEPTION_TRANSCEIVER
       && ongoingReceptionState != WAITING_FOR_RECEPTION_TRANSCEIVER_RESET)
   {    
@@ -238,6 +243,10 @@ boolean ESAT_COMClass::readPacketFromRadio(ESAT_CCSDSPacket& packet)
   switch (ongoingReceptionState)
   {
     default:
+    case RADIO_DISABLED:
+      resetReceptionWatchdog();
+      ongoingReceptionState = RADIO_DISABLED;
+      return false;
     case AWAITING:    
       if (radioReader.read(packet))
       {
@@ -294,7 +303,8 @@ void ESAT_COMClass::update()
   if (ESAT_COMSequenceGenerator.getMode() == 0 && // Sequence mode is disabled.
       ESAT_COMTransmissionTransceiver.getModulationSource() == 0 &&  // FIFO data source.
       ESAT_COMTransmissionTransceiver.getModulation() != 5 && // No random mode.
-      ESAT_COMTransmissionTransceiver.getModulation() != 255) // No wrong modulation error.
+      ESAT_COMTransmissionTransceiver.getModulation() != 255 && // No wrong modulation error.
+      !ESAT_COMTransmissionTransceiver.checkIfTransceiverIsEnabled()) // Transmitter is not disabled.
   {
     // Check the transmission watchdog first.  If we've stayed out of
     // IDLE or EXTERNAL_DATA_TRANSMITTED for too long, reset the transmission
@@ -393,6 +403,8 @@ void ESAT_COMClass::update()
           ongoingTransmissionState = RESETTING_TRANSMISSION_TRANSCEIVER;
         }
         break;
+      // Unused for transmission. Initial if clause will detect and handle disabled condition.
+      case RADIO_DISABLED:       
       default:
         ongoingTransmissionState = IDLE;
         break;
@@ -400,6 +412,7 @@ void ESAT_COMClass::update()
   }
   else // Process I2C telecommands while the sequence sweep is on.
   {
+    resetTransmissionWatchdog(); // May not be required or even been contraproducent.
     ongoingTransmissionPacket.rewind();
     if (ESAT_SubsystemPacketHandler.readPacketFromI2C(ongoingTransmissionPacket))
       {

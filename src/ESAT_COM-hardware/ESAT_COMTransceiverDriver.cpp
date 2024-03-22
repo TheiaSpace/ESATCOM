@@ -127,6 +127,15 @@ ESAT_COMTransceiverDriverClass::TransceiverErrorCode ESAT_COMTransceiverDriverCl
   return noError;
 }
 
+byte ESAT_COMTransceiverDriverClass::checkIfTransceiverIsEnabled()
+{
+  if (transceiverOperationMode == notInitializedMode)
+  {
+    return 0;
+  }
+  return 1;
+}
+
 signed char ESAT_COMTransceiverDriverClass::checkReceptionAvailability()
 {
   ESAT_COMTransceiverCommandsClass::InterruptStatusReply intStatusReply = ESAT_COMTransceiverCommands.getInterruptStatus(*transceiver, 0, 0, 0);

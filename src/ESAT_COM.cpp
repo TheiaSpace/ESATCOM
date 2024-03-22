@@ -304,7 +304,7 @@ void ESAT_COMClass::update()
       ESAT_COMTransmissionTransceiver.getModulationSource() == 0 &&  // FIFO data source.
       ESAT_COMTransmissionTransceiver.getModulation() != 5 && // No random mode.
       ESAT_COMTransmissionTransceiver.getModulation() != 255 && // No wrong modulation error.
-      !ESAT_COMTransmissionTransceiver.checkIfTransceiverIsEnabled()) // Transmitter is not disabled.
+      ESAT_COMTransmissionTransceiver.checkIfTransceiverIsEnabled()) // Transmitter is enabled.
   {
     // Check the transmission watchdog first.  If we've stayed out of
     // IDLE or EXTERNAL_DATA_TRANSMITTED for too long, reset the transmission

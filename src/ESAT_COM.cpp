@@ -103,7 +103,7 @@ void ESAT_COMClass::beginRadioSoftware()
   radioReader = ESAT_CCSDSPacketFromKISSFrameReader(ESAT_COMRadioStream,
                                                     radioInputBufferBackendArray,
                                                     WHOLE_PACKET_BUFFER_LENGTH);
-  ongoingReceptionState = AWAITING;                                                    
+  ongoingReceptionState = AWAITING;
   radioOutputBuffer = ESAT_Buffer(radioOutputBufferBackendArray, WHOLE_KISS_FRAME_MAX_LENGTH);
   radioWriter = ESAT_KISSStream(radioOutputBuffer);
   ownDataQueue = ESAT_CCSDSPacketQueue(OWN_DATA_TRANSMISSION_QUEUE_CAPACITY, WHOLE_PACKET_BUFFER_LENGTH);
@@ -163,7 +163,7 @@ void ESAT_COMClass::checkReceptionWatchdog()
   }
   if (ongoingReceptionState != RESETTING_RECEPTION_TRANSCEIVER
       && ongoingReceptionState != WAITING_FOR_RECEPTION_TRANSCEIVER_RESET)
-  {    
+  {
     if ((millis() - receptionWatchdogResetTime)
         > RECEPTION_WATCHDOG_PERIOD)
     {
@@ -238,16 +238,23 @@ boolean ESAT_COMClass::queueTelemetryToRadio(ESAT_CCSDSPacket& packet)
 }
 
 boolean ESAT_COMClass::readPacketFromRadio(ESAT_CCSDSPacket& packet)
-{  
+{
   checkReceptionWatchdog();
   switch (ongoingReceptionState)
   {
     default:
     case RADIO_RECEIVER_DISABLED:
+      if (ESAT_COMReceptionTransceiver.checkIfTransceiverIsEnabled())
+      {
+        ongoingReceptionState = AWAITING;
+      }
+      else
+      {
+        ongoingReceptionState = RADIO_RECEIVER_DISABLED;
+      }
       resetReceptionWatchdog();
-      ongoingReceptionState = RADIO_RECEIVER_DISABLED;
       return false;
-    case AWAITING:    
+    case AWAITING:
       if (radioReader.read(packet))
       {
         resetReceptionWatchdog();
@@ -282,7 +289,7 @@ boolean ESAT_COMClass::readPacketFromRadio(ESAT_CCSDSPacket& packet)
         ongoingReceptionState = RESETTING_RECEPTION_TRANSCEIVER;
       }
       return false;
-  } 
+  }
 }
 
 void ESAT_COMClass::resetReceptionWatchdog()
@@ -404,7 +411,7 @@ void ESAT_COMClass::update()
         }
         break;
       // Unused for transmission. Initial if clause will detect and handle disabled condition.
-      case RADIO_TRANSMITTER_DISABLED:       
+      case RADIO_TRANSMITTER_DISABLED:
       default:
         ongoingTransmissionState = IDLE;
         break;

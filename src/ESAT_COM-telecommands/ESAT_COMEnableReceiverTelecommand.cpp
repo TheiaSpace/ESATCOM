@@ -21,6 +21,7 @@
 #include "ESAT_COM-telecommands/ESAT_COMEnableReceiverTelecommand.h"
 #include "ESAT_COM-hardware/ESAT_COMRadioStream.h"
 #include "ESAT_COM-hardware/ESAT_COMTransceiverDriver.h"
+#include "ESAT_COM.h"
 
 boolean ESAT_COMEnableReceiverTelecommandClass::handleUserData(ESAT_CCSDSPacket packet)
 {
@@ -28,6 +29,7 @@ boolean ESAT_COMEnableReceiverTelecommandClass::handleUserData(ESAT_CCSDSPacket 
   ESAT_COMReceptionTransceiver.begin(ESAT_COMTransceiverDriverClass::RXMode);
   ESAT_COMRadioStream.beginReading();
   ESAT_COMReceptionTransceiver.startReception();
+  ESAT_COM.resetReceptionWatchdog();
   return true;
 }
 

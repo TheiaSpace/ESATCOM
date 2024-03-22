@@ -117,6 +117,16 @@ class ESAT_COMClass
     // Fills the packet with the data read from the radio interface.
     // Returns true if a new packet was read, otherwise returns false.
     boolean readPacketFromRadio(ESAT_CCSDSPacket& packet);
+    
+    // Reset the reception watchdog so that it starts counting from 0.
+    void resetReceptionWatchdog();
+    
+    // Reset the transmission watchdog so that it starts counting from
+    // 0.  If this method is called more often than once every
+    // TRANSMISSION_WATCHDOG_PERIOD milliseconds,
+    // checkTransmissionWatchdog() won't switch
+    // ongoingTransmissionState to RESETTING_TRANSMISSION_TRANSCEIVER.
+    void resetTransmissionWatchdog();
 
     // Performs the background tasks:
     //  -I2C written packets: radio telecommands or any subsystem telemetry.
@@ -143,7 +153,8 @@ class ESAT_COMClass
     {
       AWAITING,      
       RESETTING_RECEPTION_TRANSCEIVER,
-      WAITING_FOR_RECEPTION_TRANSCEIVER_RESET
+      WAITING_FOR_RECEPTION_TRANSCEIVER_RESET,
+      RADIO_DISABLED
     };
   
     // Multi-source transmission state machine states.
@@ -155,7 +166,8 @@ class ESAT_COMClass
       TRANSMITTING_OWN_DATA, // Board's telemetry.
       OWN_DATA_TRANSMITTED,
       RESETTING_TRANSMISSION_TRANSCEIVER,
-      WAITING_FOR_TRANSMISSION_TRANSCEIVER_RESET
+      WAITING_FOR_TRANSMISSION_TRANSCEIVER_RESET,
+      RADIO_DISABLED
     };
 
     // I2C Address of the board.
@@ -256,20 +268,10 @@ class ESAT_COMClass
     // reset the reception transceiver.
     void checkReceptionWatchdog();
 
-    // Reset the reception watchdog so that it starts counting from 0.
-    void resetReceptionWatchdog();
-    
     // If ongoingTransmissionState has stayed out of IDLE,
     // EXTERNAL_DATA_TRANSMITTED or OWN_DATA_TRANSMITTED for too long,
     // switch to RESETTING_TRANSMISSION_TRANSCEIVER.
     void checkTransmissionWatchdog();
-
-    // Reset the transmission watchdog so that it starts counting from
-    // 0.  If this method is called more often than once every
-    // TRANSMISSION_WATCHDOG_PERIOD milliseconds,
-    // checkTransmissionWatchdog() won't switch
-    // ongoingTransmissionState to RESETTING_TRANSMISSION_TRANSCEIVER.
-    void resetTransmissionWatchdog();
 };
 
 // Instance of the tasks scheduler (should be global?).

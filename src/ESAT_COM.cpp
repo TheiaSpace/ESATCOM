@@ -78,7 +78,10 @@ void ESAT_COMClass::beginHardware()
 {
   ESAT_COMTaskScheduler.add(ESAT_COMSequenceGenerator.SequenceIncrementingTask);
   ESAT_COMHeartBeatLED.begin();
-  WireInner.begin();
+  // TODO
+  // Change to WireInner.begin(); once the stm32l4 board definitions were upgraded above 1.2.0.
+  // There is a bug with each (COM and GS) WireInner macro (a space is missing).
+  Wire1.begin();
   WireCOM.begin(byte(COM_I2C_ADDRESS));
   // Keep reconfiguring the transmitter until everything went right.
   while (ESAT_COMTransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode)

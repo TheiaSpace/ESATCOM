@@ -37,29 +37,29 @@ ESAT_Timestamp ESAT_COMExternalRealTimeClockClass::read()
   // we assume that the actual year goes from 2000 to 2099.  For a more
   // extended range of years, we would need to store the extra information
   // elsewhere.
-  Wire.beginTransmission(ADDRESS);
-  Wire.write(TIME_REGISTER);
-  const byte errorCode = Wire.endTransmission();
+  Wire1.beginTransmission(ADDRESS);
+  Wire1.write(TIME_REGISTER);
+  const byte errorCode = Wire1.endTransmission();
   if (errorCode != 0)
   {
     error = true;
     return ESAT_Timestamp();
   }
   const byte bytesToRead = 7;
-  const byte bytesRead = Wire.requestFrom(ADDRESS, bytesToRead);
+  const byte bytesRead = Wire1.requestFrom(ADDRESS, bytesToRead);
   if (bytesRead != bytesToRead)
   {
     error = true;
     return ESAT_Timestamp();
   }
-  const byte seconds = Wire.read();
-  const byte minutes = Wire.read();
-  const byte hours = Wire.read();
-  const byte weekDay = Wire.read();
+  const byte seconds = Wire1.read();
+  const byte minutes = Wire1.read();
+  const byte hours = Wire1.read();
+  const byte weekDay = Wire1.read();
   (void) weekDay; // Unused.
-  const byte day = Wire.read();
-  const byte month = Wire.read();
-  const byte year = Wire.read();
+  const byte day = Wire1.read();
+  const byte month = Wire1.read();
+  const byte year = Wire1.read();
   return ESAT_Timestamp(2000 + ESAT_Util.decodeBinaryCodedDecimalByte(year),
                         ESAT_Util.decodeBinaryCodedDecimalByte(month),
                         ESAT_Util.decodeBinaryCodedDecimalByte(day),
@@ -83,18 +83,18 @@ void ESAT_COMExternalRealTimeClockClass::write(ESAT_Timestamp timestamp)
   // we assume that the actual year goes from 2000 to 2099.  For a more
   // extended range of years, we would need to store the extra information
   // elsewhere.
-  Wire.beginTransmission(ADDRESS);
-  Wire.write(TIME_REGISTER);
-  Wire.write(ESAT_Util.encodeBinaryCodedDecimalByte(timestamp.seconds));
-  Wire.write(ESAT_Util.encodeBinaryCodedDecimalByte(timestamp.minutes));
-  Wire.write(ESAT_Util.encodeBinaryCodedDecimalByte(timestamp.hours));
+  Wire1.beginTransmission(ADDRESS);
+  Wire1.write(TIME_REGISTER);
+  Wire1.write(ESAT_Util.encodeBinaryCodedDecimalByte(timestamp.seconds));
+  Wire1.write(ESAT_Util.encodeBinaryCodedDecimalByte(timestamp.minutes));
+  Wire1.write(ESAT_Util.encodeBinaryCodedDecimalByte(timestamp.hours));
   // Day of the week not used.
-  Wire.write(ESAT_Util.encodeBinaryCodedDecimalByte(2));
-  Wire.write(ESAT_Util.encodeBinaryCodedDecimalByte(timestamp.day));
-  Wire.write(ESAT_Util.encodeBinaryCodedDecimalByte(timestamp.month));
-  Wire.write(ESAT_Util.encodeBinaryCodedDecimalByte(timestamp.year % 100));
-  Wire.write(0);
-  const byte errorCode = Wire.endTransmission();
+  Wire1.write(ESAT_Util.encodeBinaryCodedDecimalByte(2));
+  Wire1.write(ESAT_Util.encodeBinaryCodedDecimalByte(timestamp.day));
+  Wire1.write(ESAT_Util.encodeBinaryCodedDecimalByte(timestamp.month));
+  Wire1.write(ESAT_Util.encodeBinaryCodedDecimalByte(timestamp.year % 100));
+  Wire1.write(0);
+  const byte errorCode = Wire1.endTransmission();
   if (errorCode != 0)
   {
     error = true;

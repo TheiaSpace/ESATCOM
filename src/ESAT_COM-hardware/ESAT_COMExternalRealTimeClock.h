@@ -29,7 +29,7 @@
 // mounted on the ESAT COM board.
 // Communications are done through the OBC COM bus.  The I2C bus must
 // be configured before using this library.  You must have called
-// Wire.begin() before using this library.
+// Wire1.begin() before using this library.
 // Use the global instance ESAT_COMExternalRealTimeClock.
 class ESAT_COMExternalRealTimeClockClass: public ESAT_Clock
 {

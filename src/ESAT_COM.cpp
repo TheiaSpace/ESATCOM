@@ -64,7 +64,7 @@ void ESAT_COMClass::begin(word subsystemApplicationProcessIdentifier,
                                     majorVersionNumber,
                                     minorVersionNumber,
                                     patchVersionNumber,
-                                    ESAT_COMBuiltinHardwareClock,
+                                    ESAT_COMExternalRealTimeClock,
                                     WireCOM,
                                     WHOLE_PACKET_BUFFER_LENGTH,
                                     EXTERNAL_DATA_TRANSMISSION_QUEUE_CAPACITY);
@@ -78,6 +78,7 @@ void ESAT_COMClass::beginHardware()
 {
   ESAT_COMTaskScheduler.add(ESAT_COMSequenceGenerator.SequenceIncrementingTask);
   ESAT_COMHeartBeatLED.begin();
+  WireInner.begin();
   WireCOM.begin(byte(COM_I2C_ADDRESS));
   // Keep reconfiguring the transmitter until everything went right.
   while (ESAT_COMTransmissionTransceiver.begin(ESAT_COMTransceiverDriverClass::TXMode)

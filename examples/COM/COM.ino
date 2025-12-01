@@ -1,6 +1,6 @@
 /*
- * ESAT COM Main Program version 1.1.3
- * Copyright (C) 2020, 2021, 2023 Theia Space, Universidad Politécnica
+ * ESAT COM Main Program version 1.1.4
+ * Copyright (C) 2020, 2021, 2023, 2025 Theia Space, Universidad Politécnica
  * de Madrid.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,7 @@
 const word COM_APPLICATION_PROCESS_IDENTIFIER = 5;
 const byte COM_MAJOR_VERSION_NUMBER = 1;
 const byte COM_MINOR_VERSION_NUMBER = 1;
-const byte COM_PATCH_VERSION_NUMBER = 3;
+const byte COM_PATCH_VERSION_NUMBER = 4;
 
 ESAT_CCSDSPacket packet(ESAT_COMClass::PACKET_DATA_BUFFER_LENGTH);
 

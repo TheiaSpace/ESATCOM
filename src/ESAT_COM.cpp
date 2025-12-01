@@ -103,7 +103,7 @@ void ESAT_COMClass::beginRadioSoftware()
   radioReader = ESAT_CCSDSPacketFromKISSFrameReader(ESAT_COMRadioStream,
                                                     radioInputBufferBackendArray,
                                                     WHOLE_PACKET_BUFFER_LENGTH);
-  ongoingReceptionState = AWAITING;                                                    
+  ongoingReceptionState = AWAITING;
   radioOutputBuffer = ESAT_Buffer(radioOutputBufferBackendArray, WHOLE_KISS_FRAME_MAX_LENGTH);
   radioWriter = ESAT_KISSStream(radioOutputBuffer);
   ownDataQueue = ESAT_CCSDSPacketQueue(OWN_DATA_TRANSMISSION_QUEUE_CAPACITY, WHOLE_PACKET_BUFFER_LENGTH);
@@ -156,9 +156,14 @@ void ESAT_COMClass::enableCOMTelemetryRadioDelivery()
 
 void ESAT_COMClass::checkReceptionWatchdog()
 {
+  if (!ESAT_COMReceptionTransceiver.checkIfTransceiverIsEnabled())
+  {
+    ongoingReceptionState = RADIO_RECEIVER_DISABLED;
+    return;
+  }
   if (ongoingReceptionState != RESETTING_RECEPTION_TRANSCEIVER
       && ongoingReceptionState != WAITING_FOR_RECEPTION_TRANSCEIVER_RESET)
-  {    
+  {
     if ((millis() - receptionWatchdogResetTime)
         > RECEPTION_WATCHDOG_PERIOD)
     {
@@ -233,12 +238,23 @@ boolean ESAT_COMClass::queueTelemetryToRadio(ESAT_CCSDSPacket& packet)
 }
 
 boolean ESAT_COMClass::readPacketFromRadio(ESAT_CCSDSPacket& packet)
-{  
+{
   checkReceptionWatchdog();
   switch (ongoingReceptionState)
   {
     default:
-    case AWAITING:    
+    case RADIO_RECEIVER_DISABLED:
+      if (ESAT_COMReceptionTransceiver.checkIfTransceiverIsEnabled())
+      {
+        ongoingReceptionState = AWAITING;
+      }
+      else
+      {
+        ongoingReceptionState = RADIO_RECEIVER_DISABLED;
+      }
+      resetReceptionWatchdog();
+      return false;
+    case AWAITING:
       if (radioReader.read(packet))
       {
         resetReceptionWatchdog();
@@ -273,7 +289,7 @@ boolean ESAT_COMClass::readPacketFromRadio(ESAT_CCSDSPacket& packet)
         ongoingReceptionState = RESETTING_RECEPTION_TRANSCEIVER;
       }
       return false;
-  } 
+  }
 }
 
 void ESAT_COMClass::resetReceptionWatchdog()
@@ -294,7 +310,8 @@ void ESAT_COMClass::update()
   if (ESAT_COMSequenceGenerator.getMode() == 0 && // Sequence mode is disabled.
       ESAT_COMTransmissionTransceiver.getModulationSource() == 0 &&  // FIFO data source.
       ESAT_COMTransmissionTransceiver.getModulation() != 5 && // No random mode.
-      ESAT_COMTransmissionTransceiver.getModulation() != 255) // No wrong modulation error.
+      ESAT_COMTransmissionTransceiver.getModulation() != 255 && // No wrong modulation error.
+      ESAT_COMTransmissionTransceiver.checkIfTransceiverIsEnabled()) // Transmitter is enabled.
   {
     // Check the transmission watchdog first.  If we've stayed out of
     // IDLE or EXTERNAL_DATA_TRANSMITTED for too long, reset the transmission
@@ -393,6 +410,8 @@ void ESAT_COMClass::update()
           ongoingTransmissionState = RESETTING_TRANSMISSION_TRANSCEIVER;
         }
         break;
+      // Unused for transmission. Initial if clause will detect and handle disabled condition.
+      case RADIO_TRANSMITTER_DISABLED:
       default:
         ongoingTransmissionState = IDLE;
         break;
@@ -400,6 +419,7 @@ void ESAT_COMClass::update()
   }
   else // Process I2C telecommands while the sequence sweep is on.
   {
+    resetTransmissionWatchdog(); // May not be required or even been contraproducent.
     ongoingTransmissionPacket.rewind();
     if (ESAT_SubsystemPacketHandler.readPacketFromI2C(ongoingTransmissionPacket))
       {
